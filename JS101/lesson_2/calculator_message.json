@@ -1,0 +1,13 @@
+{
+  "en": {
+    "welcome": "welcome to calculator",
+    "1st n": "Whats the first number?",
+    "err": "Hmm... that doesn't look like a valid number.",
+    "2nd n": "whats the second number?",
+    "op": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+    "num1-4": "Must choose 1, 2, 3 or 4",
+    "result": "the result is:",
+    "another": "would you like to perform another operation ?"
+  },
+  "es": {}
+}

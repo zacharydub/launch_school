@@ -1,0 +1,10 @@
+extends layout.pug
+
+block appContent
+    h1 My name
+    h2 You have #{money}
+    if !recent
+      p no recent 
+    else
+      p recent yes
+    button logout
