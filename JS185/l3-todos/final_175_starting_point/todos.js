@@ -7,6 +7,8 @@ const TodoList = require("./lib/todolist");
 const Todo = require("./lib/todo");
 const { sortTodoLists, sortTodos } = require("./lib/sort");
 const store = require("connect-loki");
+// const SeedData = require("./lib/seed-data"); // Temporary code!
+const SessionPersistence = require("./lib/session-persistence");
 
 const app = express();
 const host = "localhost";
@@ -35,16 +37,23 @@ app.use(session({
 
 app.use(flash());
 
+////removing in favor of SessionPersistence object
 // Set up persistent session data
-app.use((req, res, next) => {
-  let todoLists = [];
-  if ("todoLists" in req.session) {
-    req.session.todoLists.forEach(todoList => {
-      todoLists.push(TodoList.makeTodoList(todoList));
-    });
-  }
+// app.use((req, res, next) => {
+//   // req.session.todoLists = SeedData; // Temporary code!
+//   let todoLists = [];
+//   if ("todoLists" in req.session) {
+//     req.session.todoLists.forEach(todoList => {
+//       todoLists.push(TodoList.makeTodoList(todoList));
+//     });
+//   }
 
-  req.session.todoLists = todoLists;
+//   req.session.todoLists = todoLists;
+//   next();
+// });
+// Create a new datastore, accessed/manipulated by the SessionPersistence object
+app.use((req, res, next) => {
+  res.locals.store = new SessionPersistence(req.session);
   next();
 });
 
