@@ -1,0 +1,237 @@
+@import url("../skeletons/reset.css");
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 13px;
+  color: #444;
+}
+
+header {
+  width: 100%;
+  z-index: 1;
+  position: fixed;
+  background-color: #FFF;
+  border-top: 10px solid #F5F5F5;
+  border-bottom: 1px solid #EEE;
+}
+
+nav ul {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 960px;
+  text-align: center;
+}
+
+nav li {
+  list-style: none;
+  display: inline-block;
+  margin: 0 25px;
+}
+
+nav a {
+  line-height: 44px;
+  text-decoration: none;
+  color: #444;
+}
+
+section.masthead {
+  position: relative;
+  top: 55px;
+  margin-bottom: 55px;
+  height: 428px;
+  text-align: center;
+  background-image: url("./images/front.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+section.masthead img {
+  position: relative;
+  top: 150px;
+  width: 80px;
+  height: 80px;
+}
+
+section.masthead h1 {
+  font-weight: normal;
+  color: #fff;
+  position: relative;
+  font-size: 72px;
+  top: 150px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4),0 0 30px rgba(0,0,0,.075);
+}
+
+section.masthead h2 {
+  font-size: 31px;
+  font-weight: normal;
+  color: #fff;
+  position: relative;
+  top: 150px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4),0 0 30px rgba(0,0,0,.075);
+}
+
+.section {
+  text-align: center;
+  border-top: 1px solid #efefef;
+  padding-bottom: 60px;
+  margin: 0 30px;
+}
+
+.section h1 {
+  margin: 1.236em 0 .618em;
+  font-size: 48px;
+  font-weight: 100;
+}
+
+.section h2 {
+  margin: 30px 0 4px;
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.section p {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 25px;
+  margin: 0 auto 17px;
+}
+
+.section a[href] {
+  color: #008000;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.button {
+  background-color: #008000;
+  padding: 10px 30px;
+  font-weight: bold;
+  color: #EEE !important;
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: darkgreen;
+}
+
+div.speaker-grid {
+  margin: 0 auto;
+  text-align: center;
+  max-width: 1080px;
+}
+
+.speaker-grid .speaker {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 280px;
+  height: 378px;
+  margin: 5px;
+  border: 1px solid #e8e8e8
+}
+
+.speaker div.speaker-hover {
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  left: 0;
+  bottom:0;
+  padding: 10px;
+  color: #FFF;
+  background: rgba(0,0,0,0.9);
+  transition: all 0.5s;
+}
+
+.speaker-hover p {
+  font-size: 13px;
+  line-height: 15px;
+}
+
+.speaker:hover .speaker-hover { opacity: 1; }
+
+.schedule table {
+  border-collapse: collapse;
+  max-width: 960px;
+  margin: 0 auto;
+  border-bottom: 1px solid #EFEFEF;
+}
+
+.schedule td {
+  padding: 10px;
+  border-bottom: 1px solid #EFEFEF;
+  text-align: left;
+}
+
+.time {
+  font-size: 24px;
+}
+
+.schedule h2 {
+  vertical-align: middle;
+  margin: 0 10px 0 0;
+  font-weight: normal;
+}
+
+.schedule h3 {
+  margin: 8px 0 0;
+  font-size: 18px;
+}
+
+.schedule img {
+  width: 130px;
+}
+
+.schedule table {
+  width: 100%;
+}
+
+.photo {
+  float: right;
+}
+
+.schedule-tag {
+  display: inline-block;
+  padding: 1px 4px;
+  font-size: 7px;
+  background-color: #EEE;
+  border: 1px solid #AAA;
+}
+
+.callforpapers {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.sponsors {
+  max-width: 960px;
+  margin: 0 auto 17px;
+  font-size: 16px;
+  line-height: 25px;
+  font-weight: 300;
+}
+
+.sponsors h3 {
+  text-align: left;
+}
+
+.sponsors img:nth-of-type(1n+3) {
+  margin-right: 40px;
+}
+
+footer.section {
+  margin: 0;
+  height: 280px;
+  color: #FFF;
+  background-size: cover !important;
+  background: url(images/people.jpg) no-repeat center 23%;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4),0 0 30px rgba(0,0,0,.075);
+}
+
+.dark {
+  text-align: left;
+  background-color: rgba(0,0,0,.7);
+  padding-bottom: 10px;
+  padding-left: 25%;
+}

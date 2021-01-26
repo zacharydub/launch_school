@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  </style>
+</head>
+<body>
+  <form action="#" method="get">
+    <fieldset>
+      <dl>
+        <dt><label for="categories">Category</label></dt>
+        <dd>
+
+          <!--<input type="radio" name="category" id="">Core
+          <input type="radio" name="category" id="">Plugins & Libraries
+          <input type="radio" name="category" id="">Conventions
+          <input type="radio" name="category" id="">Reviews
+          <input type="radio" name="category" id="">Opinions
+          <input type="radio" name="category" id="">People-->
+          <select name="categories" id="categories" size="3">
+            <option value="Core">Core</option>
+            <option value="Plugins">Plugins</option>
+            <option value="Conventions">Conventions</option>
+            <option value="Reviews">Reviews</option>
+            <option value="Opinions">Opinions</option>
+            <option value="People">People</option>
+          </select>
+        </dd>
+      </dl>
+      <dl>
+        <dt><label for="tags">Tags</label></dt>
+        <dd>
+          <!--<input type="checkbox" name="HTML" id="HTML">HTML
+        <input type="checkbox" name="CSS" id="CSS">CSS
+        <input type="checkbox" name="Javascript" id="Javascript">Javascript
+        <input type="checkbox" name="Ruby" id="Ruby">Ruby
+        <input type="checkbox" name="Rails" id="Rails">Rails
+        <input type="checkbox" name="Python" id="Python">Python
+        <input type="checkbox" name="Django" id="Django">Django-->
+        <select name="tags" id="tags" size="3" multiple>
+          <option value="CSS">CSS</option>
+          <option value="JS">JS</option>
+          <option value="Ruby">Ruby</option>
+          <option value="Rails">Rails</option>
+          <option value="Python">Python</option>
+          <option value="HTML">HTML</option>
+          <option value="Django">Django</option>
+        </select>
+        </dd>
+      </dl>
+      <input type="submit" value="Submit">
+
+      <!-- USING UNORDERED LISTS -->
+      <!--<label>
+        <ul> Categories
+          <li><input type="radio" name="category" id="">Core</li>
+          <li><input type="radio" name="category" id="">Plugins & Libraries</li>
+          <li><input type="radio" name="category" id="">Conventions</li>
+          <li><input type="radio" name="category" id="">Reviews</li>
+          <li><input type="radio" name="category" id="">Opinions</li>
+          <li><input type="radio" name="category" id="">People</li>
+        </ul>
+      </label>
+      <label>
+        <ul>Tags
+        <li><input type="checkbox" name="HTML" id="HTML">HTML</li>
+        <li><input type="checkbox" name="CSS" id="CSS">CSS</li>
+        <li><input type="checkbox" name="Javascript" id="Javascript">Javascript</li>
+        <li><input type="checkbox" name="Ruby" id="Ruby">Ruby</li>
+        <li><input type="checkbox" name="Rails" id="Rails">Rails</li>
+        <li><input type="checkbox" name="Python" id="Python">Python</li>
+        <li><input type="checkbox" name="Django" id="Django">Django</li>
+        </ul>
+      </label>-->
+
+      <!-- ANOTHER WAY -->
+      <!--<h1>Category</h1>
+    <ul>
+      <li>
+        <label>
+          <input type="radio" name="category" value="core" required />
+          Core
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="radio" name="category" value="plugins" required />
+          Plugins and Libraries
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="radio" name="category" value="conventions" required />
+          Conventions
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="radio" name="category" value="reviews" required />
+          Reviews
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="radio" name="category" value="opinion" required />
+          Opinion
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="radio" name="category" value="people" required />
+          People
+        </label>
+      </li>
+    </ul>
+
+    <h1>Tags</h1>
+    <ul>
+      <li>
+        <label>
+          <input type="checkbox" name="html" />
+          HTML
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="css" />
+          CSS
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="javascript" />
+          Javascript
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="ruby" />
+          Ruby
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="rails" />
+          Rails
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="python" />
+          Python
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="django" />
+          Django
+        </label>
+      </li>
+    </ul>
+
+    <input type="submit" value="Filter" />-->
+    <input type="reset"/>
+    </fieldset>
+  </form>
+</body>
+</html>

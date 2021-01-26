@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluid Photo Gallery</title>
+<style>
+body{
+  background: black;
+  color:white;
+  font:16px Helvetica, Arial, sans-serif;
+  margin:0;
+}
+main{
+  /*min-width: 500px;
+  max-width: 1000px;*/
+  background-color: gray;
+  margin:0 auto;
+  padding: 20px;
+}
+h1{
+  text-align: center;
+}
+img {
+  display: block;
+  width: 100%;
+}
+figure{
+  margin:0;
+  padding: 0 0 30px 0
+}
+figure img{
+  border: 15px solid black;
+  box-sizing: border-box;
+}
+figcaption{
+  padding-top: 20px;;
+}
+ul{
+  padding-left: 0;
+  font-size: 0;
+}
+li{
+  display: inline-block;
+  width: 25%;
+  padding: 0 15px 0 15px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+@media screen and (max-width:899px){
+  li {
+    width:33.333%;
+  }
+}
+@media screen and (max-width:599px){
+  li {
+    width:50%;
+  }
+}
+@media screen and (min-width:1280px){
+  main {
+    max-width: 100%;
+  }
+  figure{
+    display: inline-block;
+    float: left;
+    margin-right: 50px;
+    vertical-align: top;
+    width: 950px;
+  }
+  ul {
+    overflow: hidden;
+  }
+
+  li {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Fluid Photo Gallery</h1>
+  <figure>
+    <img src="http://placehold.it/1200x900" alt="Example photo">
+    <figcaption>Example photo</figcaption>
+  </figure>
+  <ul>
+    <li><img src="http://placehold.it/1200x900" alt="thumb1" title="photo1"></li>
+    <li><img src="http://placehold.it/1200x900" alt="thumb2" title="photo2"></li>
+    <li><img src="http://placehold.it/1200x900" alt="thumb3" title="photo3"></li>
+    <li><img src="http://placehold.it/1200x900" alt="thumb4" title="photo4"></li>
+    <li><img src="http://placehold.it/1200x900" alt="Photo 5" /></li>
+    <li><img src="http://placehold.it/1200x900" alt="Photo 6" /></li>
+    <li><img src="http://placehold.it/1200x900" alt="Photo 7" /></li>
+  </ul>
+</main>
+</body>
+</html>

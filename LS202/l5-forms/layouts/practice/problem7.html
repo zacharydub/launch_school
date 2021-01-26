@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  button{
+    border-radius: 4px;
+  }
+    </style>
+</head>
+<body>
+  <form action="#" method="get">
+    <!-- a GET request is more appropriate than a POST request.since searches customarily don't update the server -->
+    <fieldset>
+      <label for="search">Search for</label>
+      <input type="search" name="query" id="query">
+
+      <label><input type="radio" name="medium" id="tv" checked required>TV</label>
+      <label><input type="radio" name="medium" id="movies" required>Movies</label>
+      <label><input type="radio" name="medium" id="music" required>Music</label>
+
+      <!--<input type="submit" value="Search">-->
+      <button type="submit">Search</button>
+    </fieldset>
+  </form>
+</body>
+</html>

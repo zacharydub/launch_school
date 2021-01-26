@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form action="#" method="post">
+    <fieldset>
+      <dl>
+        <dt><label for="fname">First Name</label></dt>
+        <dd><input type="text" name="fname" id="fname" required></dd>
+      </dl>
+      <dl>
+        <dt><label for="lname">Last Name</label></dt>
+        <dd><input type="text" name="lname" id="lname" required></dd>
+      </dl>
+      <dl>
+        <dt><label for="email">Email Address</label></dt>
+        <dd><input type="email" name="email" id="email" required autocomplete="off" autocorrect="off" autocapitalize="none"></dd>
+      </dl>
+      <dl>
+        <dt><label for="tel">Phone Number</label></dt>
+        <dd><input type="tel" name="tel" id="tel" required placeholder="###-###-####"></dd>
+        <!--<dd>
+          <select name="tel" id="tel">
+            <option value="default" selected disabled>Choose One</option>
+            <option value="home" >Home</option>
+            <option value="business">Business</option>
+            <option value="mobile">Mobile</option>
+          </select>
+        </dd>-->
+      </dl>
+      <dt><label for="message">Message</label></dt>
+      <dd><textarea id="message" name="message" rows="6" cols="60" placeholder="Type your message here"></textarea></dd>
+
+      <input type="submit" value="Send">
+    </fieldset>
+  </form>
+</body>
+</html>

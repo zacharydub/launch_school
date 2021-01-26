@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <style>
+    /* mobile version */
+    body {
+      font: 16px Helvetica, Arial, sans-serif;
+      display: flex;
+    }
+
+    nav {
+      background-color: #464f77;
+      width: 200px;
+      padding: 50px 0 0 50px;
+      /*display: grid;
+      grid-template-areas:
+        "icon title1 number1"
+        "icon title2 number2"
+        "icon title3 number3"
+        "icon title4 number4"
+        "icon title5 number5"
+        "icon title6 number6";*/
+    }
+
+    nav img {
+      float: left;
+    }
+
+    table {
+      color: white;
+      padding-left: 10px;
+      border-spacing: 10px;
+    }
+
+    th {
+      padding-bottom: 10px;
+    }
+
+    tr:hover {
+      background-color: darkslateblue;
+    }
+
+    .second {
+      padding-right: 20px;
+    }
+
+    .number {
+      text-align: center;
+      border-radius: 50%;
+      border: 5px solid gray;
+      background-color: gray;
+    }
+
+    section {
+      margin-top: 50px;
+    }
+
+    h3 {
+      display: inline;
+      color: white;
+      margin-left: 10px;
+    }
+
+    section ul {
+      list-style-type: none;
+      color: white;
+      /*text-decoration:;*/
+    }
+
+    section li {
+      padding-bottom: 10px;
+    }
+
+    header>img {
+      display: block;
+      margin-bottom: 20px;
+      margin-left: 20px;
+      height: 25px;
+    }
+
+    main h2 {
+      display: inline;
+      margin: 10px 25px 20px 25px
+    }
+
+    span {
+      border-radius: 50%;
+      background-color: blue;
+      border: 5px solid blue;
+      color: white;
+    }
+
+    main {
+      width: 100%;
+    }
+
+    main section {
+      margin-left: 10px;
+    }
+
+    main section img {
+      margin-right: 10px;
+    }
+
+    main section p {
+      display: inline;
+      color: blue;
+    }
+
+    main section ul {
+      color: black;
+    }
+
+    main section li {
+      border-top: 1px solid gray;
+      padding: 5px 0;
+      display: flex;
+    }
+
+    .trash {
+      margin-left: 500px;
+    }
+
+    main section a {
+      text-decoration: none;
+      color: black;
+      /*margin-right: 800px;*/
+    }
+
+    .done a {
+      color: gray;
+    }
+
+    #item1 {
+      display: none;
+    }
+
+    form {
+      display: none;
+    }
+
+    #item1:checked+form {
+      display: block;
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      width: 400px;
+      height: auto;
+      margin: 0 0 0 -200px;
+      z-index: 1;
+      border: 1px solid black;
+      background-color: white;
+      padding: 25px;
+    }
+
+    #item1:checked+form:before {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      content: "";
+      z-index: -1;
+      background: rgba(0, 0, 0, .2);
+    }
+
+    fieldset {
+      border: none;
+    }
+
+    dt,
+    dd {
+      display: inline;
+    }
+
+    dt {
+      margin-left: 10px;
+    }
+
+    input[type="text"] {
+      width: 250px;
+      margin-left: 25px;
+    }
+
+    #date #first {
+      margin-left: 27px;
+    }
+
+    .others {
+      margin-left: 15px
+    }
+
+    mark {
+      background-color: white;
+      padding: 0 0 0 15px;
+    }
+
+    #deslist dd {
+      margin-left: 15px;
+    }
+
+    #deslabel {
+      vertical-align: top;
+    }
+
+    #descr {
+      /*margin-left: 25px;*/
+    }
+
+    #save,
+    #complete {
+      background-color: blue;
+      color: white;
+      width: 125px;
+      border-radius: 2px;
+    }
+
+    #save {
+      margin-left: 105px;
+      margin-right: 5px;
+    }
+
+    @media screen and (min-width: 481px) {}
+  </style>
+</head>
+
+<body>
+  <nav>
+    <img src="all-todos.png" alt="all">
+    <table>
+      <thead>
+        <tr>
+          <th class="second">All Todos</th>
+          <th class='number'>18</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="second">02/16</td>
+          <td class='number'>8</td>
+        </tr>
+        <tr>
+          <td class="second">03/16</td>
+          <td class='number'>2</td>
+        </tr>
+        <tr>
+          <td class="second"> 04/16</td>
+          <td class='number'>1</td>
+        </tr>
+        <tr>
+          <td class="second">05/16</td>
+          <td class='number'>1</td>
+        </tr>
+        <tr>
+          <td class="second">06/16</td>
+          <td class='number'>6</td>
+        </tr>
+      </tbody>
+    </table>
+    <section>
+      <img src="done.png" alt="done">
+      <h3>Completed</h3>
+      <ul>
+        <li><s>02/15</s></li>
+        <li><s>03/15</s></li>
+        <li><s>04/15</s></li>
+        <li><s>05/15</s></li>
+        <li><s>06/15</s></li>
+      </ul>
+    </section>
+  </nav>
+  <main>
+    <header>
+      <img src="hamburger.png" alt="hamburger" id="hamburger">
+      <h2>02/16</h2>
+      <span>8</span>
+    </header>
+    <section>
+      <img src="plus.png" alt="plus" id="plus">
+      <p>Add new todo</p>
+      <ul>
+        <li>
+          <img src="unticked-box.png" alt="unticked" class="unticked">
+          <label for="item1">Item 1</label>
+          <input type="checkbox" name="item1" id="item1">
+          <form action="#" method="post">
+            <dl>
+              <dt>
+                <label for="title">Title</label>
+              </dt>
+              <dd>
+                <input type="text" id="title">
+              </dd>
+            </dl>
+            <dl id="date">
+              <dt><label for="date">Due Date</label></dt>
+              <dd id="first">
+                <select name="daypick" id="daypick" class="date">
+                  <option selected disabled>Day</option>
+                  <option value="">1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </dd>
+              <mark>/</mark>
+              <dd class="others">
+                <select name="monthpick" id="monthpick" class="date">
+                  <option selected disabled>Month</option>
+                  <option>jan</option>
+                  <option>feb</option>
+                  <option>march</option>
+                  <option>april</option>
+                  <option>may</option>
+                </select>
+              </dd>
+              <mark>/</mark>
+              <dd class="others">
+                <select name="yearpick" id="yearpick" class="date">
+                  <option selected disabled>Year</option>
+                  <option value="">2021</option>
+                  <option value="">2021</option>
+                  <option value="">2022</option>
+                  <option value="">2023</option>
+                  <option value="">2024</option>
+                </select>
+              </dd>
+            </dl>
+            <dl id="deslist">
+              <dt id="deslabel">
+                <label for="descr">Description</label>
+              </dt>
+              <dd><textarea name="descr" id="descr" cols="30" rows="10"></textarea></dd>
+            </dl>
+            <input type="submit" value="Save" id='save'>
+            <button id="complete">Mark as Complete</button>
+          </form>
+
+          <img src="trash.png" alt="trash" class="trash">
+        </li>
+        <li>
+          <img src="unticked-box.png" alt="unticked" class="unticked">
+          <a href="#">Item 2</a>
+          <img src="trash.png" alt="trash" class="trash">
+        </li>
+        <li>
+          <img src="unticked-box.png" alt="unticked" class="unticked">
+          <a href="#">Item 3</a>
+          <img src="trash.png" alt="trash" class="trash">
+        </li>
+        <li class="done">
+          <img src="ticked-box.png" alt="ticked" class="ticked">
+          <a href="#"><s>Item 4</s></a>
+          <img src="trash.png" alt="trash" class="trash">
+        </li>
+        <li class="done">
+          <img src="ticked-box.png" alt="ticked" class="ticked">
+          <a href="#"><s>Item 5</s></a>
+          <img src="trash.png" alt="trash" class="trash">
+        </li>
+      </ul>
+    </section>
+  </main>
+</body>
+
+</html>

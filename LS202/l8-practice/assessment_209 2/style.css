@@ -1,0 +1,168 @@
+/* by Ezra Ellette */
+body {
+  font: normal 16px Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 335px;
+  height: 100%;
+  background-color:#464f77;
+  color: #b2b5c3;
+}
+
+nav table {
+  width: inherit;
+  padding: 70px 32px 0 102px;
+}
+
+nav h1 {
+  color: #ffffff;
+  font-weight: normal;
+}
+
+.todo-count {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.todo-count p, .todo-total p {
+  display: flex;
+  float: right;
+  justify-content: space-evenly;
+  line-height: 18px;
+  background-color: #6b7292;
+}
+
+.todo-count p {
+  width: 18px;
+  border-radius: 50%;
+}
+
+.todo-total p {
+  width: 24px;
+  border-radius: 9px;
+}
+
+.active {
+  background-color: #38405e;
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding-left: 102px;
+}
+
+.active td {
+  display: inline-block;
+}
+
+.active td:nth-of-type(1) {
+  width: 26px;
+  margin-right: 7px;
+}
+
+.active td:nth-of-type(2) {
+  margin-right: 93px;
+}
+
+.toggle {
+  visibility: hidden;
+  width: 18px;
+  height: 18px;
+  margin-top: 23px;
+  margin-left: 10px;
+}
+
+label {
+  clear: both;
+  display: flex;
+  width: 18px;
+}
+
+label img {
+  flex-basis: 18px;
+}
+
+input.toggle {
+  display: none;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+main {
+  margin-top: 75px;
+  margin-left: 360px;
+  color: #060606;
+  max-width: 960px;
+}
+
+main h2 {
+  font-weight: normal;
+  display: inline-block;
+  padding-bottom: 45px;
+  margin-bottom: 0;
+}
+
+main span {
+  margin-left: 18px;
+  width: 18px;
+  text-align: center;
+  display: inline-block;
+}
+
+span p {
+  background-color: #148fd5;
+  height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  color: #ffffff;
+}
+
+main table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+main th {
+  color: #148fd5;
+  text-align: left;
+}
+
+main tbody td {
+  height: 48px;
+  border-top: 1px solid #e7e7e7;
+}
+
+main td:hover {
+  color: #148fd5;
+}
+
+main tr th:nth-of-type(1) {
+  width: 14px;
+  padding-right: 14px;
+}
+
+main tr td:nth-of-type(3) img {
+  float: right;
+}
+
+@media only screen and (max-width: 768px) {
+  nav {
+    display: none;
+  }
+
+  input:checked + nav {
+    display: block;
+  }
+
+
+  .toggle {
+    visibility: visible;
+  }
+}

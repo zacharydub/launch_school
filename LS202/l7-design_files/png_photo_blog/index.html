@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+  <title>Photo Blog - PNG Design File</title>
+  <style>
+    @import url("whitespace-reset.css");
+    * {
+      margin:0;
+      padding:0;
+    }
+    body{
+      background-color: khaki;
+      /*background-image: url("logo.png");*/
+      background: transparent url("logo.png")no-repeat;
+      background-image: linear-gradient(to bottom, #d2dbbd, #fcfff5);
+      font-family: 'Roboto Condensed', sans-serif;
+    }
+    header{
+      height:100px;
+      margin: 50px 70px 10px 70px;
+      display: flex;
+      justify-content: space-between;
+      width: 960px;
+    }
+    h1{
+      /*margin-top:25px;*/
+      font-size: 2rem;
+      /*justify-self: flex-start;*/
+      /*text-align: left;*/
+      /*align-self: flex-start;*/
+      /*margin-left: 15px;;*/
+      /*margin:0 auto;*/
+      /*display:inline-block;*/
+      position: relative;
+      left:-60px;
+      top:50px;
+    }
+    ul{
+      display: flex;
+      align-items: flex-end;
+    }
+    nav{
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    a{
+      padding: 10px 40px 10px 40px;
+      background-color: whitesmoke;
+      color: green;
+      margin:10px;
+      text-decoration: none;
+      border-top-right-radius: 5px;
+      border-top-left-radius: 5px;
+    }
+    .active{
+      background-color: green;
+      color: white;
+    }
+    header img {
+      height: 100px;
+      position: relative;
+      bottom:25px;
+    }
+    main{
+      width: 960px;
+      /*box-sizing: border-box;*/
+      background-color: white;
+      height: 100px;
+      margin-left:70px;
+      margin-right: 70px;
+    }
+    figure img{
+      margin:25px 25px 40px 25px;
+      /*height:250px;*/
+    }
+    article {
+      display: grid;
+      grid-template-areas: "header header"
+                          "article1 article1"
+                          "article2 image"
+                          "article3 image";
+      grid-template-columns: 2fr 1fr;
+    }
+    h2{
+      grid-area:header;
+      font-size: 3rem;
+    }
+    #article1{
+      grid-area:article1;
+    }
+    article img {
+      grid-area:image;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="logo">
+    <h1>Shutter Bug</h1>
+    <nav>
+      <ul>
+        <li><a href="#" class="active">Home</a> </li>
+        <li><a href="#">Gallery</a> </li>
+        <li><a href="#">About</a> </li>
+        <li><a href="#">Contact</a> </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <figure>
+      <img src="img-masthead.jpg" alt="masthead">
+      <!--<figcaption></figcaption>-->
+    </figure>
+    <article>
+      <h2>Welcome to Shutter Bug</h2>
+      <p id="article1"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. At ipsum modi omnis tenetur, cumque blanditiis facere praesentium, sapiente aperiam molestiae ipsam magni dolorem, veniam reiciendis! Quidem, delectus quis. Est, eligendi!
+      Voluptatibus modi itaque facilis excepturi obcaecati explicabo ad, dignissimos officiis laborum, harum, rem magni provident! Ea officia distinctio laborum sed nisi, nemo facere suscipit reiciendis enim quae quos quis maiores.
+      </p>
+
+      <p id="article2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae eligendi veritatis quisquam beatae at corporis nulla voluptate ab perferendis optio? Laborum saepe magnam eum, adipisci voluptatum soluta temporibus quisquam odio!Ipsam itaque beatae animi aspernatur nostrum deleniti, impedit quae vel! Porro cumque deserunt voluptas quibusdam, expedita suscipit temporibus minima, quae similique enim et quia id? Harum impedit placeat dolorum perferendis?</p>
+      <p id="article3">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et suscipit quisquam, saepe officia odio labore quidem ea impedit sapiente! Quod cupiditate neque voluptate odit excepturi saepe laborum porro natus. Adipisci.Dolorum itaque quam pariatur iure cumque enim? Sed assumenda quas ad excepturi odio itaque corrupti molestiae ducimus harum fuga aperiam veniam quisquam, earum et cupiditate praesentium neque cum reiciendis dolores!
+      </p>
+      <img src="img-article.jpg" alt="article">
+      <p></p>
+    </article>
+  </main>
+  <footer></footer>
+</body>
+</html>

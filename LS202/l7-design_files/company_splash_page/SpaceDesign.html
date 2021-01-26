@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Design File</title>
+    <style>
+      body{
+        /*background-image: url("bg_body.gif");*/
+        background: url("bg_body.gif");
+        font: normal 20px Helvetica, Arial, sans-serif;
+        /*padding-bottom: 50px;*/
+      }
+      header, main, footer{
+        width:1000px;
+        margin-right: 0 auto;
+      }
+      header img{
+        margin: 100px 500px 50px 500px;
+      }
+      main{
+        height:700px;
+        background-color: white;
+        /*padding: 50px 70x 50x 70px;*/
+        /*margin:50px auto 5s0px auto;*/
+        position: relative;
+        left:125px;
+        font-size:20px;
+        padding-bottom: 50px;
+      }
+      footer{
+        height:115px;
+        background-color: gray;
+        /*display: flex;*/
+        /*margin: 0 auto 100px auto;*/
+        position: relative;
+        left: 125px;
+      }
+      ul{
+        /*display: flex;*/
+        list-style-type: none;
+        /*justify-content: space-around;*/
+        /*padding-top: 50px;*/
+        margin-top:0;
+      }
+
+      li{
+        display: inline-block;
+        margin:60px;
+        position: relative;
+        top:-25px;
+      }
+      li:first-of-type{
+       margin-left: 250px;
+      }
+      li:last-of-type{
+        margin-right: 250px;
+      }
+      h1{
+        padding-top:150px;
+        text-align: center;
+      }
+      p{
+       width: 700px;
+       text-align: center;
+       margin:0 auto;
+      }
+      p:last-of-type{
+        /*margin-bottom: 50px;*/
+      }
+
+      h2{
+        color: teal;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="logo.png" alt="logo">
+    </header>
+    <main>
+      <article id="article1">
+        <h1>&bull; About us &bull;</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure in.</p>
+      </article>
+      <article id="article2">
+        <h1>&bull; Our Founder &bull;</h1>
+        <h2>Admiral Kerning</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in.</p>
+      </article>
+    </main>
+    <footer>
+      <ul>
+        <li> <a href="#"> <img src="icon_twitter.png" alt="twitter"></a></li>
+        <li> <a href="#"> <img src="icon_facebook.png" alt="facebook"></a></li>
+        <li> <a href="#"> <img src="icon_email.png" alt="email"></a></li>
+      </ul>
+    </footer>
+  </body>
+</html>

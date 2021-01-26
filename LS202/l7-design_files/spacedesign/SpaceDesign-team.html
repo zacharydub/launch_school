@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Design File</title>
+    <style>
+@import url("../../whitespace-reset.css");
+
+      body, img {
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+      body{
+        font: normal Helvetica, Arial, sans-serif;
+        background-image: url("images/bg_body.gif");
+        background-color: purple; /*good idea to have this in case bkg-image doesn't load and/or while waiting for it to load*/
+        text-align: center;
+        padding:135px 0 115px 0 ;
+      }
+      header{
+
+      }
+      header h1{
+        margin: 0 0 115px 0;
+        color: white;
+      }
+      header img{
+        /*margin: auto;
+        display: block;
+        margin-bottom: 50px;*/
+      }
+      nav{
+        font-size: 26px;
+        text-transform: uppercase;
+      }
+      nav li{
+        display: inline-block;
+        text-align: right;
+        padding: 0 42px;
+        margin-bottom: 40px;
+      }
+      a{
+        padding: 20px;
+        text-decoration: none;
+        color: white;
+      }
+      .current{
+        color: teal;
+        font-weight: bold;
+      }
+      main{
+        background-color: white;
+        width: 1000px;
+        margin: auto;
+        padding:80px;
+        text-align: center;
+      }
+      h2{
+        font-size: 26px;
+      }
+      h2::before,
+      h2::after{
+        display: inline-block;
+        padding:24px;
+        content:"\2022"
+      }
+      h3 {
+        margin-bottom: 10px;
+        color: teal;
+      }
+      #founder h2{
+        margin-top: 50px;
+      }
+      p{
+        margin:auto;
+        width: 500px;
+      }
+      footer {
+        background-color: lightgray;
+      }
+      footer p {
+        color: gray;
+        padding-top: 25px;
+        width: 250px;
+        margin-bottom: 15px;
+      }
+      footer ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      footer li {
+        display: inline-block;
+        padding: 0 60px 15px 60px;
+      }
+
+      footer li a {
+        background:
+          transparent
+          url("https://d3jtzah944tvom.cloudfront.net/202/projects/lesson_7/spacedesign/images/icons_social-media.png")
+          0 0 no-repeat;
+        display: block;
+        height: 46px;
+        overflow: hidden;
+        text-indent: -8685px;
+        width: 46px;
+      }
+
+      footer li a.twitter {
+        background-position: 0 0;
+      }
+
+      footer li a.facebook {
+        background-position: 0 -46px;
+      }
+
+      footer li a.email {
+        background-position: 0 -92px;
+      }
+
+      footer li a.instagram {
+        background-position: 0 -138px;
+      }
+      /*figure img{
+        width:90%
+      }*/
+      main div{
+        width: 90%;
+        margin: auto;
+      }
+      figure{
+        display: inline-block;
+      }
+      figure img{
+        margin: 90px 15px 0 15px;
+        /*display: inline-block;*/
+        width: 135px;
+        box-sizing: border-box;
+        /*height:30px;*/
+      }
+      figcaption{
+        color:blue;
+      }
+      main li{
+        display: inline-block;
+        margin: 0 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <!--<img src="SpaceDesign-home.png" alt="design file" title="design file"/>-->
+    <header>
+      <h1>
+        <img src="images/logo.png" alt="logo">
+      </h1>
+      <nav>
+        <ul>
+          <li><a href="SpaceDesign-home.html">Home</a> </li>
+          <li><a href="SpaceDesign-Project.html" >Projects</a> </li>
+          <li><a href="SpaceDesign-team.html" class="current">Team</a> </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Team</h2>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi vero est ullam maiores nesciunt minima quisquam sapiente dolores</p>
+      <!--<div>-->
+        <!--<figure>
+          <img src="images/img_kevin.jpg" alt="kevin">
+          <figcaption>Kevin</figcaption>
+        </figure>
+        <figure>
+          <img src="images/img_louis.jpg" alt="louis">
+          <figcaption>Louis</figcaption>
+        </figure>
+        <figure>
+          <img src="images/img_kasper.jpg" alt="kasper">
+          <figcaption>Kasper</figcaption>
+        </figure>
+        <figure>
+          <img src="images/img_chris.jpg" alt="chris">
+          <figcaption>Chris</figcaption>
+        </figure>-->
+      <!--</div>-->
+        <ul>
+          <li>
+            <a href="#">
+              <img src="images/img_kevin.jpg" alt="kevin">
+              Kevin
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="images/img_louis.jpg" alt="louis">Louis</a>
+            </li>
+          <li>
+            <a href="#">
+              <img src="images/img_kasper.jpg" alt="kasper">Kasper</a>
+            </li>
+          <li>
+            <a href="#">
+              <img src="images/img_chris.jpg" alt="chris">Chris</a>
+            </li>
+        </ul>
+    </main>
+
+    <footer>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis </p>
+      <ul>
+        <li><a href="#" class="twitter">Twitter</a></li>
+        <li><a href="#" class="facebook">Facebook</a></li>
+        <li><a href="#" class="email">Email</a></li>
+        <li><a href="#" class="instagram">Instagram</a></li>
+      </ul>
+    </footer>
+  </body>
+</html>

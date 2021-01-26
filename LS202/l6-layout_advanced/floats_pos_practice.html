@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Positioning</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      /*margin: 0;
+      padding: 0;*/
+    }
+    body {
+      border: 2px solid grey;
+      padding: 15px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    h2, h3, h5 {
+      color: maroon;
+      margin-top: 30px;;
+    }
+    p{
+      font:16px Helvetica, Arial sans-serif;
+      line-height: 20px;
+    }
+    #inline, #margin-inline, #padding {
+      border: 2px dashed black;
+      width: 550px;
+      margin: 45px;
+      padding: 30px;
+    }
+    .inline {
+      text-decoration: none;
+      color: black;
+      padding-top:25px;
+    }
+    .margin-inline{
+      text-decoration: none;
+      color: black;
+      padding-top:25px;
+      margin: 25px;
+    }
+    .padding{
+      text-decoration: none;
+      padding: 30px 40px 30px 40px;
+      background-color: green;
+      color:white;
+      width:200px;
+      font-weight: bold;
+    }
+
+    .float{
+      text-decoration: none;
+      padding: 25px;
+      margin: 15px;
+      background-color: green;
+      border: 2px darkgreen solid;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+      float: left;
+    }
+    #float {
+      border: 2px dashed black;
+      width: 650px;
+      margin: 45px;
+      padding: 30px;
+      /*overflow: auto; -- used to 'clear' the floating elements contained within this container element*/
+      overflow: hidden;
+    }
+
+    /* CAN USE THIS METHOD INSTEAD OF 'overflow:hidden;' */
+    /*#float::after{
+      clear: both;
+      content: "";
+      display: block;
+    }*/
+
+    /*code {
+      font-family:
+    }*/
+     /*#cf::before,
+    #cf::after {
+      content: "";
+      display: block;
+    }*/
+
+    /*#cf::after {
+      clear: both;
+    }*/
+    #bluediv{
+      background-color: blue;
+      color: white;
+    }
+    #greendiv{
+      height:60px;
+      background-color: green;
+      padding:20px;
+      margin:20px;
+      color:white;
+    }
+    #reddiv{
+      width: 90px;
+      background-color: red;
+      color: white;
+    }
+    #fadeddiv{
+      width: 180px;
+      height: 140px;
+      padding: 20px;
+      margin: 20px;
+      background-color: darksalmon;
+      overflow: hidden;
+    }
+    #redbluediv{
+      border: 1px solid red;
+      background-color: blue;
+      color: white;
+      /*display: inline-block;*/
+      float: left;
+    }
+    #redrec{
+      border: darkred;
+      background-color: red;
+      color: white;
+      /*display: inline-block;*/
+      float:right;
+    }
+    /*#firstfloat{
+      margin-bottom: 20px;
+    }*/
+    #postfloat{
+      margin-top: 100px;
+      /*display: block;*/
+    }
+    #redbox{
+      background-color: red;
+      color: white;
+      float: left;
+      width: 40%;
+      padding: 20px;
+      text-align: center;
+    }
+    #bluebox{background-color: blue;
+      color: white;
+      float: right;
+      width: 50%;
+      padding: 20px;
+      text-align: center;
+    }
+    #postfloated{
+      margin-top: 125px;
+    }
+    .block{
+      display: block;
+      text-decoration: none;
+      color: white;
+      background-color: blue;
+      width: 100%;
+      margin: 5px;
+      text-align: center;
+      padding: 10px;
+    }
+    .nav{
+      text-decoration: none;
+      color: white;
+      background-color: blue;
+      margin: 5px;
+      text-align: center;
+      padding: 10px 40px 10px 40px;
+      margin-left: 50px;
+    }
+    #floatheading{
+      border-top: 2px dashed black;
+      padding-top: 20px;
+      text-align: center;
+    }
+    .boxfloat{
+      float: left;
+    }
+    #redfloat{
+      background-color: red;
+      color: white;
+      width: 45%;
+      text-align: center;
+      padding: 40px 100px 40px 100px;
+      margin-bottom: 0;
+
+    }
+    #bluefloat{
+      background-color: blue;
+      color: white;
+      width: 55%;
+      text-align: center;
+      padding: 40px 100px 40px 100px;
+      margin-bottom: auto;
+    }
+    #greenfloat{
+      margin-top: 0;
+      background-color: green;
+      color: white;
+      width: 100%;
+      padding: 20px 100px 20px 100px;
+      text-align: center;
+      /*clear:both;*/
+    }
+    #boxfloat::after{
+      content: "";
+      clear:both;
+      display: block;
+    }
+    ul {
+      font-style: italic;
+      font-size: large;
+      margin-left: 50px;
+    }
+    #fixed{
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      color:white;
+      background-color: lightblue;
+      width: 200px;
+      padding: 20px;
+      z-index: -1;
+    }
+    #relative{
+      position: relative;
+      left: 0;
+      bottom:-30px;
+      color:white;
+      background-color: lightpink;
+      width: 200px;
+      padding: 20px;
+
+    }
+    #absolute{
+      position: absolute;
+      top: -200px;
+      left:250px;
+      color:white;
+      background-color: green;
+      width: 200px;
+      padding: 20px;
+    }
+    #absolutecont{
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <h2>Inline Elements</h2>
+<p> Inline elements occupy the space required by the content, and nothing more. They do not take width and height values.</p>
+
+<h3>Example</h3>
+
+<p>Anchor tags are inline elements: they take up the width required by their content and not the entire width of the page.</p>
+
+<section id="inline">
+<a href="#top" class="inline">Home</a>
+<a href="#top" class="inline">Portfolio</a>
+<a href="#top" class="inline">Contact</a>
+</section>
+
+<h3>What happens when we set a margin on an inline-level element?</h3>
+
+<p>Inline elements ignore top and bottom margins but observe the left and right margins.</p>
+
+<section id="margin-inline">
+<a href="#top" class="margin-inline">Home</a>
+<a href="#top" class="margin-inline">Portfolio</a>
+<a href="#top" class="margin-inline">Contact</a>
+</section>
+
+<p>In the above example, we requested a margin of 30px on all sides. However, the browser ignored the top and bottom margins.</p>
+
+<h3>What about padding? </h3>
+
+<section id="padding">
+<a href="#top" class="padding">Home</a>
+<a href="#top" class="padding">Portfolio</a>
+<a href="#top" class="padding">Contact</a>
+</section>
+
+<p>Inline elements accept padding on all sides.</p>
+
+<h3>Floating Inline Elements</h3>
+
+<section id="float">
+<a href="#top" class="float">Home</a>
+<a href="#top" class="float">Portfolio</a>
+<a href="#top" class="float">Contact</a>
+</section>
+
+<p>Floating an inline element changes its display value to block, which makes it subject to all block-level characteristics. Thus, floated inline elements can take margins, padding, heights, and widths.</p>
+
+<h2>Block Elements</h2>
+
+<p>Block-level elements require the entire width of the page and always start a new line. They can have margins and padding. When you omit the width, block elements expand to fill their parent container's natural width; when you omit the height, they expand to fit the content.</p>
+
+<h3> Example</h3>
+
+<p> <code> `div`</code> elements are block-level.</p>
+
+<p id="bluediv">This div has no explicit width or height.</p>
+
+<p>Without an explicit width or height, the box fills the entire width and uses as much height as it needs to fit the content.</p>
+
+<p id="greendiv">This div has no explicit width but a height of 60px; it also has both padding and margins of 20px on all sides.</p>
+
+<p>With an explicit height of 60px plus margins and padding, the box still fills the entire width (including the padding and margins), but now requires the requested height.</p>
+
+<p id="reddiv" >This div has a width of 90px and no explicit height.</p>
+
+<p>With an explicit width of 90px, the box collapses down to 90px width but expands the height to ensure the text still fits.</p>
+
+<p id="fadeddiv"> This div has a width of 180px and a height of 140px; it also has both padding and margins of 20px on all sides.</p>
+
+<p>With an explicit width of 180px and height of 140px, the box takes on the requested dimensions. However, the content can overflow the box as it does here.</p>
+
+<h3>Floating Block Elements</h3>
+
+<h5>Floating block elements with no width or height</h5>
+
+<div id="firstfloat">
+  <p id="redbluediv">Box - 1 - Floated Left</p>
+  <p id="redrec"> Box - 2 - Floated Right</p>
+</div>
+
+<p id="postfloat">Floated block-level elements that don't have a width collapse down to the width required by the content. Thus, multiple floated blocks can fit on the same line as shown above where we float one item left and the other right.</p>
+
+<h5>Floating block elements with width and height set.</h5>
+
+<p id="redbox">Box - 1 - Floated Left</p>
+<p id="bluebox">Box - 2 - Floated Right</p>
+
+<p id="postfloated">When you specify the widths on floated block-level elements, the browser will observe the widths. In the above example, our blocks have widths of 40% and 50%.</p>
+
+<h5>Can we change an inline element into a block element?</h5>
+
+<p>Let's use the anchor tag as an example.</p>
+
+<a href="#top" class="block">Home</a>
+<a href="#top" class="block">Portfolio</a>
+<a href="#top" class="block">Contact</a>
+
+<p>Yes, we can change a block element to an inline and vice versa. You can change the <code>display</code> property regardless of the previous value.</p>
+
+<h2>Inline-Block Elements</h2>
+
+<p>Inline-block elements are inline elements that take on most block element properties, such as width and height.</p>
+
+<h3>Example</h3>
+
+<!-- need markdown font for the code tags -->
+<p>Let's use <code>inline-block</code> to create a navigation bar:</p>
+
+<a href="#top" class="nav">Home</a>
+<a href="#top" class="nav">Portfolio</a>
+<a href="#top" class="nav">About</a>
+<a href="#top" class="nav">Contact</a>
+
+<p>We achieved similar results when we floated the anchor elements. It's as though you get two elements in one: you have the flow properties of inline elements combined with most properties of block elements.</p>
+<!-- dotted line across screen - top border for next element? -->
+<h2 id="floatheading">Floats and Positioning Elements</h2>
+
+<h3>Floats</h3>
+
+<p> The browser removes floated elements from the normal flow. Floated elements automatically become block-level elements with change: two or more floated elements can fit on the same line.</p>
+
+<h3>Example</h3>
+
+<div id="boxfloat">
+<p class="boxfloat" id="redfloat">Box 1</p>
+<p class="boxfloat" id="bluefloat">Box-2</p>
+<p class="boxfloat" id="greenfloat">Box-3</p>
+</div>
+<!-- markdown for the following -->
+<p>Elements that follow a floated element wrap around it. However, we don't want this behavior above, so we applied clear:both` property to the third `div`. There are two other values for `clear`, `left` and `right`, but we typically want `both.</p>
+
+
+<p>There are other ways to clear floats. One technique is the <strong> clearfix</strong> method:</p>
+
+<!-- need markdown font for the following -->
+  <code> elementName::after {
+    content: " ";
+    display:block;
+    clear: both;
+  }
+</code>
+  <!-- markdown -->
+<p>Here we append the ::after pseudo-element to the parent element's selector.</p>
+
+<h2>Positioning</h2>
+
+<p>We sometimes want to position elements at specific locations on the page. The normal page flow and floats can't do this with the precision we often want. We can use CSS positioning in this case. There are four positioning types:</p>
+<ul>
+  <li>Static</li>
+  <li>Fixed</li>
+  <li>Relative</li>
+  <li>Absolute</li>
+</ul>
+
+<h3>Static Positioning</h3>
+
+<p>The element renders at its normal position on the page. That is, the browser uses the standard page flow. All elements default tom static positioning.</p>
+
+<h3>Fixed Positioning</h3>
+
+<p> Lets you place an element at a fixed position in the browser window; it will remain in place even when you scroll the page. You need the top`, `bottom`, `right`, and `left properties to position the element.</p>
+
+<p>The browser removes elements with fixed positioning from the page flow. It does not leave a gap in the location where the browser would have positioned it otherwise.</p>
+
+<p>The blue box on the bottom-left corner of the page is a fixed position element.</p>
+
+<p id="fixed">I use fixed positioning.</p>
+
+<h3>Relative Positioning</h3>
+
+<p>Relative positioning positions an element at a location relative to its normal position. Unlike fixed positioning, relative positioning does not remove an element from the page flow; in fact, you can observe a gap in the flow indicating the original position.</p>
+
+<p id="relative">I use relative positioning.</p>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non cumque repellat sapiente vitae nihil debitis accusamus, odit, tempore id reiciendis consequatur necessitatibus veritatis, distinctio vel, cum repellendus numquam blanditiis perferendis?</p>
+
+<h3>Absolute Positioning</h3>
+
+<p> Absolute positioning removes an element from the normal page flow and positions it at an absolute position relative to its parent element. If the parent element is the `<body>`, the position is absolute relative to the complete page.</p>
+
+<p>The green box shows uses absolute positioning.</p>
+
+<div id="absolutecont">
+<p id="absolute"> I use absolute positioning</p>
+</div>
+
+</body>
+</html>

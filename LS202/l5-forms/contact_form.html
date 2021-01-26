@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form</title>
+  <style>
+    /* inspect document to see default styles set by browser aka 'user agent' on the chrome dev tools when you click inspect */
+    textarea {
+        resize: none;
+        overflow-y: scroll;
+        height:100px;
+        }
+    body {
+      font: 16px Helvetica, Arial, sans-serif;
+      /* helvetica is default on some, Arial default on others, and if neither of them then whatever is the sans-serif default font for that OS */
+    }
+    fieldset{
+    padding:0;
+    border:none;
+    width: 600px;
+    margin: auto;
+    }
+    /*dl{
+      margin: 0;
+    }*/
+    dt{
+      margin-bottom: 5px;;
+    }
+    dd{
+      margin-left: 0;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    textarea{
+      width: 100%;
+      height: 30px;
+      font:16px Helvetica, Arial, sans-serif;
+      padding:0 10px;
+      box-sizing: border-box;
+    }
+    textarea{
+      /* use the height we defined as HTML attribute 'rows': */
+      height: auto;
+      /* prevent the browser from allowing user to expand/shrink textarea using corner widget horizontally, but allow vertical: */
+      resize: vertical;
+    }
+    .address{
+      display: inline-block;
+
+      box-sizing: border-box;
+      /*width: 100vw;*/
+    }
+    .address dt{
+      text-align: center;
+      margin-bottom:5px;
+      height:20px;
+    }
+    .address dd{
+      margin-left: 0;
+    }
+    #statelabel{
+      padding-bottom:20px;
+    }
+    #state{
+      margin-top: 5px;
+    }
+    .fullname{
+      display: inline-block;
+      width: 50%;
+      padding-right: 5px;
+      box-sizing: border-box;
+    }
+    .fifty{
+      width: 50%;
+      /*margin-right:10px;*/
+    }
+    .tenth{
+    width: 10%;
+    /*margin-right:10px;*/
+    }
+    .forty {
+     width: 40%;
+    }
+  </style>
+</head>
+<body>
+  <form action="#" method="post">
+    <!-- POST method, this way the info from the fields wont be revealed in the URL -->
+    <fieldset>
+      <dl class="fullname">
+        <dt><label for="fname">First Name</label></dt>
+        <dd><input type="text" name="fname" id="fname"></dd>
+      </dl><!--
+      --><dl class="fullname">
+        <dt><label for="lname">Last Name</label></dt>
+        <dd><input type="text" name="lname" id="lname"></dd>
+      </dl>
+      <dl>
+        <dt><label for="email">Email Address</label></dt>
+        <dd><input type="email" name="email" id="email" placeholder="zach@gmail.com"></dd>
+      </dl>
+      <dl class = 'address fifty'>
+        <dt><label for="city">City</label></dt>
+        <dd><input type="text" name="city" id="city"></dd>
+      </dl><!--
+      --><dl class = 'address tenth' >
+        <dt><label for="state" id="statelabel">State</label></dt>
+        <dd>
+          <select name="state" id="state">
+            <option>AK</option>
+            <option>AL</option>
+            <option>AR</option>
+            <option>AZ</option>
+            <option>CA</option>
+            <option>CO</option>
+            <option>CT</option>
+            <option>DC</option>
+            <option>DE</option>
+            <option>FL</option>
+            <option>GA</option>
+            <option>HI</option>
+            <option>IA</option>
+            <option>ID</option>
+            <option>IL</option>
+            <option>IN</option>
+            <option>KS</option>
+            <option>KY</option>
+            <option>LA</option>
+            <option>MA</option>
+            <option>MD</option>
+            <option>ME</option>
+            <option>MI</option>
+            <option>MN</option>
+            <option>MO</option>
+            <option>MS</option>
+            <option>MT</option>
+            <option>NC</option>
+            <option>ND</option>
+            <option>NE</option>
+            <option>NH</option>
+            <option>NJ</option>
+            <option>NM</option>
+            <option>NV</option>
+            <option>NY</option>
+            <option>OH</option>
+            <option>OK</option>
+            <option>OR</option>
+            <option>PA</option>
+            <option>RI</option>
+            <option>SC</option>
+            <option>SD</option>
+            <option>TN</option>
+            <option>TX</option>
+            <option>UT</option>
+            <option>VA</option>
+            <option>VT</option>
+            <option>WA</option>
+            <option>WI</option>
+            <option>WV</option>
+            <option>WY</option>
+          </select>
+        </dd>
+      </dl><!--
+      --><dl class = 'address forty' >
+        <dt><label for="zipcode">Zipcode</label></dt>
+        <dd><input type="text" name="zipcode" id="zipcode" pattern="[0-9]{5}"></dd>
+      </dl>
+      <dl>
+        <dt><label for="colors">Which of these colors do you like the best?</label></dt>
+        <dd>
+          <input type="radio" name="color" id="Green" checked>Green
+          <input type="radio" name="color" id="Yellow">Yellow
+          <input type="radio" name="color" id="Blue">Blue
+        </dd>
+      </dl>
+      <dl>
+        <dt><label for="tech">Which web technologies do you want to learn?</label></dt>
+        <dd>
+          <input type="checkbox" name="HTML" id="HTML">HTML
+          <input type="checkbox" name="JS" id="JS">JS
+          <input type="checkbox" name="React" id="React">React
+        </dd>
+      </dl>
+      <dl>
+        <dt><label for="comments">Comments</label></dt>
+        <dd>
+          <textarea name="comments" id="comments" cols="80" rows="6" placeholder="Let me have it"></textarea>
+        </dd>
+      </dl>
+
+      <input type="hidden" value="2018-02-17" name="timestamp" >
+
+      <button type="submit" name="Send">Send</button>
+      <!--<button type="reset"></button>-->
+      <input type="reset" value="Reset">
+    </fieldset>
+  </form>
+</body>
+</html>
