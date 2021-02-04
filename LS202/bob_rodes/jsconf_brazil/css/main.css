@@ -1,0 +1,587 @@
+/* General settings */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-padding-top: 60px;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}
+
+body {
+  text-align: center;
+  color: #444444;
+}
+
+  /* General settings for individual elements */
+
+a {
+  text-decoration: none;
+  color: #008000;
+  font-weight: bold;
+}
+
+a:hover, a:focus {
+  text-decoration: underline;
+}
+
+a.button {
+  display: inline-block;
+  color: white;
+  background-color: #008000;
+  text-decoration: none;
+  padding: 10px 30px;
+  margin-bottom: 9px;
+}
+
+a.button:hover, a.button:focus {
+  background-color: #006000;
+}
+
+h1 {
+  margin-top: -1px;
+  font-size: 48px;
+  font-weight: 300;
+  padding: 60px 0 31px;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+p {
+  margin-bottom: 17px;
+}
+
+/* Nav */
+
+nav {
+  width: 100%;
+  padding: 13px;
+  border-top: 10px solid #f5f5f5;
+  border-bottom: 1px solid #eeeeee;
+  position: fixed;
+  background-color: #ffffff;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 3.34rem;
+}
+
+nav a {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: normal;
+  text-decoration: none;
+  outline: none;
+  color: #444444;
+}
+
+/* Header (nav is outside header, since it's a fixed-position element and the header isn't) */
+
+header {
+  height: 428px;
+  position: relative;
+  top: 55px;
+  background: url("../images/front.jpg") no-repeat center;
+}
+
+header * {
+  padding: 0;
+  font-weight: normal;
+  position: relative;
+  top: 150px;
+  color: #ffffff;
+}
+
+header img {
+  height: 80px;
+  width: 80px;
+}
+
+header h1 {
+  font-size: 72px;
+}
+
+header h2 {
+  font-size: 31px;
+  text-transform: uppercase;
+}
+
+/* Main */
+
+main {
+  margin-top: 55px;
+}
+
+main section {
+  margin: 0 30px;
+  padding-bottom: 60px;
+  border-top: 1px solid #efefef;
+}
+
+  /* Tickets section settings */
+
+#tickets p {
+  margin-bottom: 10px;
+}
+
+  /* Speakers section settings */
+
+.grid-container {
+  max-width: 1080px;
+  margin: 4px auto 5px;
+  padding-right: 3px;
+  display: grid;
+  grid-template-columns: repeat(3, 280px);
+  justify-content: center;
+  column-gap: 15px;
+  row-gap: 10px;
+}
+
+.block {
+  margin-left: 1px;
+  height: 380px;
+  width: 282px;
+  border: 1px solid #e8e8e8;
+  position: relative;
+}
+
+.block:nth-child(3n+1) {
+  margin-left: 0;
+}
+
+.block h2 {
+  margin: 29px 0 4px;
+}
+
+.block:nth-child(3n+2) h2 {
+  margin-left: -1px;
+}
+
+.block p {
+  padding: 0 0.6rem;
+  line-height: 25px;
+}
+
+.block:nth-child(3n+2) > p {
+  margin-left: -1px;
+}
+
+.block-hover-text {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+}
+
+.block-hover-text h2 {
+  margin-top: 4px;
+}
+
+.block .block-hover-text p {
+  padding: 0 10px;
+  font-size: 13px;
+  line-height: 15px;
+  color: #ffffff;
+}
+
+.block:nth-child(3n+2) .block-hover-text p {
+  padding: 0 0.59rem 0 0.65rem;
+}
+
+.block:nth-child(3n+3) .block-hover-text p {
+  padding: 0 0.55rem 0 0.7rem;
+}
+
+.block:hover .block-hover-text, 
+.block:target .block-hover-text,
+.block:focus-within .block-hover-text {
+  opacity: 1;
+}
+
+  /* Schedule section settings */
+
+    /* General grid */
+
+.schedule-grid {
+  max-width: 960px;
+  margin: 1px auto 0;
+  padding-left: 2px;
+  border-bottom: 1px solid #efefef;
+  display: grid;
+  grid-template-columns: 84px 722px 150px;
+}
+
+.schedule-grid > div {
+  padding: 11px 12px 11px 10px;
+  border-top: 1px solid #efefef;
+  text-align: left;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+    /* Time column */
+
+.schedule-grid .schedule-hour {
+  width: 82px;
+  padding: 10px 12px 12px 10px;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+    /* Description column */
+
+.schedule-desc h2 {
+  margin-top: -2px;
+  display: inline-block;
+  font-weight: normal;
+}
+
+.schedule-desc h2.multiline {
+  margin-top: -4px;
+}
+
+.schedule-desc h3 {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.schedule-desc p {
+  margin: 0;
+}
+
+.taglist {
+  display: inline-block;
+  font-size: 13px;
+}
+
+.taglist h2 {
+  margin-right: 10px;
+}
+
+.schedule-tag {
+  padding: 1px 4px;
+  display: inline-block;
+  vertical-align: 6px;
+  font-size: 7px;
+  font-weight: normal;
+  background: #eeeeee;
+  border: 1px solid #aaaaaa;
+}
+
+    /* Photo column */
+  
+.schedule-photo a {
+  /* width: 130px; Keeps outline from running to edge of page on keyboard access */
+  height: 111px;
+}
+
+.schedule-photo img {
+  width: 130px;
+  margin-top: -1px;
+}
+
+    /* Special settings for badly behaved row (17:00 John Paul) */
+
+#paul-time {
+  padding-top: 8px;
+}
+
+#paul-desc h2 {
+  margin-top: -4px;
+}
+
+#paul-photo {
+  padding-bottom: 10px;
+}
+
+  /* Location settings */
+
+.left p {
+  text-align: left;
+  max-width: 960px;
+  margin: -1px auto 18px;
+  line-height: 25px;
+}
+
+#map {
+  padding-top: 12px;
+  margin: 0 -30px 26px;
+}
+
+#map img {
+  width: 100%;
+  height: 500px;
+}
+
+  /* Call for papers settings */
+
+#papers {
+  margin-top: -1px;
+}
+
+.left a.button {
+  display: inline;
+}
+
+  /* Sponsors settings */
+
+#sponsors {
+  margin-top: -1px;
+  padding-bottom: 49px;
+}
+
+.sponsors-container {
+  max-width: 960px;
+  margin: -1px auto 0;
+}
+
+.sponsors-container h3 {
+  font-size: 18px;
+  font-weight: 600;  
+  text-align: left;
+}
+
+.sponsors-flex {
+  margin: 5px 0 37px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 44px;
+  row-gap: 7px;
+}
+
+.sponsors-flex:first-of-type {
+  column-gap: 4px;
+}
+
+.platinum-sponsor, .gold-sponsor {
+  height: 247px;
+}
+
+.silver-sponsor {
+  height: 198px;
+}
+
+.support-sponsor {
+  height: 148px;
+}
+
+.gold-sponsor img {
+  width: 300px;
+}
+
+.silver-sponsor img {
+  width: 240px;
+}
+
+.support-sponsor img {
+  width: 180px;
+}
+
+#booking {
+  margin-top: 1px;
+}
+
+/* Footer settings */
+
+footer {
+  height: 100%;
+  padding-bottom: 28px;
+  background-size: cover !important;
+  background: url("../images/people.jpg") no-repeat center 23%;
+  color: white;
+}
+
+footer section {
+  padding: 0 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+footer h1 {
+  padding: 30px 0 29px;
+}
+
+footer h2 {
+  font-size: 31px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+footer p {
+  line-height: 25px;
+}
+
+footer a.button {
+  margin-top: -9px;
+}
+
+.footer-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 10px 0;
+  text-align: left;
+}
+
+@media (max-width: 1024px) {
+  .schedule-grid {
+    grid-template-columns: 1fr 8.5fr 1fr;
+  }  
+}
+
+@media (max-width: 768px) {
+  nav {
+    width: 100vw;
+    row-gap: 26px;
+  }
+
+  .speakers {
+    padding-left: 2px;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 13px;
+  }
+
+  .block:nth-child(odd) {
+    justify-self: end;
+  }
+
+  .schedule-grid {
+    grid-template-columns: 1fr 5fr 1fr;
+  }    
+}
+
+@media (max-width: 654px) {
+  nav { 
+    display: none; 
+  }
+
+  header { 
+    top: 0; 
+    margin-bottom: 0; 
+    height: 300px; 
+  }
+  
+  header * { 
+    top: 90px; 
+  }
+
+  header h1 { 
+    font-size: 40px; 
+  }
+  
+  header h2 { 
+    font-size: 20px; 
+  }
+
+  main {
+    margin: 0;
+  }
+
+  .block {
+    margin-left: 3px;
+  }
+
+  .block > h2 {
+    padding-left: inherit !important;
+  }
+
+  .block > p {
+    padding-left: 0.6rem !important;
+  }
+
+  .grid-container {
+    grid-template-columns: auto;
+  }
+
+  .schedule-grid {
+    margin-right: 2px;
+    border-color: #999999;
+    grid-template-columns: 1fr 1fr 1% 1fr;
+    grid-auto-flow: dense;
+  }
+
+  .schedule-grid > div {
+    display: inline-block;
+    border-color: #999999;
+  }
+
+  .schedule-grid .schedule-hour {
+    width: 100%;
+    padding: 20px;
+    text-align: right;
+    grid-column: 4 / 5;
+  }
+
+  .schedule-grid .schedule-desc:not(.nophoto) {
+    margin: -18px 0 -1px;
+    grid-column: 1 / 5;
+    border: none;
+  }
+
+  .schedule-desc.nophoto {
+    display: flex;
+    grid-column: 1 / 3;
+  }
+
+  .schedule-desc h2.multiline {
+    margin-top: -1px;
+  }
+
+  .schedule-grid .schedule-photo {
+    grid-column: 1 / 4;
+  }
+
+  .schedule-photo.nophoto {
+    grid-column: 3 / 4;
+  }
+
+  .schedule-photo img {
+      width: 80px;
+  }
+
+  #map {
+    margin: 29px -30px 27px;
+    padding: 0;
+    background: top / 100vw 501px no-repeat url("../images/maps/map_small.jpg");
+  }
+
+  #map img {
+    visibility: hidden;
+  }
+
+  footer {
+    padding-bottom: 36px;
+  }
+
+  footer h1 { 
+    font-size: 35px;
+    padding: 22px;
+  }
+
+  .footer-content {
+    padding: 10px;
+  }
+
+}
+
+/* Experiment with Firefox-specific settings, where elements are slightly off from Chrome */
+
+@-moz-document url-prefix() {
+  main section:first-child p {
+    margin-bottom: 9px;
+  }
+
+  a.button {
+    margin-bottom: 8px;
+  }
+}

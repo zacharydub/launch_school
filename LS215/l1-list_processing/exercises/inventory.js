@@ -23,3 +23,7 @@ function transactionsFor(inventoryItem, transactions) {
     return elm.id === inventoryItem;
   })
 }
+//ALTERNATIVE
+//function transactionsFor(inventoryItem, transactions) {
+//  return transactions.filter(({id}) => id === inventoryItem);
+//}

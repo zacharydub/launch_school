@@ -50,7 +50,7 @@
 // mysteriousMath('(4 * 3 + 2) / 7 - 1 = 1'); // -> '(4 ? 3 ? 2) ? 7 ? 1 = 1'
 
 // let mysteriousMath = function (equation) {
-//   return equation.replace(/[+\-*\?]/g, '?')
+//   return equation.replace(/[+\-*\/]/g, '?')
 // }
 
 // Note that we apply the g option to the regex in JavaScript.
