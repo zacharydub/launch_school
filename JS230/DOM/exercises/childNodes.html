@@ -1,0 +1,47 @@
+<div id="1">
+  <h1 id="2">Hello, <em id="3">World</em></h1>
+  <p id="4">
+    Welcome to wonderland. This is an
+    <span id="5">awesome</span> place.
+  </p>
+  <a href="#" id="6"><strong id="7">Enter</strong></a>
+  <div id="8">
+    <p id="9"><a href="#" id="10">Go back</a></p>
+  </div>
+</div>
+
+<!-- Write code that returns the number of direct and indirect child nodes for a given parent node as an array.
+
+// sample output
+> childNodes(1);
+= [9, 12]
+> childNodes(4);
+= [3, 1]
+> childNodes(9);
+= [1, 1]
+
+
+function childNodes(id) {
+  let parent = document.getElementById(String(id));
+  let directChildren = parent.childNodes.length;
+  let indirectChildren = 0;
+
+  for (let idx = 0; idx < directChildren; idx += 1) {
+    walkTree(parent.childNodes[idx], node => {
+      return indirectChildren += node.childNodes.length;
+    });
+  }
+
+  return [directChildren, indirectChildren];
+}
+
+function walkTree(node, callback) {
+  callback(node);
+
+  if (node.childNodes.length > 0) {
+    for (let idx = 0; idx < node.childNodes.length; idx += 1) {
+      walkTree(node.childNodes[idx], callback);
+    }
+  }
+}
+-->

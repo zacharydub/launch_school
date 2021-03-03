@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One</title>
+  <style>
+    #elem1 {
+      background-color: green;
+      position: relative;
+      width: 200px;
+      height: 200px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #elem2 {
+      background-color: blue;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 150px;
+      height: 150px;
+    }
+
+    #elem3 {
+      background-color: red;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 100px;
+      height: 100px;
+      line-height: 25px;
+    }
+
+    #elem4 {
+      background-color: yellow;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="elem1">1
+    <section id="elem2">2
+      <article id="elem3">3
+        <main id="elem4">4
+        </main>
+      </article>
+    </section>
+  </div>
+  <script>
+    //objective is to list the sequence of event listeners that fire based on the alert boxes you see in the clip (i.e., click event listener of the main element listening on the capture phase).
+    let elem1 = document.querySelector('#elem1');
+
+    elem1.addEventListener('click', event => alert(event.target.tagName + '' + event.target.id));
+    elem1.addEventListener('click', event => alert(event.currentTarget.tagName + '' + event.currentTarget.id));
+
+
+    //Sequence (when clicking on inner most element/box)
+//The click event listener listening on the bubbling phase that alerts the tagName of the target element listening on the div element (the first event handler).
+//The click event listener listening on the bubbling phase that alerts the tagName of the currentTarget element listening on the div element (the second event handler).
+
+//**NOTE**
+//It is interesting to note that adding an event listener of the same type — "click" — to the same element doesn't overwrite the first one that was added
+  </script>
+</body>
+
+</html>

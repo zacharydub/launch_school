@@ -2,6 +2,9 @@
 //remove all non-alpha chars
 str.replace(/[^a-z]/ig, '')
 
+//split acc to multiple delimeters
+let regex = /[-\.:]/
+let arr = 'he-l.l:o'.split(regex)
 
 //check for a valid URL
 str.match(/^https?:\/\/\S+$/)
@@ -25,4 +28,10 @@ function searchWord(word, text) {
   const matches = text.match(regex);
 
   return matches ? matches.length : 0;
+}
+
+function isBlockWord(word) {
+  const blocks = ['B:O', 'X:K', 'D:Q', 'C:P', 'N:A', 'G:T', 'R:E', 'F:S', 'J:W', 'H:U', 'V:I', 'L:Y', 'Z:M'];
+  const regExps = blocks.map(block => new RegExp(block.replace(':', '|'), 'gi'));
+  return regExps.every(regExp => (word.match(regExp) || []).length < 2);
 }

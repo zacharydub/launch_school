@@ -1,7 +1,7 @@
 //input validation
 //check that it's a string and consists of only numbers
 
-//play around with provided examples - break them down and see how it processes in head
+//play around with provided examples - break them down and see how it processes
 
 //write func tht will return true if a given string (divided and grouped into a size) will contain a set of conscutive numbers regardless of orientation, whether ascending or descneing - otherwie return false
 

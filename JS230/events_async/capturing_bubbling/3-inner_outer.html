@@ -1,0 +1,74 @@
+<!--
+two event listeners: one on the div#elem4 element and the other on the div#elem1 element. The two event listeners have the same behavior: they display the id via an alert box. We'll also display the id of the currentTarget instead of target so that it is clearer which event listener is firing.
+
+Only one event gets fired when clicking on "4": a click event. The handlers on the other hand, are two and that's why there are two alert boxes. The one event triggers the two handlers because of "capturing" and "bubbling."
+
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inner-outer</title>
+  <style>
+    #elem1 {
+      background-color: green;
+      position: relative;
+      width: 200px;
+      height: 200px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #elem2 {
+      background-color: blue;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 150px;
+      height: 150px;
+    }
+
+    #elem3 {
+      background-color: red;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 100px;
+      height: 100px;
+      line-height: 25px;
+    }
+
+    #elem4 {
+      background-color: yellow;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="elem1">1
+    <div id="elem2">2
+      <div id="elem3">3
+        <div id="elem4">4
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    let elem1 = document.querySelector('#elem1');
+    let elem4 = document.querySelector('#elem4');
+
+    elem1.addEventListener('click', event => alert(event.currentTarget.id));
+    elem4.addEventListener('click', event => alert(event.currentTarget.id));
+  </script>
+</body>
+
+</html>

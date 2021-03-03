@@ -1,0 +1,57 @@
+<!-- Implement a function that makes an element bold and allows the user of the function to optionally do something else with it. -->
+
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <title>Bold Element + Custom</title>
+</head>
+
+<body>
+  <section>Hello World</section>
+  <p>Greetings!</p>
+
+  <script>
+    let sectionElement = document.querySelector('section');
+
+    makeBold(sectionElement, function (elem) {
+      elem.classList.add('highlight');
+    });
+    console.log(sectionElement.classList.contains('highlight'));
+    //true
+    console.log(sectionElement.style.fontWeight);
+    //"bold"
+
+    ////SOLUTION:
+    function makeBold(elm, cb) {
+      elm.style.fontWeight = 'bold';
+
+      if (cb && typeof cb === 'function') {
+        cb(elm);
+      }
+
+    }
+
+    ////Further Exploration
+    //You can get the same behavior as the above solution by creating your own custom event. For this further exploration exercise, create your own CustomEvent called bolded that allows the user to add it as the type of event to listen to.
+    const sectionElement = document.querySelector('section');
+
+    function makeBold(element) {
+      element.style.fontWeight = 'bold';
+      const event = new CustomEvent('bolded');
+
+      element.dispatchEvent(event);
+    }
+
+    sectionElement.addEventListener('bolded', (event) => {
+      alert(event.target.tagName);
+      event.target.classList.add('highlight');
+    });
+
+    makeBold(sectionElement);
+
+  </script>
+</body>
+
+</html>

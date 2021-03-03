@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+</head>
+
+<body>
+
+
+  <!--given this info:-->
+  <script id="post" type="text/x-handlebars">
+  <article>
+    <h1>{{title}}</h1>
+    <p><time>Posted on {{published}}</time></p>
+    {{body}}
+  </article>
+</script>
+  <script>
+    let post = {
+      title: 'Lorem ipsum dolor sit amet',
+      published: 'April 1, 2015',
+      body: 'Sed <strong>ut</strong> perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.'
+    };
+    //1- Locate the template by ID and compile it to a template function. Render the post to the body element using the function.
+    let template = Handlebars.compile($('#post').html())
+    //or using JS:
+    let postTemplate = Handlebars.compile(document.getElementById('post').innerHTML);
+
+    $('body').append(template(post))
+
+    //2 - Change your post object's body property to contain HTML elements as part of the string. Modify your Handlebars template to allow HTML to be output unescaped.
+    post.body = '<p>' + post.body + '</p>'
+
+
+    //  <p><time>Posted on {{ published }}</time></p>
+    //  { { { body } } } // <--
+    //</article >
+
+
+    //3 - Add a property called tags on the post object that will be an array of strings to represent tags added to the blog post. Use the Handlebars each built-in helper to output all tags for the post.
+    post.tags = []
+
+  </script>
+</body>
+
+</html>

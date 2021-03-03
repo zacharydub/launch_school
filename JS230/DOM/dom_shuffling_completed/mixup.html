@@ -1,0 +1,86 @@
+<!--Oh no! We've got a gremlin in our server that's moving elements all over the place. Thankfully, we've got an older version of the page as a reference to put things back in order. Whenever we upload it, though, the same shuffling occurs on our page. We have to write some code to find their resulting positions and move them to their correct places once the page has loaded.
+
+You'll want to have both the original and mixed up pages open to make comparisons. Create a Javascript file and include it in the mixup HTML file before the closing body tag. Write any code you need to take the elements from where they currently are and move them to the right places. Refresh your page as you work on this. When an element is in the right spot, it will have a light green background; when it isn't, the background will be red.
+
+The original.html file is what you want to produce by manipulating the HTML in mixup.html. You should attempt to locate the misplaced elements and move them to where they belong. There are many ways to complete this problem, so there's no one right answer.-->
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <title>Mixup Fixer</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+
+<body>
+  <main>
+    <h1><a href="#">My Site!</a></h1>
+    <section id="content">
+      <article>
+        <header>
+          <h1>Welcome to my site!</h1>
+          <h2>I hope you stay a while.</h2>
+        </header>
+        <p>
+          This is my personal slice of the Internet, where I post my ideas and
+          projects that I've completed or am currently working on. All are
+          patent pending.
+        </p>
+      </article>
+      <figure>
+        <img src="images/baby_mop.jpg" alt="The baby mop" />
+        <figcaption>
+          The chin stick &ndash; stay upright while sleeping!
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="images/chin_stick.jpg" alt="The chin stick" />
+        <figcaption>
+          The baby mop &ndash; great for wet and dry mopping!
+        </figcaption>
+      </figure>
+    </section>
+  </main>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <footer>
+    <p>&copy; 2020 me. All projects are patent pending</p>
+  </footer>
+
+  <!-- SOLUTION -->
+
+  <script>
+    let header = document.querySelector("body > header");
+    let h1 = document.querySelector("main > h1");
+    header.insertBefore(h1, header.firstChild);
+    document.body.insertBefore(header, document.body.firstChild);
+
+    let [chinStickFigure, babyMopFigure] = document.querySelectorAll("figure");
+
+    let babyMopImage = chinStickFigure.querySelector("img");
+    let chinStickImage = babyMopFigure.querySelector("img");
+    chinStickFigure.insertBefore(chinStickImage, chinStickFigure.firstChild);
+    babyMopFigure.insertBefore(babyMopImage, babyMopFigure.firstChild);
+
+    let article = document.querySelector("article");
+    article.insertBefore(chinStickFigure, null);
+    article.insertBefore(babyMopFigure, null);
+//Our solution can be entered directly into the Developer Tools console. If you need to rerun the code, just reload the page and copy and paste the code into the console.
+
+//We start out by moving the h1 header that contains the My Site! link into the header element that contains the unordered list we use for navigation. We then move the modified header element to the top of the document body. Note that we don't have to explicitly remove any of the DOM elements. Merely copying an element from one location to another (as we do with the insertBefore method) moves the original node to a new place; nothing gets left behind.
+//Next, we exchange the two positions of the two images (the Chin Stick and the Baby Mop), each of which is in the wrong figure element. This operation is straightforward but can be confusing, especially if you choose to use arrays for the figure elements. We intentionally destructure the arrays to give them meaningful names.
+//Finally, we move the two figures into the article element where they belong.
+  </script>
+</body>
+
+</html>
