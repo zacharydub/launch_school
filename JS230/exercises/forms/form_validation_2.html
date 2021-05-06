@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!-- Part 2: Character Blocking Input
+The previous exercise is a first good step at validating user input. Let's enhance it a bit:
+
+The first and last names aren't validated properly: the user can use numbers in their name. With our current validation rules, the user can get away with using numbers as names. Don't let the user enter invalid characters in these fields.
+Solicit a credit card number as four hyphen-separated 4-digit numbers.
+Specifications
+ - Use the pattern a-zA-Z'\s to validate user input for first and last names. Use the keypress event to prevent the user from entering a character that doesn't match the pattern.
+ - Add a credit card field to the form. The field should use 4 inputs, all with the same name - attribute.
+ - Each credit card input should have a maximum length of 4 characters.
+ - Use the keypress event to prevent the user from entering non-numeric characters in the credit card inputs. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up2</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="whitespace-reset.css">
+  <link rel="stylesheet" href="app.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 24px;
+      width: 800px;
+      margin: 70px auto 0 auto;
+    }
+
+    body {
+      background: #52be43;
+      font-size: 18px;
+    }
+
+    form {
+      width: 800px;
+      margin: 15px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 4px;
+    }
+
+    dt {
+      padding: 20px 0 5px 0;
+    }
+
+    input {
+      font-size: 18px;
+      width: 300px;
+      height: 38px;
+      padding: 3px 10px;
+      outline: none;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    input:focus {
+      border: 1px solid #52be43;
+    }
+
+    .invalid_field {
+      border: 1px solid #a93333;
+    }
+
+    .error_message {
+      display: inline-block;
+      margin-left: 30px;
+    }
+
+    button {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      outline: none;
+      color: #fff;
+      padding: 5px 15px;
+      border-radius: 4px;
+      background: #52be43;
+      border: none;
+    }
+
+    .form_errors,
+    .error_message {
+      color: #a93333;
+    }
+
+    #creditCardNumber input {
+      width: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sign up Form</h1>
+  <form action="#" method="post" novalidate>
+    <p class="form_errors"></p>
+    <fieldset>
+      <dl>
+        <dt>
+          <label for="first_name">First Name</label>
+        </dt>
+        <dd>
+          <!--<input type="text" id="first_name" name="first_name" class='fullName' required pattern="[a-zA-Z]+">-->
+          <input type="text" id="first_name" name="first_name" class='fullName' required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="last_name">Last Name</label>
+        </dt>
+        <dd>
+          <!--<input type="text" id="last_name" name="last_name" class='fullName' required pattern="[a-zA-Z]+">-->
+          <input type="text" id="last_name" name="last_name" class='fullName' required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="email">Email</label>
+        </dt>
+        <dd>
+          <input type="text" required name="email" id="email" placeholder="someone@example.com" pattern=".+@.+">
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="password">Password</label>
+        </dt>
+        <dd>
+          <input type="password" name="password" id="password" pattern=".{10,}" required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="phone">Phone Number</label>
+        </dt>
+        <dd>
+          <input type="number" name="phone" id="phone" pattern="\d{3}-\d{3}-\d{4}" placeholder="111-222-3333">
+          <span class="error_message"></span>
+        </dd>
+
+        <dl>
+          <dt>
+            <label for="creditCardNumber">Credit Card</label>
+          </dt>
+          <dd id="creditCardNumber">
+            <!--<input type="text" id="cd1" name="cc" maxlength='4' pattern="\d{4}">-->
+            <input type="text" id="cd1" name="cc" maxlength='4'>
+
+            -
+            <input type="text" id="cd2" name="cc" maxlength='4'>
+            -
+            <input type="text" id="cd3" name="cc" maxlength='4'>
+            -
+            <input type="text" id="cd4" name="cc" maxlength='4'>
+            <span class="error_message"></span>
+          </dd>
+
+        </dl>
+
+        <button type="submit">Sign Up</button>
+      </dl>
+    </fieldset>
+  </form>
+  <script>
+    var App = {
+      $form: $('form'),
+      $input: $('input'),
+      $names: $('.fullName'),
+
+      handleValueAbsence: function ($control) {
+        var labelText = $('label[for=' + $control.attr('id') + ']').text();
+        var $errorMessage = $control.next('.error_message');
+        var errorMessage = labelText + ' is a required field.';
+
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+      },
+
+      handlePatternMismatch: function ($control) {
+        var labelText = $('label[for=' + $control.attr('id') + ']').text();
+        var $errorMessage = $control.next('.error_message');
+        var errorMessage = 'Please Enter a valid ' + labelText + '.';
+
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+
+        if ($control.attr('id') === 'password') {
+          $errorMessage.text('Password must be at least 10 characters long.');
+        }
+        ////
+        ////
+        ////I added a pattern HTML attribute for the names and CC fields, so I can use the existing handlePatternMismatch func
+
+        ///check if name fields
+        //else if ($control.hasClass('fullName')) {
+        //  $control.val($control.val().slice(0, -1))
+        //}
+        //// check if cc fields
+        //else if ($control.attr('name') === 'cc') {
+        //  $control.val($control.val().slice(0, -1))
+        //}
+        ////
+        ////
+      },
+
+      validateControl: function ($control) {
+        if ($control[0].validity.valueMissing) {
+          this.handleValueAbsence($control);
+          return false;
+        } else if ($control[0].validity.patternMismatch) {
+          this.handlePatternMismatch($control);
+          return false;
+        }
+
+        return true;
+      },
+
+      handleFormSubmit: function () {
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+        } else {
+          $('.form_errors').text('Form cannot be submitted until errors are corrected.');
+          this.validateFormInputs();
+          return false;
+        }
+      },
+
+      validateFormInputs: function () {
+        var self = this;
+        this.$input.each(function () {
+          self.validateControl($(this));
+        });
+      },
+
+      handleBlur: function (e) {
+        var $control = $(e.target);
+
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+        }
+        this.validateControl($control);
+      },
+
+      handleFocus: function (e) {
+        var $control = $(e.target);
+        $control.next('.error_message').text('');
+        $control.removeClass('invalid_field');
+      },
+
+      ////
+      ////
+      blockNonAlpha: function (e) {
+        if (!e.key.match(/[a-zA-Z'\s]/)) {
+          e.preventDefault();
+        }
+      },
+
+      blockNonNumeric: function (e) {
+        if (!e.key.match(/[-0-9]/)) {
+          e.preventDefault();
+        }
+      },
+      ////
+      ////
+      init: function () {
+        this.$input.on('blur', this.handleBlur.bind(this));
+        this.$input.on('focus', this.handleFocus.bind(this));
+        this.$form.on('submit', this.handleFormSubmit.bind(this));
+        ////
+        ////
+        //this.$names.on('keyup', this.handleBlur.bind(this))
+
+        //LS
+        $('#first_name, #last_name').on('keypress', this.blockNonAlpha.bind(this));
+        $('#phone, #cd1, #cd2, #cd3, #cd4').on('keypress', this.blockNonNumeric.bind(this));
+        ////
+        ////
+      }
+    };
+
+    App.init();
+
+
+    //P - additional validations on name fields and add cc fields
+    //E - QA against validation rules
+    //D - same
+    //A -
+    //attach KEYPRESS event to name fields to prevent user inputting pattern mismatch
+    // use handleBlur, then in validateControl func, in pattern mismatch, check if current control is a name. If so, delete most recent char
+
+    //LS approach:
+    //new ELs (blockNonAlpha and blockNonNumeric) on keypress event for name fields and cc fields
+
+
+
+
+  </script>
+</body>
+
+</html>

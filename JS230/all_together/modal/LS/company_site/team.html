@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <title>Space Design | Team</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="initial-scale=1.0" />
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="site.css" />
+  <style>
+    /*.modal {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      width: 400px;
+      height: auto;
+      margin: 0 0 0 -200px;
+      z-index: 2;
+    }*/
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>
+      <a href="home.html">SpaceDesign</a>
+    </h1>
+    <nav>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="team.html" class="active">Team</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div id="team" class="column">
+      <div id="modal-layer" class="hide"></div>
+      <div id="modal" class="hide">
+        <a href="#" class="close">Close</a>
+        <!-- what is the 'Close' text in the above anchor tag? -->
+        <img src="" alt="" />
+        <h3></h3>
+        <p></p>
+      </div>
+      <article>
+        <h2>Team</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniadolor</p>
+        <ul>
+          <li>
+            <a href="#" data-name="Kevin Wang" data-image-source="images/img_kevin.jpg"
+              data-text="Fusce feugiat loremissum not working what cani i do thats development for you you gotta keep practinging and experimenting and building biilding bui,ding most of all keep building dont stop building you need to keep going and writting more and more and more and eventually you will actually get good at it.">
+              <img src="images/img_kevin.jpg" alt="Kevin Wang" />
+              Kevin
+            </a>
+          </li>
+          <li>
+            <a href="#" data-name="Louis" data-image-source="images/img_louis.jpg"
+              data-text="Fusce feugiat loremissum not working what cani i do thats development for you you gotta keep practinging and experimenting and building biilding bui,ding most of all keep building dont stop building you need to keep going and writting more and more and more and eventually you will actually get good at it.">
+              <img src="images/img_louis.jpg" alt="Louis Burton" />
+              Louis
+            </a>
+          </li>
+          <li>
+            <a href="#" data-name="Kasper" data-image-source="images/img_kasper.jpg"
+              data-text="Fusce feugiat loremissum not working what cani i do thats development for you you gotta keep practinging and experimenting and building biilding bui,ding most of all keep building dont stop building you need to keep going and writting more and more and more and eventually you will actually get good at it.">
+              <img src="images/img_kasper.jpg" alt="Kasper Salto" />
+              Kasper
+            </a>
+          </li>
+          <li>
+            <a href="#" data-name="Chris" data-image-source="images/img_chris.jpg"
+              data-text="Fusce feugiat loremissum not working what cani i do thats development for you you gotta keep practinging and experimenting and building biilding bui,ding most of all keep building dont stop building you need to keep going and writting more and more and more and eventually you will actually get good at it.">
+              <img src="images/img_chris.jpg" alt="Chris Lee" />
+              Chris
+            </a>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      Lorem ipsum dolor sit amet, consectetu
+      <br />
+      incididunt ut labore et dolore magna aliqua. Ut enim ad
+    </p>
+    <ul>
+      <li><a href="" class="twitter">Twitter</a></li>
+      <li><a href="" class="facebook">Facebook</a></li>
+      <li><a href="" class="email">Email</a></li>
+      <li><a href="" class="instagram">Instagram</a></li>
+    </ul>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let modal = document.querySelector('#modal');
+      let modalLayer = document.querySelector('#modal-layer');
+      let modalTitle = modal.querySelector('h3');
+      let modalImage = modal.querySelector('img');
+      let modalText = modal.querySelector('p');
+      let teamLinks = document.querySelectorAll('#team li > a');
+      console.log(teamLinks)
+
+      function showModal() {
+        event.preventDefault();
+        let link = event.target.closest('a');
+        modalTitle.textContent = link.dataset.name;
+        modalImage.src = link.dataset.imageSource;
+        modalImage.alt = link.dataset.name;
+        modalText.textContent = link.dataset.text;
+        modalLayer.classList.replace('hide', 'show');
+        modal.classList.replace('hide', 'show');
+      }
+
+      function hideModal() {
+        event.preventDefault();
+        modalTitle.textContent = '';
+        modalImage.src = '';
+        modalImage.alt = '';
+        modalText.textContent = '';
+        modalLayer.classList.replace('show', 'hide');
+        modal.classList.replace('show', 'hide');
+      }
+
+      //teamLinks is HTML collection, not array with access to forEach?
+      teamLinks.forEach(link => link.addEventListener('click', showModal));
+      document.querySelector('#modal-layer').addEventListener('click', hideModal);
+      document.querySelector('#modal a.close').addEventListener('click', hideModal);
+      document.addEventListener('keyup', function (event) {
+        if (event.keyCode === 27) {
+          hideModal();
+        }
+      });
+    });
+//In the team.html file, we added a <div> for the modal layer and a <div> for the modal itself; the both begin with a class of hide. The modal <div> contains the empty <img>, <h3>, <p> elements which will be populated dynamically, as well an <a> element which will have an event listener attached for closing the modal.
+
+//We added CSS rules to style the #modal-layer and #modal divs, as well as the content of the modal. The show and hide classes will be added and removed from the #modal and #modal-layer dynamically in order to change their visibility and opacity; the #modal has a transition property set to create a fade effect.
+//
+//Our JavaScript code in modal.js is fairly basic in terms of implementation. We have a DOMContentLoaded event listener, within which we use querySelector and querySelectorAll to locate the various elements we need to manipulate and then assign variables to those elements.
+//
+//We declare two functions showModal() and hideModal() which do fairly similar things:
+//
+//The showModal() function uses the Element.closest() method to locate the closest matching anchor (<a>) element to the event target. The reason for using closest is so that we know we are always working with the <a> element, regardless of whether that element or one of its children was clicked. The function then sets the content for <h3> and <p> elements of the modal, and the values of the src and alt attributes of the <img> element. They are set to the values of the appropriate data- attributes from the <a> element that was clicked. Finally, the Element.classList.replace() method to remove the hide class from the modal and modal layer, and add the show class.
+//The hideModal() function essentially does the reverse. It empties the <h3> and <p> elements of the modal, as well as the values of the src and alt attributes of the <img> element. It then removes the show class from the modal and modal layer, and adds the hide class.
+//Finally we have four event listeners:
+//
+//There is a click event listener attached to each of the list items. We could have delegated the listener to the <ul> element rather than attaching them individually, but this would have required some additional conditional checking in response to every click within the <ul> to see if an <li> element or one of its children was actually clicked. Since there are only four <li> elements, attaching a listener to each isn't really an issue in terms of performance. The handler for this event is the showModal() function.
+//There are click event listeners for the #modal-layer div and the close anchor element of the modal, which both call the hideModal() function.
+//Finally there is a keyup listener which calls hideModal() if the Escape key is pressed.
+  </script>
+</body>
+
+</html>

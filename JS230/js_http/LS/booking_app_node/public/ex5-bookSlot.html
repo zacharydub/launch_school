@@ -1,0 +1,394 @@
+<!-- Implement the markup and JavaScript for booking a schedule. Be sure to check out the documentation on the requirements for a booking.
+
+In the event that the student who's booking the appointment isn't in the database, you must provide a way for the user to create the student, and then automatically proceed with the booking once the student is successfully created.
+
+Assume that only one schedule at a time can be booked.
+
+Beware scope and send() nested within an EL - https://launchschool.com/posts/eb27e0b7-->
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Exercise 5</title>
+  <style>
+    #newStudentForm {
+      background: #ccc;
+      padding: 15px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Schedules</h1>
+  <form method="post" action="/api/bookings">
+    <label for="id">Please select one schedule</label>
+    <select id="id" name="id">
+    </select>
+    <br>
+    <label for="student_email">Email:</label>
+    <input type="email" id="student_email" name="student_email" required>
+    <input id="btnSubmit" type="submit">
+  </form>
+
+  <script>
+    //HINT: You'll need to get a list of available schedules. Schedules that can be booked are those without a value in the student_email field. Also, you need at least an input box to get the email of the user who wants to book a schedule.
+    //Be mindful of the response of the server (i.e., the text contains a "booking sequence") when the student email used to book a schedule does not exist in the database. You'll need this when creating a new student. Note that the booking sequence is part of payload for creating a new student and the 403 status is returned when the booking sequence isn't present or valid. Check out /doc for the specific response of the server for this scenario.
+    //If a student email is not in the database, you will need to chain callbacks. That is, have another XMLHttpRequest be sent as part of the callback for your load event.
+    const form = document.querySelector('form');
+    let schedules;
+
+    function populateListBox(schedules) {
+      const scheduleList = document.querySelector('#id');
+      schedules.forEach(({ id, staff_id, date, time }) => {
+        const row = document.createElement('option');
+        row.setAttribute('value', id);
+        row.textContent = `${staff_id} | ${date} | ${time}`;
+        scheduleList.appendChild(row);
+      });
+    }
+
+    function convertStaffIdsToNames(schedules, staffs) {
+      function getStaffName(id, staffs) {
+        return staffs.filter(staff => staff.id === id)[0].name;
+      }
+
+      schedules.forEach(schedule => {
+        schedule.staff_id = getStaffName(schedule.staff_id, staffs);
+      });
+
+      return schedules;
+    }
+
+    (() => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/schedules');
+      xhr.responseType = 'json'
+      xhr.send();
+      xhr.addEventListener('load', event => {
+        schedules = xhr.response;
+        schedules = schedules.filter(({ student_email }) => !student_email);
+
+        let staffs = [];
+        (() => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', '/api/staff_members');
+          xhr.responseType = 'json'
+          xhr.send();
+          xhr.addEventListener('load', event => {
+            staffs = xhr.response;
+            schedules = convertStaffIdsToNames(schedules, staffs);
+            populateListBox(schedules);
+          });
+        })();
+      });
+    })();
+    // re IIFE - The major concern is to avoid name(variable or function) clashes. This can be useful when we want to make many XMLHttpRequests in a single page. Names like request1, request2 are easy to be messed up, so wrapping some operations in IIFE can make the process easier for us. We can also give a name to an IIFE to give some semantic meaning about what we're doing, like (function whatThisDoes() {})(), then it will be easier to recognize the intention of this chunk of code when we review the code later.
+
+
+
+    function showBookingTemplate(data) {
+      const newStudentForm = document.createElement('form');
+      newStudentForm.setAttribute('method', 'post');
+      newStudentForm.setAttribute('action', '/api/students');
+      newStudentForm.setAttribute('id', 'newStudentForm');
+
+      const h1 = document.createElement('h1');
+      h1.textContent = 'Please provide new student details';
+      newStudentForm.appendChild(h1);
+
+      const emailLabel = document.createElement('label');
+      emailLabel.textContent = 'Email:';
+      emailLabel.setAttribute('for', 'email');
+      newStudentForm.appendChild(emailLabel);
+
+      const emailInput = document.createElement('input');
+      emailInput.setAttribute('type', 'email');
+      emailInput.setAttribute('name', 'email');
+      emailInput.setAttribute('id', 'email');
+      emailInput.setAttribute('value', data.email);
+      newStudentForm.appendChild(emailInput);
+      newStudentForm.appendChild(document.createElement('br'));
+
+      const nameLabel = document.createElement('label');
+      nameLabel.textContent = 'Name:';
+      nameLabel.setAttribute('for', 'name');
+      newStudentForm.appendChild(nameLabel);
+
+      const nameInput = document.createElement('input');
+      nameInput.setAttribute('type', 'text');
+      nameInput.setAttribute('name', 'name');
+      nameInput.setAttribute('id', 'name');
+      newStudentForm.appendChild(nameInput);
+      newStudentForm.appendChild(document.createElement('br'));
+
+      const bookingSequenceLabel = document.createElement('label');
+      bookingSequenceLabel.textContent = 'Booking Sequence:';
+      bookingSequenceLabel.setAttribute('for', 'booking_sequence');
+      newStudentForm.appendChild(bookingSequenceLabel);
+
+      const bookingSequenceInput = document.createElement('input');
+      bookingSequenceInput.setAttribute('type', 'text');
+      bookingSequenceInput.setAttribute('name', 'booking_sequence');
+      bookingSequenceInput.setAttribute('id', 'booking_sequence');
+      bookingSequenceInput.setAttribute('value', data.bookingSequence);
+      newStudentForm.appendChild(bookingSequenceInput);
+      newStudentForm.appendChild(document.createElement('br'));
+
+      const submitInput = document.createElement('input');
+      submitInput.setAttribute('type', 'submit');
+      newStudentForm.appendChild(submitInput);
+      document.querySelector('body').appendChild(newStudentForm);
+    }
+
+    function formDataToJson(formData) {
+      const json = {};
+      for (const pair of formData.entries()) {
+        json[pair[0]] = pair[1];
+      }
+
+      return json;
+    }
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const json = JSON.stringify(formDataToJson(formData));
+      const xhr = new XMLHttpRequest();
+
+      xhr.open('POST', form.action);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(json);
+
+      xhr.addEventListener('load', event => {
+        switch (xhr.status) {
+          case 204:
+            alert('Booked');
+            window.location.href = "/ex5.html"
+            break;
+          case 404:
+            alert(xhr.responseText);
+            bookingSequence = xhr.responseText.split(':')[1].trim();
+            showBookingTemplate({ email: form['student_email'].value, bookingSequence });
+            const newStudentForm = document.querySelector('#newStudentForm');
+            newStudentForm.addEventListener('submit', event => {
+              event.preventDefault();
+              const xhr2 = new XMLHttpRequest();
+              const formData2 = new FormData(newStudentForm);
+              const json2 = JSON.stringify(formDataToJson(formData2));
+
+              xhr2.open('POST', newStudentForm.action);
+              xhr2.setRequestHeader('Content-Type', 'application/json');
+              xhr2.send(json2);
+
+              xhr2.addEventListener('load', event => {
+                alert(xhr2.responseText);
+                if (xhr2.status === 201) {
+                  newStudentForm.reset();
+                  formData.set('student_email', formData2.get('email'));
+                  form.dispatchEvent(new Event('submit', { cancelable: true }));
+                }
+              });
+            });
+        }
+      });
+    });
+//There are three major parts to this problem: (1) getting the schedules that can be booked, (2) getting the user input, and (3) submitting the booking immediately after a student is successfully added to the database.
+//For the first part of getting the schedules that can be booked, the solution gets the data from /schedules and filters out those that already have a value for the student_email field. For an improved user experience, the solution also replaces the staff_id number with the staff's name by querying /staff and using the data returned to replace the staff_id values with the staff's name. Note that the request to /staff_members is nested within the callback of /schedules. This is to ensure that there are already staff_id values to replace.
+//To get the user input, there are two forms needed. The first is for selecting the schedule to book. The second one is for the student's information in case the student who is booking isn't in the database yet. Like the request to /staff_members which was nested in the callback for /schedules, the creation of the form — together with the corresponding submit event listener (alternative is to use event delegation) — for the student's information is also nested under the callback of the post request to /bookings/new since creating a student depends on the booking_sequence data returned when a student does not exist in the database.
+//Finally, the submission of the booking immediately after a student is successfully added is done by updating the form data for the booking form and then dispatching a submit event to it. An alternative is to write up code for making another nestedXMLHttpRequest to /bookings/new with the new form data. The current approach takes advantage of the fact that there is already an event listener on the booking form that has the XMLHttpRequest for booking a schedule that we can just trigger.
+
+
+//Further Exploration
+//The current solution uses chained callbacks. An alternative approach to try, if you haven't already, is to use promises.
+
+//<!DOCTYPE html>
+//<html lang="en">
+//  <head>
+//    <meta charset="UTF-8">
+//    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+//    <title>Exercises</title>
+//    <script src="javascripts/ex5.js"></script>
+  <!--//  </head>
+//  <body>
+//    <h1>Schedules</h1>
+//    <form id="schedules" action="/api/bookings" method="post">
+//      <label for="staff">Please select one schedule</label>
+//      <select id="staff" name="id">
+//      </select>
+//      <label for="student_email">Email:</label>
+//      <input type="email" id="student_email" name="student_email">
+//      <input type="submit" value="Submit">
+//    </form>
+//    <div id='new_student'></div>
+//  </body>
+//</html>-->
+
+  <!--document.addEventListener('DOMContentLoaded', () => {
+  fetchSchedules();
+
+  const form = document.getElementById('schedules');
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const json = formDataToJson(formData);
+    let status;
+
+    fetch(form.action, {
+      method: form.method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(json),
+    })
+      .then(response => {
+        status = response.status;
+        return response.text();
+      })
+      .then(responseText => {
+        if (status === 204) {
+          alert('Booked!');
+          window.location.href = '/ex5.html';
+        } else {
+          alert(responseText);
+          const bookingSequence = responseText.split(':')[1].trim();
+
+          if (bookingSequence) {
+            const newStudentDiv = document.getElementById('new_student');
+            newStudentDiv.style.backgroundColor = 'lightgray';
+            newStudentDiv.innerHTML = '';
+            newStudentDiv.appendChild(newStudentTemplate(json["student_email"], bookingSequence));
+          }
+        }
+      });
+  });
+});
+
+async function fetchSchedules() {
+  const staff = await fetchStaff();
+  const select = document.getElementById('staff');
+
+  fetch('/api/schedules', {headers:{ 'Content-Type': 'application/json'}})
+    .then(response => response.json())
+    .then(schedules => {
+      const openSchedules = schedules.filter(schedule => schedule.student_email === null);
+
+      openSchedules.forEach(schedule => {
+        const scheduleId = schedule.id;
+        const name = staff.find(member => member.id === schedule.staff_id).name
+        const date = schedule.date;
+        const time = schedule.time;
+        const option = document.createElement('option');
+
+        option.setAttribute('value', scheduleId);
+        option.textContent = `${name} | ${date} | ${time}`;
+
+        select.appendChild(option);
+      });
+    })
+};
+
+async function fetchStaff() {
+  return fetch('/api/staff_members', {
+    headers: { 'Content-Type': 'application/json' }
+  }).then(response => response.json())
+}
+
+function newStudentTemplate(email, bookingSequence) {
+  const title = document.createElement('h1');
+  title.textContent = 'Please provide new student details';
+
+  const form = document.createElement('form');
+  form.setAttribute('action', '/api/students');
+  form.setAttribute('method', 'post');
+  form.setAttribute('id', 'student_form');
+
+  const emailLabel = document.createElement('label');
+  emailLabel.setAttribute('for', 'new_student_email');
+  emailLabel.textContent = 'Email: ';
+
+  const emailInput = document.createElement('input');
+  emailInput.setAttribute('type', 'email');
+  emailInput.setAttribute('id', 'new_student_email');
+  emailInput.setAttribute('name', 'email');
+  emailInput.setAttribute('value', email);
+
+  const nameLabel = document.createElement('label');
+  nameLabel.setAttribute('for', 'new_student_name');
+  nameLabel.textContent = 'Name: ';
+
+  const nameInput = document.createElement('input');
+  nameInput.setAttribute('id', 'new_student_name');
+  nameInput.setAttribute('name', 'name')
+
+  const bookingSequenceLabel = document.createElement('label');
+  bookingSequenceLabel.setAttribute('for', 'booking_sequence');
+  bookingSequenceLabel.textContent = 'Booking sequence: ';
+
+  const bookingSequenceInput = document.createElement('input');
+  bookingSequenceInput.setAttribute('id', 'booking_sequence');
+  bookingSequenceInput.setAttribute('name', 'booking_sequence');
+  bookingSequenceInput.setAttribute('value', bookingSequence);
+
+  const submitButton = document.createElement('input');
+  submitButton.setAttribute('type', 'submit');
+  submitButton.setAttribute('value', 'Submit');
+
+  form.appendChild(title);
+  form.appendChild(emailLabel);
+  form.appendChild(emailInput);
+  form.appendChild(nameLabel);
+  form.appendChild(nameInput);
+  form.appendChild(bookingSequenceLabel);
+  form.appendChild(bookingSequenceInput);
+  form.appendChild(submitButton);
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const json = formDataToJson(formData);
+    let status;
+
+    fetch(form.action, {
+      method: form.method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(json),
+    })
+      .then(response => {
+        status = response.status;
+        return response.text()
+      })
+      .then(responseText => {
+        alert(responseText);
+        if (status === 201) {
+          form.reset();
+          const scheduleForm = document.getElementById('schedules');
+          const submit = new Event('submit', { cancelable: true })
+          scheduleForm.dispatchEvent(submit);
+        }
+      })
+  });
+
+  return form;
+}
+
+function formDataToJson(formData) {
+  const json  = {};
+  for (const pair of formData.entries()) {
+    json[pair[0]] = pair[1];
+  };
+
+  return json;
+}-->
+
+  </script>
+
+
+</body>
+
+</html>

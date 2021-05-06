@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 24px;
+      width: 800px;
+      margin: 70px auto 0 auto;
+    }
+
+    body {
+      background: #52be43;
+      font-size: 18px;
+    }
+
+    form {
+      width: 800px;
+      margin: 15px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 4px;
+    }
+
+    dt {
+      padding: 20px 0 5px 0;
+    }
+
+    input {
+      font-size: 18px;
+      width: 300px;
+      height: 38px;
+      padding: 3px 10px;
+      outline: none;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    input:focus {
+      border: 1px solid #52be43;
+    }
+
+    .invalid_field {
+      border: 1px solid #a93333;
+    }
+
+    .error_message {
+      display: inline-block;
+      margin-left: 30px;
+    }
+
+    button {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      outline: none;
+      color: #fff;
+      padding: 5px 15px;
+      border-radius: 4px;
+      background: #52be43;
+      border: none;
+    }
+
+    .form_errors,
+    .error_message {
+      color: #a93333;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sign up Form</h1>
+  <form action="#" method="post" novalidate>
+    <p class="form_errors"></p>
+    <fieldset>
+      <dl>
+        <dt>
+          <label for="first_name">First Name</label>
+        </dt>
+        <dd>
+          <input type="text" id="first_name" name="first_name" required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="last_name">Last Name</label>
+        </dt>
+        <dd>
+          <input type="text" id="last_name" name="last_name" required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="email">Email</label>
+        </dt>
+
+        <dd>
+          <input type="text" required name="email" id="email" placeholder="someone@example.com" pattern=".+@.+">
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="password">Password</label>
+        </dt>
+
+        <dd>
+          <input type="password" name="password" id="password" pattern=".{10,}" required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="phone">Phone Number</label>
+        </dt>
+
+        <dd>
+          <input type="text" name="phone" id="phone" pattern="\d{3}-\d{3}-\d{4}" placeholder="111-222-3333">
+          <span class="error_message"></span>
+        </dd>
+
+        <button type="submit">Sign Up</button>
+      </dl>
+    </fieldset>
+  </form>
+  <script>
+    var App = {
+      $form: $('form'),
+      $input: $('input'),
+
+      handleValueAbsence: function ($control) {
+        var labelText = $('label[for=' + $control.attr('id') + ']').text();
+        var $errorMessage = $control.next('.error_message');
+        var errorMessage = labelText + ' is a required field.';
+
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+      },
+
+      handlePatternMismatch: function ($control) {
+        var labelText = $('label[for=' + $control.attr('id') + ']').text();
+        var $errorMessage = $control.next('.error_message');
+        var errorMessage = 'Please Enter a valid ' + labelText + '.';
+
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+        if ($control.attr('id') === 'password') {
+          $errorMessage.text('Password must be at least 10 characters long.');
+        }
+      },
+
+      validateControl: function ($control) {
+        if ($control[0].validity.valueMissing) {
+          this.handleValueAbsence($control);
+          return false;
+        } else if ($control[0].validity.patternMismatch) {
+          this.handlePatternMismatch($control);
+          return false;
+        }
+
+        return true;
+      },
+
+      handleFormSubmit: function () {
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+        } else {
+          $('.form_errors').text('Form cannot be submitted until errors are corrected.');
+          this.validateFormInputs();
+          return false;
+        }
+      },
+
+      validateFormInputs: function () {
+        var self = this;
+        this.$input.each(function () {
+          self.validateControl($(this));
+        });
+      },
+
+      handleBlur: function (e) {
+        var $control = $(e.target);
+
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+        }
+        this.validateControl($control);
+      },
+
+      handleFocus: function (e) {
+        var $control = $(e.target);
+        $control.next('.error_message').text('');
+        $control.removeClass('invalid_field');
+      },
+
+      init: function () {
+        this.$input.on('blur', this.handleBlur.bind(this));
+        this.$input.on('focus', this.handleFocus.bind(this));
+        this.$form.on('submit', this.handleFormSubmit.bind(this));
+        console.log(this.$form[0])
+      }
+    };
+
+    App.init();
+
+    //P - write JS to handle 3 events: field focus, field blur, form submit
+    //E - QA against validation rules
+    //D - OOP OLOO and pseudo-classical/classes
+
+    //A - grab the relevant nodes (inputs and form) and attach ELs to them for events focus in/out and submit.
+      //Focus-in: remove error message and invalid class
+      //Focus-out:
+        // Check form validity using CONSTRAINT VALIDATION API - some props: checkValidity(), patternMismatch, valueMissing
+          // https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+          // If true, erase top error message.
+        // Validate this control (HELPER)
+      //Form submit:
+        //Check form validity using checkValidity()
+          //If true
+          //If false, display error message and validate all controls (control validation HELPER)
+
+      //Control Validation - impact of returning true or false?
+        //check if:
+          // missing value
+            // render error message - grab the error span container and give it text: '[field] is required.'
+            // return false
+          // pattern mismatch
+            // render error message - 'please enter a valid'
+            // if control is password, adjust error message to 'pw must be 10+ chars long'
+            // return false
+        //otherwise return true
+
+  </script>
+</body>
+
+</html>
+
+<!-- Create a sign-up form that validates each field when it loses focus.
+
+Specifications
+Form Controls
+
+The form should have the following controls:
+
+First Name
+Last Name
+Email
+Password
+Phone
+The form should also have a submit button with the value of "Sign Up".
+
+Validation Rules
+
+The following validation rules apply to the form's fields:
+
+The first name, last name, password, and email fields are all required.
+The phone number is optional.
+Password must be at least 10 characters long.
+Phone number must use US-style numbers: 111-222-3333.
+Email should conform to the constraint validation pattern .+@.+ (see below).
+Functionality
+
+When a form field loses focus, validate the field value against the validation rule for that field. If the value is not valid, display a red error message to the right of the field. You may also want to add a red border to the input element. The error message should describe what the program expects, e.g., "The password is required."
+When a field with an error regains focus, the message should disappear. It should not reappear after the user corrects the field.
+When the user clicks the Submit button, don't send the form to the server if it has any validation errors. Instead, display an error message at the top of the page that says "Fix errors before submitting this form."
+The form validation error message should disappear when the user corrects all fields with an error.
+
+Implementation
+You should not use the built-in error message mechanism. You can disable them with the form element's novalidate attribute.
+Use HTML5 constraint validation API and the pattern attribute to implement validations. MDN has a nice article on form validation. Read the section on constraint validation API. -->

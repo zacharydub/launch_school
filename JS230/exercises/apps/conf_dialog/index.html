@@ -1,0 +1,103 @@
+<!-- Create an application that displays a list of todos. When the user wants to delete a todo, the application should show a custom confirmation dialog.
+
+Specifications
+Create a list of todos in the DOM from a JavaScript collection (array) of todos.
+Add a delete button for each todo.
+When the user clicks the delete button, a dialog appears asking the user to confirm the deletion.
+Use CSS to display the dialog.
+The dialog has Yes and No buttons.
+When the user clicks the Yes button, the dialog disappears, and the corresponding todo is deleted.
+When the user clicks the No button, the dialog disappears, and the todo is not deleted. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dialog</title>
+  <link rel="stylesheet" href="../reset.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+
+  <style>
+    li {
+      /*display: inline;*/
+    }
+
+    #dialog {
+      display: none;
+      height: 200px;
+      width: 400px;
+      position: absolute;
+      background-color: rgba(0, 0, 0, .3);
+      border: 1px solid white;
+      z-index: 5;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <ul></ul>
+  </div>
+
+  <div id='dialog'>
+    <p>Are you sure you want to remove?</p>
+    <button class='confirm' id='yes'>Yes</button>
+    <button class='confirm' id='no'>No</button>
+  </div>
+
+  <script id="item" type="text/x-handlebars">
+      <li>{{title}}
+        <button class='delete'>Delete</button>
+      </li>
+  </script>
+
+
+  <script>
+    todo_items = [
+      { id: 1, title: 'Homework' },
+      { id: 2, title: 'Shopping' },
+      { id: 3, title: 'Calling Mom' },
+      { id: 4, title: 'Coffee with John ' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let list = document.querySelector('ul');
+      let itemTemplate = Handlebars.compile(document.getElementById('item').innerHTML);
+
+      todo_items.forEach(item => {
+        let newitem = document.createElement('a');
+        newitem.innerHTML = itemTemplate(item);
+        list.appendChild(newitem);
+      })
+
+      let buttons = document.querySelectorAll('.delete');
+      buttons.forEach(button => {
+        button.addEventListener('click', e => {
+          document.querySelector('#dialog').style.display = 'block';
+          document.querySelectorAll('.confirm').forEach(conf => {
+            conf.addEventListener('click', (e2) => {
+              if (e2.target.id === 'yes') {
+                e.target.parentNode.remove();
+                document.querySelector('#dialog').style.display = 'none';
+              } else {
+                document.querySelector('#dialog').style.display = 'none';
+              }
+            })
+          })
+        })
+      })
+
+
+
+      document.querySelector('#yes').addEventListener('click', (e) => {
+        console.log(e.target)
+      })
+      document.querySelector('#yes').addEventListener('click', (e) => {
+
+      })
+    })
+  </script>
+</body>
+
+</html>

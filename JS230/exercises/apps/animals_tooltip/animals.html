@@ -1,0 +1,150 @@
+<!--Create a page that displays a grid of animal images and shows a tooltip for each animal that contains more information
+about the animal.
+
+Requirements
+Choose any animals that you want.
+Create markup that includes an image and caption for each animal.
+Hide the captions initially.
+Display the caption as a tooltip when the user hovers the mouse cursor over the image for more than two seconds. Close
+the tooltip when the user moves the mouse off the image.
+Don't display the caption tooltip when the user moves the cursor off the image before the two second time delay elapses.-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animals</title>
+  <link rel="stylesheet" href="../reset.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: purple;
+    }
+
+    h1 {
+      color: white;
+      padding: 25px;
+      text-align: center;
+      font-size: 50px;
+    }
+
+    ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      list-style: none;
+      margin-left: 0;
+    }
+
+    li {
+      padding: 25px;
+
+    }
+
+    img {
+      width: 250px;
+      height: 150px;
+      border: 10px solid white;
+    }
+
+    figure {
+      position: relative;
+    }
+
+    figcaption {
+      visibility: hidden;
+      color: white;
+      background-color: rgba(0, 0, 0, .5);
+      position: absolute;
+      top: 150px;
+      left: 50px;
+      z-index: 100;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Exotic Animals</h1>
+  <ul>
+    <li>
+      <figure><img src="animal.jpg" alt="a">
+        <figcaption>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis modi officiis porro aliquid
+          necessitatibus quia illum veniam laborum a? Minus nobis vel iste debitis, cum ratione totam. Necessitatibus,
+          dolor earum.</figcaption>
+      </figure>
+    </li>
+    <li>
+      <figure><img src="animal.jpg" alt="b">
+        <figcaption>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis modi officiis porro aliquid
+          necessitatibus quia illum veniam laborum a? Minus nobis vel iste debitis, cum ratione totam. Necessitatibus,
+          dolor earum.</figcaption>
+      </figure>
+    </li>
+    <li>
+      <figure><img src="animal.jpg" alt="c">
+        <figcaption>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis modi officiis porro aliquid
+          necessitatibus quia illum veniam laborum a? Minus nobis vel iste debitis, cum ratione totam. Necessitatibus,
+          dolor earum.</figcaption>
+      </figure>
+    </li>
+    <li>
+      <figure><img src="animal.jpg" alt="d">
+        <figcaption>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis modi officiis porro aliquid
+          necessitatibus quia illum veniam laborum a? Minus nobis vel iste debitis, cum ratione totam. Necessitatibus,
+          dolor earum.</figcaption>
+      </figure>
+    </li>
+    <li>
+      <figure><img src="animal.jpg" alt="e">
+        <figcaption>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis modi officiis porro aliquid
+          necessitatibus quia illum veniam laborum a? Minus nobis vel iste debitis, cum ratione totam. Necessitatibus,
+          dolor earum.</figcaption>
+      </figure>
+    </li>
+    <li>
+      <figure><img src="animal.jpg" alt="f">
+        <figcaption>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis modi officiis porro aliquid
+          necessitatibus quia illum veniam laborum a? Minus nobis vel iste debitis, cum ratione totam. Necessitatibus,
+          dolor earum.</figcaption>
+      </figure>
+    </li>
+  </ul>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let images = Array.prototype.slice.call(document.querySelectorAll('li'));
+
+
+      let timeout = null;
+
+      images.forEach(img => {
+        img.addEventListener('mouseover', (e) => {
+          let img = e.target;
+          let caption = img.nextElementSibling;
+          timeout = setTimeout(() => {
+            caption.style.visibility = 'visible';
+
+            img.addEventListener('mouseout', e => {
+              caption.style.visibility = 'hidden';
+            })
+          }, 2000)
+        })
+      })
+
+      images.forEach(img => {
+        img.addEventListener('mouseout', () => {
+          clearTimeout(timeout)
+        })
+      })
+    })
+
+
+
+
+  </script>
+</body>
+
+</html>

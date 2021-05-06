@@ -1,0 +1,330 @@
+<!-- Any data collected from a form will probably get sent to the server. The browser does this automatically using the action attribute and the submit button. With AJAX, we bypass the browser's default behavior and send the data programmatically with the XMLHttpRequest object. For the data to make sense to the server, it must have a format that the server recognizes and understands. In this exercise, you will serialize the sign-up form data into a valid POST request body that is compatible with a content-type of application/x-www-form-urlencoded.
+
+  Prevent the default action on the Submit button.
+Add a block element to the bottom of the page with a heading of "Serialized Form". You will render the form data in this block.
+When the user clicks the Submit button, and the data is valid, extract the form data from all fields in the form. Use the data to construct a string of key/value pairs separated by &, e.g., first_name=David&last_name=Shepherd&email=davids%40example.com.
+Make sure each name/value pair is URL-encoded. For instance, in the example above, the email address uses %40 instead of @.
+Concatenate the 4 credit card inputs into a single value before adding it to the request body string.
+Render the form data as text in the block element you created earlier.
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 24px;
+      width: 800px;
+      margin: 70px auto 0 auto;
+    }
+
+    body {
+      background: #52be43;
+      font-size: 18px;
+    }
+
+    form {
+      width: 800px;
+      margin: 15px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 4px;
+    }
+
+    dt {
+      padding: 20px 0 5px 0;
+    }
+
+    input {
+      font-size: 18px;
+      width: 300px;
+      height: 38px;
+      padding: 3px 10px;
+      outline: none;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    input:focus {
+      border: 1px solid #52be43;
+    }
+
+    .invalid_field {
+      border: 1px solid #a93333;
+    }
+
+    .error_message {
+      display: inline-block;
+      margin-left: 30px;
+    }
+
+    button {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      outline: none;
+      color: #fff;
+      padding: 5px 15px;
+      border-radius: 4px;
+      background: #52be43;
+      border: none;
+    }
+
+    .form_errors,
+    .error_message {
+      color: #a93333;
+    }
+
+    #cd1,
+    #cd2,
+    #cd3,
+    #cd4 {
+      width: 65px;
+    }
+
+    .serialized {
+      padding: 20px;
+      background: #fff;
+      border-radius: 4px;
+      /*margin-top: 3;*/
+      width: 800px;
+      margin: 30px auto 20px auto;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .serialized p {
+      padding: 20px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sign up Form</h1>
+  <form action="#" method="post" novalidate>
+    <p class="form_errors"></p>
+    <fieldset>
+      <dl>
+        <dt>
+          <label for="first_name">First Name</label>
+        </dt>
+        <dd>
+          <input type="text" id="first_name" name="first_name" required pattern="[a-zA-Z]+">
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="last_name">Last Name</label>
+        </dt>
+        <dd>
+          <input type="text" id="last_name" name="last_name" required pattern="[a-zA-Z]+">
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="email">Email</label>
+        </dt>
+
+        <dd>
+          <input type="text" required name="email" id="email" placeholder="someone@example.com" pattern=".+@.+">
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="password">Password</label>
+        </dt>
+
+        <dd>
+          <input type="password" name="password" id="password" pattern=".{10,}" required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="phone">Phone Number</label>
+        </dt>
+
+        <dd>
+          <input type="tel" name="phone" id="phone" pattern="\d{3}-\d{3}-\d{4}" placeholder="111-222-3333">
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="credit_card">Credit Card</label>
+        </dt>
+
+        <dd>
+          <input type="text" name="credit_card" id="cd1" maxlength="4" pattern="\d{4}"> <span>-</span>
+          <input type="text" name="credit_card" id="cd2" maxlength="4" pattern="\d{4}"> <span>-</span>
+          <input type="text" name="credit_card" id="cd3" maxlength="4" pattern="\d{4}"> <span>-</span>
+          <input type="text" name="credit_card" id="cd4" maxlength="4" pattern="\d{4}">
+          <span class="error_message"></span>
+        </dd>
+
+        <button type="submit">Sign Up</button>
+      </dl>
+    </fieldset>
+  </form>
+
+  <!--  -->
+  <!--  -->
+  <div class="serialized">
+    <h2>Serialized Form</h2>
+  </div>
+  <!--  -->
+  <!--  -->
+
+  <script>
+    var App = {
+      $form: $('form'),
+      $input: $('input'),
+
+      handleValueAbsence: function ($control) {
+        var labelText = $('label[for=' + $control.attr('name') + ']').text();
+        var $errorMessage = $control.siblings('.error_message');
+        var errorMessage = labelText + ' is a required field.';
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+      },
+
+      handlePatternMismatch: function ($control) {
+        var labelText = $('label[for=' + $control.attr('name') + ']').text();
+        var $errorMessage = $control.siblings('.error_message');
+        var errorMessage = 'Please Enter a valid ' + labelText + '.';
+
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+        if ($control.attr('name') === 'password') {
+          $errorMessage.text('Password must be at least 10 characters long.');
+        }
+      },
+
+      validateControl: function ($control) {
+        if ($control[0].validity.valueMissing) {
+          this.handleValueAbsence($control);
+          return false;
+        } else if ($control[0].validity.patternMismatch) {
+          this.handlePatternMismatch($control);
+          return false;
+        }
+
+        return true;
+      },
+
+      handleFormSubmit: function (e) {
+        e.preventDefault();
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+          $('.serialized').append('<p>' + this.serializeForm() + '</p>');
+        } else {
+          $('.form_errors').text('Form cannot be submitted until errors are corrected.');
+          this.validateFormInputs();
+        }
+      },
+
+      ////
+      ////
+      serializeForm: function () {
+        var attributes = {};
+
+        var self = this;
+        this.$form.find('input').each(function () {
+          var $control = $(this);
+          var name = $control.attr('name');
+          var value = $control.val();
+
+          attributes[name] = attributes[name] || '';
+          attributes[name] += value;
+        });
+
+        return this.hashToParams(attributes);
+      },
+
+      hashToParams: function (attrs) {
+        var attrsArray = [];
+
+        Object.keys(attrs).forEach(function (key) {
+          attrsArray.push(encodeURIComponent(key) + '=' + encodeURIComponent(attrs[key]));
+        });
+        return attrsArray.join('&');
+      },
+      ////
+      ////
+
+      validateFormInputs: function () {
+        var self = this;
+        this.$input.each(function () {
+          self.validateControl($(this));
+        });
+      },
+
+      handleBlur: function (e) {
+        var $control = $(e.target);
+
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+        }
+        this.validateControl($control);
+      },
+
+      handleFocus: function (e) {
+        var $control = $(e.target);
+        $control.siblings('.error_message').text('');
+        $control.removeClass('invalid_field');
+      },
+
+      blockNonAlpha: function (e) {
+        if (!e.key.match(/[a-zA-Z]/)) {
+          e.preventDefault();
+        }
+      },
+
+      blockNonNumeric: function (e) {
+        if (!e.key.match(/[0-9\-]/)) {
+          e.preventDefault();
+        }
+      },
+
+
+      tabForward: function (e) {
+        var $input = $(e.target);
+        var valLength = $input.val().length;
+
+        if (valLength === $input[0].maxLength) {
+          $input.nextAll('input')[0].focus();
+        }
+      },
+
+
+      init: function () {
+        this.$input.on('blur', this.handleBlur.bind(this));
+        this.$input.on('focus', this.handleFocus.bind(this));
+        this.$form.on('submit', this.handleFormSubmit.bind(this));
+        $('#first_name, #last_name').on('keypress', this.blockNonAlpha.bind(this));
+        $('#phone, #cd1, #cd2, #cd3, #cd4').on('keypress', this.blockNonNumeric.bind(this));
+
+
+        $('#cd1, #cd2, #cd3').on('keyup', this.tabForward.bind(this));
+
+      }
+    };
+
+    App.init();
+  </script>
+</body>
+
+</html>

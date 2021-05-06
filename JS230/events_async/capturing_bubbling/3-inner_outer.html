@@ -1,5 +1,7 @@
 <!--
-two event listeners: one on the div#elem4 element and the other on the div#elem1 element. The two event listeners have the same behavior: they display the id via an alert box. We'll also display the id of the currentTarget instead of target so that it is clearer which event listener is firing.
+two event listeners: one on the div#elem4 element and the other on the div#elem1 element. The two event listeners have the same behavior: they display the id via an alert box.
+
+We display the id of the currentTarget instead of target so that it is clearer which event listener is firing.
 
 Only one event gets fired when clicking on "4": a click event. The handlers on the other hand, are two and that's why there are two alert boxes. The one event triggers the two handlers because of "capturing" and "bubbling."
 

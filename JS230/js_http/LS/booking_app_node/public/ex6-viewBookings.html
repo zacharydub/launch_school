@@ -1,0 +1,93 @@
+<!-- Implement the markup and JavaScript to view bookings made by students. The view for bookings should have two levels of detail. The first level shows only a list of dates that have bookings. the second level becomes visible only when a date is clicked and shows a nested list of booking details for the data. Details include the staff name, student email address, and the time booked. -->
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <title>Exercise 6</title>
+  <style>
+    #bookings-list>li {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Bookings</h1>
+  <ul id="bookings-list">
+  </ul>
+
+  <script>
+    const templates = (() => {
+      const _templates = [];
+      document.querySelectorAll("script[type='text/x-handlebars']").forEach(({ id, innerHTML }) => {
+        _templates[id] = Handlebars.compile(innerHTML);
+      });
+
+      return _templates;
+    })();
+
+    function bookingListTemplate(data) {
+      const li = document.createElement('li');
+      li.textContent = data;
+      return li;
+    }
+
+    function bookingDetailsTemplate(data) {
+      const ulEle = document.createElement('ul');
+      data.forEach(({ staffName, studentEmail, time }) => {
+        const li = document.createElement('li');
+        li.textContent = `${staffName} | ${studentEmail} | ${time}`;
+        ulEle.appendChild(li);
+      });
+
+      return ulEle;
+    }
+
+    function renderBookingDetails(node, bookings) {
+      const bookingsObject = bookings.map(booking => ({
+        staffName: booking[0],
+        studentEmail: booking[1],
+        time: booking[2]
+      }));
+
+      node.appendChild(bookingDetailsTemplate(bookingsObject));
+    }
+
+    document.querySelector('#bookings-list').addEventListener('click', ({ target }) => {
+      if (target.tagName === 'LI') {
+        if (target.childElementCount === 0) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', `/api/bookings/${target.textContent}`);
+          xhr.responseType = 'json'
+          xhr.send();
+          xhr.addEventListener('load', () => {
+            //console.log(data)
+            data = xhr.response; // don't need to declare?
+            // let data = xhr.response;
+            console.log(data)
+            renderBookingDetails(target, data);
+          });
+        }
+      }
+    });
+
+    (() => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/bookings');
+      xhr.responseType = 'json';
+      xhr.send();
+      xhr.addEventListener('load', () => {
+        const data = xhr.response;
+        //console.log(data)
+        const bookingList = document.querySelector('#bookings-list');
+        data.forEach(date => {
+          bookingList.appendChild(bookingListTemplate(date));
+        });
+      });
+    })();
+    //The solution is straightforward; it's all about requesting from the appropriate endpoints of /bookings and /bookings/:date, and using the response data to create the corresponding markup. Depending on how you create the markup, you may need to manipulate the data returned as was the case with the approach done for the booking details using the renderBookingDetails
+  </script>
+</body>
+
+</html>

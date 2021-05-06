@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<!-- In the previous exercise, we added a Credit Card field to the sign-up form. The field uses four separate inputs, with room for 4 digits per input. To enter a credit card number, the user must change focus from one input to the next by pressing the Tab key or clicking the mouse. A nice touch for this application would have the focus change automatically as the user enters the 4th digit in each input.
+
+Specifications
+- Validate the credit card inputs to enforce precisely 4 digits in each input.
+- Attach an event handler to the first three credit card inputs to automatically change the focus to the next input when the user enters the 4th digit. The last input doesn't need an event handler. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up2</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="whitespace-reset.css">
+  <link rel="stylesheet" href="app.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 24px;
+      width: 800px;
+      margin: 70px auto 0 auto;
+    }
+
+    body {
+      background: #52be43;
+      font-size: 18px;
+    }
+
+    form {
+      width: 800px;
+      margin: 15px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 4px;
+    }
+
+    dt {
+      padding: 20px 0 5px 0;
+    }
+
+    input {
+      font-size: 18px;
+      width: 300px;
+      height: 38px;
+      padding: 3px 10px;
+      outline: none;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    input:focus {
+      border: 1px solid #52be43;
+    }
+
+    .invalid_field {
+      border: 1px solid #a93333;
+    }
+
+    .error_message {
+      display: inline-block;
+      margin-left: 30px;
+    }
+
+    button {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      outline: none;
+      color: #fff;
+      padding: 5px 15px;
+      border-radius: 4px;
+      background: #52be43;
+      border: none;
+    }
+
+    .form_errors,
+    .error_message {
+      color: #a93333;
+    }
+
+    #creditCardNumber input {
+      width: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sign up Form</h1>
+  <form action="#" method="post" novalidate>
+    <p class="form_errors"></p>
+    <fieldset>
+      <dl>
+        <dt>
+          <label for="first_name">First Name</label>
+        </dt>
+        <dd>
+          <input type="text" id="first_name" name="first_name" class='fullName' required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="last_name">Last Name</label>
+        </dt>
+        <dd>
+          <input type="text" id="last_name" name="last_name" class='fullName' required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="email">Email</label>
+        </dt>
+        <dd>
+          <input type="text" required name="email" id="email" placeholder="someone@example.com" pattern=".+@.+">
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="password">Password</label>
+        </dt>
+        <dd>
+          <input type="password" name="password" id="password" pattern=".{10,}" required>
+          <span class="error_message"></span>
+        </dd>
+
+        <dt>
+          <label for="phone">Phone Number</label>
+        </dt>
+        <dd>
+          <input type="number" name="phone" id="phone" pattern="\d{3}-\d{3}-\d{4}" placeholder="111-222-3333">
+          <span class="error_message"></span>
+        </dd>
+
+        <dl>
+          <dt>
+            <label for="creditCardNumber">Credit Card</label>
+          </dt>
+          <dd id="creditCardNumber">
+            <input type="text" id="cd1" name="cc" maxlength='4' pattern="\d{4}">
+
+            -
+            <input type="text" id="cd2" name="cc" maxlength='4' pattern="\d{4}">
+            -
+            <input type="text" id="cd3" name="cc" maxlength='4' pattern="\d{4}">
+            -
+            <input type="text" id="cd4" name="cc" maxlength='4' pattern="\d{4}">
+            <span class="error_message"></span>
+          </dd>
+
+        </dl>
+
+        <button type="submit">Sign Up</button>
+      </dl>
+    </fieldset>
+  </form>
+
+  <script>
+    var App = {
+      $form: $('form'),
+      $input: $('input'),
+      $names: $('.fullName'),
+
+      handleValueAbsence: function ($control) {
+        var labelText = $('label[for=' + $control.attr('id') + ']').text();
+        var $errorMessage = $control.next('.error_message');
+        var errorMessage = labelText + ' is a required field.';
+
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+      },
+
+      handlePatternMismatch: function ($control) {
+        var labelText = $('label[for=' + $control.attr('id') + ']').text();
+        var $errorMessage = $control.next('.error_message');
+        var errorMessage = 'Please Enter a valid ' + labelText + '.';
+
+        $control.addClass('invalid_field');
+        $errorMessage.text(errorMessage);
+
+        if ($control.attr('id') === 'password') {
+          $errorMessage.text('Password must be at least 10 characters long.');
+        }
+      },
+
+      validateControl: function ($control) {
+        if ($control[0].validity.valueMissing) {
+          this.handleValueAbsence($control);
+          return false;
+        } else if ($control[0].validity.patternMismatch) {
+          this.handlePatternMismatch($control);
+          return false;
+        }
+
+        return true;
+      },
+
+      handleFormSubmit: function () {
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+        } else {
+          $('.form_errors').text('Form cannot be submitted until errors are corrected.');
+          this.validateFormInputs();
+          return false;
+        }
+      },
+
+      validateFormInputs: function () {
+        var self = this;
+        this.$input.each(function () {
+          self.validateControl($(this));
+        });
+      },
+
+      handleBlur: function (e) {
+        var $control = $(e.target);
+
+        if ($('form')[0].checkValidity()) {
+          $('.form_errors').text('');
+        }
+        this.validateControl($control);
+      },
+
+      handleFocus: function (e) {
+        var $control = $(e.target);
+        $control.next('.error_message').text('');
+        $control.removeClass('invalid_field');
+      },
+
+      blockNonAlpha: function (e) {
+        if (!e.key.match(/[a-zA-Z\s']/)) {
+          e.preventDefault();
+        }
+      },
+
+      blockNonNumeric: function (e) {
+        if (!e.key.match(/[-0-9]/)) {
+          e.preventDefault();
+        }
+      },
+
+      ////
+      ////
+      autoForward: function (e) {
+        let $control = $(e.target);
+        if ($control.val().length === 4) {
+          let $next = $control.next('input');
+          $next.focus()
+        }
+
+        //LS solution:
+        var $input = $(e.target);
+        var valLength = $input.val().length;
+        if (valLength === $input[0].maxLength) {
+          $input.nextAll('input')[0].focus();
+        }
+      },
+      ////
+      ////
+
+      init: function () {
+        this.$input.on('blur', this.handleBlur.bind(this));
+        this.$input.on('focus', this.handleFocus.bind(this));
+        this.$form.on('submit', this.handleFormSubmit.bind(this));
+
+        $('#first_name, #last_name').on('keypress', this.blockNonAlpha.bind(this));
+        $('#phone, #cd1, #cd2, #cd3, #cd4').on('keypress', this.blockNonNumeric.bind(this));
+        ////
+        $('#cd1, #cd2, #cd3').on('keyup', this.autoForward.bind(this))
+        ////
+      }
+    };
+    App.init();
+  //P - allow auto tab forwarding once user has inputted 4 valid chars into each cc field
+
+  //A -
+  //validate cc inputs to enforce precisely 4 digits
+  // EL on 1st 3 cc inputsto auto-change focus to next input once user has entered a 4th digit
+  </script>
+
+
+
+
+
+</body>
+
+</html>

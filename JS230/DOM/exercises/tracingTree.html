@@ -52,11 +52,11 @@
   </article>
 
   <script>
-    domTreeTracer(1);
+    //domTreeTracer(1);
     //[["ARTICLE"]]
-    domTreeTracer(2);
+    console.log(domTreeTracer(2));
     //[["HEADER", "MAIN", "FOOTER"], ["ARTICLE"]]
-    domTreeTracer(22);
+    //domTreeTracer(22);
     //[["A"], ["STRONG"], ["SPAN", "SPAN"], ["P", "P"], ["SECTION", "SECTION"], ["HEADER", "MAIN", "FOOTER"], ["ARTICLE"]]
 
     function domTreeTracer(id) {
@@ -66,10 +66,8 @@
 
       do {
         parentElement = currentElement.parentNode;
-        //console.log(parentElement.children)
         let children = getTagNames(parentElement.children);
         domTree.push(children);
-
         currentElement = parentElement;
       } while (parentElement.tagName !== 'BODY');
 
@@ -78,10 +76,14 @@
 
     function getTagNames(htmlCollection) {
       const elementsArray = Array.from(htmlCollection);
-      //console.log(elementsArray)
-      //return elementsArray.map((elm) => elm.tagName);
-      return elementsArray.map(({ tagName }) => tagName);
+      //or
+      //const elementsArray = [].slice.call(htmlCollection)
+      return elementsArray.map((elm) => elm.tagName);
+      //or
+      //return elementsArray.map(({ tagName }) => tagName);
     }
+
+    //The tricky part of this problem is figuring out how to trace the DOM tree starting from an innermost element.The solution leverages two properties on Node: Node.parentNode and Node.children.Using a combination of those two we can iteratively go through each parent node, getting the children at every iteration until we reach the BODY element.
   </script>
 </body>
 

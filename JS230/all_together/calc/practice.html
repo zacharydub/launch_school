@@ -1,0 +1,102 @@
+<!-- build a simple arithmetic calculator. It will have two inputs for numbers, a selection list that controls which arithmetic operation the calculator performs, and a button that performs the calculation. It will display the result above the inputs. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    body {
+      background-color: maroon;
+    }
+
+    main {}
+
+    form {
+      background-color: white;
+      width: 500px;
+      height: 200px;
+      position: relative;
+      left: 20%;
+      top: 200px;
+    }
+
+    dl,
+    dt,
+    dd,
+    button {
+      display: inline-block;
+    }
+
+    dd,
+    input {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    p {
+      margin-bottom: 50px;
+      font-size: 50px;
+      color: green;
+      padding-left: 20px;
+    }
+
+    button {
+      margin-left: 15px;
+      padding: 5px;
+      outline: 1px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+
+    <form action="">
+      <p>0</p>
+      <dl>
+        <dt><label for="first">First</label></dt>
+        <dd><input type="text" id='first' name='first'></dd>
+        <select name="" id="">
+          <option>+</option>
+          <option>-</option>
+          <option>*</option>
+          <option>/</option>
+        </select>
+        <dt><label for="second">Second</label></dt>
+        <dd><input type="text" id='second' name='second'></dd>
+      </dl>
+      <button type="submit">=</button>
+    </form>
+  </main>
+  <script>
+    let p = document.querySelector('p');
+    let first = document.querySelector('#first')
+    let second = document.querySelector('#second')
+
+    document.querySelector('button').addEventListener('click', (e) => {
+      e.preventDefault()
+
+      let operation = document.querySelector('select').value;
+      //console.log(operation)
+      //console.log(first.value)
+
+
+      switch (operation) {
+        case '+': p.textContent = Number(first.value) + Number(second.value)
+          break;
+        case '-': p.textContent = Number(first.value) - Number(second.value)
+          break;
+        case '*': p.textContent = Number(first.value) * Number(second.value)
+          break;
+        case '/': p.textContent = Number(first.value) / Number(second.value)
+          break;
+
+      }
+    })
+
+  </script>
+</body>
+
+</html>

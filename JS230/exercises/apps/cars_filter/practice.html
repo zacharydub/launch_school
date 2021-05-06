@@ -1,0 +1,43 @@
+<html>
+
+<head>
+  <title>_.where() function</title>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js">
+  </script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore.js">
+  </script>
+</head>
+
+<body>
+  <script type="text/javascript">
+    var goal = [
+      {
+        "category": "education",
+        "title": "harry University",
+        "value": 50000,
+        "id": "1"
+      },
+      {
+        "category": "traveling",
+        "title": "tommy University",
+        "value": 50000,
+        "id": "2"
+      },
+      {
+        "category": "education",
+        "title": "jerry University",
+        "value": 50000,
+        "id": "3"
+      },
+      {
+        "category": "business",
+        "title": "Charlie University",
+        "value": 50000,
+        "id": "4"
+      }
+    ]
+    console.log(_.where(goal, { value: 50000, title: 'Charlie University' }));
+  </script>
+</body>
+
+</html>

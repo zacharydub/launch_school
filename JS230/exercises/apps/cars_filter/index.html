@@ -1,0 +1,277 @@
+<!-- Create an application that shows a grid of cars from a collection of cars. Users can filter the cars by make, model, price and year of manufacture.
+
+Specifications
+Display the following information for each car:
+
+an image
+make and model
+price
+year manufactured
+The page should have a filtering area that contains the following:
+
+A select box for car makes. Populate the options by selecting all the unique makes from our car collection
+A select box for car models. Populate the options by selecting all the unique car models from our car collection
+A select box for years. Populate the options by selecting all the unique years from our car collection
+A select box for price. Populate the options by selecting all the unique prices from our car collection
+A filter button
+When the user clicks the filter button, filter the cars so that the cars displayed all have the same price, model, make and manufacture year as the selected values. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+  <link rel="stylesheet" href="../../reset.css">
+  <title>Cars</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    header {
+      height: 250px;
+      background-color: beige;
+    }
+
+    h1 {
+      padding: 50px 25px;
+      font-size: 40px;
+    }
+
+    figure {
+      display: inline-block;
+    }
+
+    img {
+      width: 150px;
+      height: 100px;
+    }
+
+    dt,
+    dd,
+    label,
+    select,
+    #filter,
+    #reset,
+    form {
+      display: inline-block;
+    }
+
+    select,
+    option {
+      width: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Buy Used Cars</h1>
+    <div id='filters'></div>
+  </header>
+  <!--  -->
+  <!--<form>
+      <fieldset>
+        <dl>
+          <dt><label for="make">Make</label></dt>
+          <dd><select name="make" id="make">
+              <option value=''>All</option>
+              <option value="">Honda</option>
+              <option value="">Toyota</option>
+              <option value="">Suzuki</option>
+              <option value="">Audi</option>
+            </select>
+          </dd>
+          <dt><label for="model">Model</label></dt>
+          <dd><select name="model" id="model">
+              <option value="" selected>All</option>
+              <option value="">Accord</option>
+              <option value="">Corrolla</option>
+              <option value="">Swift</option>
+              <option value="">A4</option>
+              <option value="">Camry</option>
+            </select>
+          </dd>
+          <dt><label for="price">Price</label></dt>
+          <dd><select name="price" id="price">
+              <option value="" selected>Any</option>
+              <option value="">7000</option>
+              <option value="">11000</option>
+              <option value="">9000</option>
+              <option value="">15000</option>
+              <option value="">25000</option>
+              <option value="">26000</option>
+            </select>
+          </dd>
+          <dt><label for="year">Year</label></dt>
+          <dd><select name="year" id="year">
+              <option value="" selected>Any</option>
+              <option value="">2005</option>
+              <option value="">2008</option>
+              <option value="">2009</option>
+              <option value="">2016</option>
+              <option value="">2014</option>
+              <option value="">2013</option>
+            </select>
+          </dd>
+        </dl>
+        <button type="submit" name="Send" id="filter">Filter</button>
+        <input type="reset" value="Reset" id="reset">
+      </fieldset>
+    </form>-->
+
+
+  <main>
+    <div id='cars_area'></div>
+  </main>
+
+
+  <script id='filter_template' type="text/x-handlebars-template">
+
+  <label for="make">Make</label>
+  <select name="make" id="make">
+  <option value="">All</option>
+  {{#each make}}
+  <option value="{{.}}">{{.}}</option>
+  {{/each}}
+</select>
+
+  <label for="model">Model</label>
+  <select name="model" id="model">
+  <option value="">All</option>
+  {{#each model}}
+  <option value="{{.}}">{{.}}</option>
+  {{/each}}
+</select>
+
+  <label for="price">Price</label>
+  <select name="price" id="price">
+  <option value="">Any</option>
+  {{#each price}}
+  <option value="{{.}}">{{.}}</option>
+  {{/each}}
+</select>
+
+  <label for="year">Year</label>
+  <select name="year" id="year">
+  <option value="">Any</option>
+  {{#each year}}
+  <option value="{{.}}">{{.}}</option>
+  {{/each}}
+</select>
+
+  <button id='filter_btn'>Filter</button>
+  </script>
+
+  <script id="cars_template" type="text/x-handlebars-template">
+  {{#each array}}
+      {{> car_template}}
+    {{/each}}
+  </script>
+
+  <script id='car_template' type="text/x-handlebars-template">
+    <div class="car">
+      <figure>
+        <img src="{{image}}" alt="">
+      </figure>
+      <p><strong>{{make}} {{model}}</strong></p>
+      <p>Year: {{year}}</p>
+      <p>Year: {{price}}</p>
+      <button>Buy Now</button>
+    </div>
+  </script>
+
+
+
+  <script>
+    Handlebars.registerPartial('car_template', document.querySelector('#car_template').innerHTML);
+
+    const carsArray = [
+      { make: 'Honda', image: 'images/honda-accord-2005.jpg', model: 'Accord', year: 2005, price: 7000 },
+      { make: 'Honda', image: 'images/honda-accord-2008.jpg', model: 'Accord', year: 2008, price: 11000 },
+      { make: 'Toyota', image: 'images/toyota-camry-2009.jpg', model: 'Camry', year: 2009, price: 12500 },
+      { make: 'Toyota', image: 'images/toyota-corrolla-2016.jpg', model: 'Corolla', year: 2016, price: 15000 },
+      { make: 'Suzuki', image: 'images/suzuki-swift-2014.jpg', model: 'Swift', year: 2014, price: 9000 },
+      { make: 'Audi', image: 'images/audi-a4-2013.jpg', model: 'A4', year: 2013, price: 25000 },
+      { make: 'Audi', image: 'images/audi-a4-2013.jpg', model: 'A4', year: 2013, price: 26000 },
+    ];
+    let App = {
+      cars_template: Handlebars.compile(document.querySelector('#cars_template').innerHTML),
+      filter_template: Handlebars.compile(document.querySelector('#filter_template').innerHTML),
+
+      checkObj: {},
+
+      handleFilter(e) {
+        e.preventDefault();
+        let makeVal = document.querySelector('#make').value;
+        let priceVal = document.querySelector('#price').value;
+        let yearVal = document.querySelector('#year').value;
+        let modelVal = document.querySelector('#model').value;
+
+        let updatedMake = carsArray.filter(obj => obj['make'] === makeVal);
+
+        let updatedModel = carsArray.filter(obj => obj['model'] === modelVal);
+        let updatedPrice = carsArray.filter(obj => obj['price'] === +priceVal);
+        let updatedYear = carsArray.filter(obj => obj['year'] === yearVal);
+
+        let updateds = updatedMake.concat(updatedModel).concat(updatedPrice).concat(updatedYear)
+        //document.querySelector('#cars_area').innerHTML = '';
+        document.querySelector('#cars_area').innerHTML = this.cars_template({ array: updateds })
+
+      },
+
+      renderFilters() {
+        let make = [], model = [], price = [], year = [];
+        carsArray.forEach(obj => {
+          for (let key in obj) {
+            if (key === 'make') {
+              make.push(obj[key]);
+            } else if (key === 'model') {
+              model.push(obj[key]);
+            } else if (key === 'price') {
+              price.push(obj[key])
+            } else if (key === 'year') {
+              year.push(obj[key])
+            }
+          }
+        })
+
+        let uniqueMake = this.getUnique(make);
+        let uniqueModel = this.getUnique(model);
+        let uniqueYear = this.getUnique(year);
+        let uniquePrice = this.getUnique(price);
+
+        document.querySelector('#filters').innerHTML = this.filter_template({ make: uniqueMake, model: uniqueModel, year: uniqueYear, price: uniquePrice })
+      },
+      getUnique(array) {
+        let newArray = [];
+        let obj = {};
+
+        array.forEach(elm => {
+          if (!obj[elm]) {
+            obj[elm] = true;
+            newArray.push(elm)
+          }
+        })
+
+        return newArray.sort((a, b) => {
+          if (a < b) {
+            return -1;
+          } else if (a > b) {
+            return 1;
+          } else return 0;
+        })
+      },
+
+      init: function () {
+        document.querySelector('#cars_area').innerHTML = this.cars_template({ array: carsArray });
+        this.renderFilters();
+        document.querySelector('#filter_btn').addEventListener('click', this.handleFilter.bind(this))
+      }
+    }
+    App.init()
+  </script>
+</body>
+
+</html>

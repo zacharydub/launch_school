@@ -1,5 +1,7 @@
 <!-- Given the HTML below, write some JavaScript code that updates the options on one dropdown when the selection in the other dropdown changes. For instance, when the user chooses an option under Classifications, the items in the Animals dropdown should change accordingly. Use the lookup tables below to see which animals and classifications go together.
 
+  When the user clicks the "Clear" button, the program should reset both dropdowns to their default values.
+
  -->
 <!DOCTYPE html>
 <html lang="en">
@@ -32,8 +34,57 @@
   </form>
 
   <script>
-    let classType = document.querySelector('#animal-classifications')
-    let animals = document.querySelector('#animals')
+    const linkedOptions = {
+      classifications: {
+        Vertebrate: ['Bear', 'Turtle', 'Whale', 'Salmon', 'Ostrich'],
+        'Warm-blooded': ['Bear', 'Whale', 'Ostrich'],
+        'Cold-blooded': ['Salmon', 'Turtle'],
+        Mammal: ['Bear', 'Whale'],
+        Bird: ['Ostrich'],
+        Classifications: ['Animals', 'Bear', 'Turtle', 'Whale', 'Salmon', 'Ostrich'],
+      },
+      animals: {
+        Bear: ['Vertebrate', 'Warm-blooded', 'Mammal'],
+        Turtle: ['Vertebrate', 'Cold-blooded'],
+        Whale: ['Vertebrate', 'Warm-blooded', 'Mammal'],
+        Salmon: ['Vertebrate', 'Cold-blooded'],
+        Ostrich: ['Vertebrate', 'Warm-blooded', 'Bird'],
+        Animals: ['Classifications', 'Vertebrate', 'Warm-blooded', 'Cold-blooded', 'Mammal', 'Bird'],
+      },
+    };
+
+    const animalClassifications = document.querySelector('#animal-classifications');
+    const animals = document.querySelector('#animals');
+    const clearFiltersBtn = document.querySelector('#clear');
+    let animalClassificationsValue;
+    let animalsValue;
+
+    function setOptions({ options }, filters) {
+      options.length = 0;
+      filters.forEach((value, index) => {
+        options[index] = new Option(value)
+      });
+    }
+
+    function setDefault(event) {
+      event.preventDefault();
+      setOptions(animalClassifications, ['Classifications', 'Vertebrate', 'Warm-blooded', 'Cold-blooded', 'Mammal', 'Bird']);
+      setOptions(animals, ['Animals', 'Bear', 'Turtle', 'Whale', 'Salmon', 'Ostrich']);
+    }
+
+    animalClassifications.addEventListener('change', event => {
+      animalClassificationsValue = animalClassifications.options[animalClassifications.selectedIndex].value
+      setOptions(animals, linkedOptions['classifications'][animalClassificationsValue])
+    });
+
+    animals.addEventListener('change', event => {
+      animalsValue = animals.options[animals.selectedIndex].value
+      setOptions(animalClassifications, linkedOptions['animals'][animalsValue])
+    });
+
+    clearFiltersBtn.addEventListener('click', setDefault);
+
+    //The solution uses the linkedOptions object and the setOptions method to update the HTML based on the selection change in either dropdown filter. The linkedOption object has two properties: classifications and animals. Both have the same purpose; they show the options that should be available on the other dropdown when the current dropdown gets set to a new value. For instance, linkedOptions['classifications']['Mammal'] returns ['Bear', 'Whale']; thus, when the Classifications dropdown is Mammal, the Animals dropdown should contain Bear and Whale.
   </script>
 </body>
 

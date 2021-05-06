@@ -1,0 +1,222 @@
+<!-- For this project, build a multiple choice quiz application that uses an answer key to mark questions right or wrong.
+
+Specifications
+You can use the question collection shown below or a collection of your choice.
+Render the question collection to the page. Each question should let the user select a radio button to choose one of four possible answers.
+Add a Submit and Reset button.
+When the user clicks the submit button, mark each question as correct, wrong, or unanswered.
+When the user supplies a correct answer, display a "Correct Answer" message beneath the radio buttons for that question.
+When the user supplies an incorrect answer or fails to answer the question, display an appropriate error message and the correct answer beneath the radio buttons for that question.
+Disable the Submit button after the user submits the quiz.
+When the user clicks the Reset button, clear all selected radio buttons and messages and enable the Submit button. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz</title>
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #eee9ce;
+      font-size: 18px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    .wrapper {
+      width: 600px;
+      margin: 20px auto;
+    }
+
+    form {
+      margin: 30px 0 0 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 5px;
+    }
+
+    .question {
+      margin: 0 0 10px 0;
+    }
+
+    .question .description {
+      margin: 0 0 10px 0;
+    }
+
+    .submit,
+    .reset_form {
+      background: transparent;
+      padding: 5px 15px;
+      background: #55ec39;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    a.disabled {
+      background: #ccc;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 10px;
+      height: 35px;
+      padding: 5px;
+    }
+
+    .result.correct {
+      border: 1px solid green;
+    }
+
+    .result.wrong {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class='wrapper'>
+    <h1>Multiple Choice Quiz</h1>
+    <form action="#" method="POST" novalidate>
+      <p class='form_errors'></p>
+      <fieldset>
+
+
+      </fieldset>
+      <a class='submit'>Submit</a>
+      <a class='reset_form disabled'>Reset</a>
+    </form>
+  </div>
+
+  <script id='question_template' type='text/x-handlebars-template'>
+  <div class='question' data-id="{{id}}">
+    <p class = "description">Q{{id}}. {{{description}}}</p>
+    {{#each options}}
+    <label>
+      <input type="radio" name="{{../id}}" value = "{{.}}">
+      {{.}}
+    </label>
+    {{/each}}
+    <p class='result'></p>
+  </div>
+  </script>
+
+  <script>
+    var questions = [
+      {
+        id: 1,
+        description: "Who is the author of <cite>The Hitchhiker's Guide to the Galaxy</cite>?",
+        options: ['Dan Simmons', 'Douglas Adams', 'Stephen Fry', 'Robert A. Heinlein']
+      },
+      {
+        id: 2,
+        description: 'Which of the following numbers is the answer to Life, the \
+                  universe and everything?',
+        options: ['66', '13', '111', '42']
+      },
+      {
+        id: 3,
+        description: 'What is Pan Galactic Gargle Blaster?',
+        options: ['A drink', 'A machine', 'A creature', 'None of the above']
+      },
+      {
+        id: 4,
+        description: 'Which star system does Ford Prefect belong to?',
+        options: ['Aldebaran', 'Algol', 'Betelgeuse', 'Alpha Centauri']
+      }
+    ];
+
+    var answerKey = { '1': 'Douglas Adams', '2': '42', '3': 'A drink', 4: 'Betelgeuse' };
+
+    function App() {
+      this.questions = questions;
+      this.answerKey = answerKey;
+      this.score = 0;
+      this.questionTemplate = Handlebars.compile(document.querySelector('#question_template').innerHTML)
+      this.renderQuestions();
+      this.bindEvents();
+    }
+
+    App.prototype = {
+      renderQuestions: function () {
+        this.questions.forEach(function (q) {
+          document.querySelector('fieldset').insertAdjacentHTML('beforeEnd', this.questionTemplate(q))
+        }.bind(this))
+      },
+      markQuestion: function (elm) {
+        let qid = elm.getAttribute('data-id');
+        let givenAns = elm.querySelector('input:checked');
+
+        if (givenAns) { givenAns = givenAns.value }
+
+        let result = elm.querySelector('.result')
+        let correctAnswer = this.answerKey[qid];
+
+        if (!givenAns) {
+          this.markUnanswered(result, correctAnswer);
+        } else if (givenAns === correctAnswer) {
+          this.markCorrect(result)
+        } else {
+          this.markWrong(result, correctAnswer)
+        }
+      },
+      markCorrect(result) {
+        result.textContent = 'Correct Answer';
+        result.classList.add('correct');
+      },
+      markWrong(result, correctAnswer) {
+        result.textContent = 'Wrong answer. The correct answer is: "' + correctAnswer + '".';
+        result.classList.add('wrong');
+      },
+      markUnanswered(result, correctAnswer) {
+        result.textContent = 'You didn\'t answer this question. Answer is: "' + correctAnswer + '".'
+        result.classList.add('wrong')
+      },
+      markQuiz() {
+        let that = this;
+        document.querySelectorAll('.question').forEach(function (input) {
+          that.markQuestion(input)
+        })
+      },
+      resetForm(e) {
+        let results = document.querySelectorAll('.result');
+        e.preventDefault();
+        document.querySelector('form').reset();
+        e.target.classList.add('disabled');
+
+        results.forEach(result => {
+          result.textContent = '';
+          result.setAttribute('class', 'result')
+        })
+        document.querySelector('.submit').classList.remove('disabled')
+      },
+      handleSubmit(e) {
+        let submitBtn = e.target;
+        e.preventDefault();
+
+        if (!submitBtn.classList.contains('disabled')) {
+          this.markQuiz();
+          submitBtn.classList.add('disabled');
+          document.querySelector('.reset_form').classList.remove('disabled')
+        }
+      },
+      bindEvents() {
+        document.querySelector('.submit').addEventListener('click', this.handleSubmit.bind(this));
+        document.querySelector('.reset_form').addEventListener('click', this.resetForm.bind(this));
+      }
+    }
+
+    new App;
+  </script>
+</body>
+
+</html>

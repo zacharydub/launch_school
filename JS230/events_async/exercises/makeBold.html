@@ -30,11 +30,16 @@
       if (cb && typeof cb === 'function') {
         cb(elm);
       }
-
     }
+
+
+    //The solution leverages the fact that functions are first class objects and has the makeBold function take a callback as an argument. To avoid errors when calling the callback, checks were added to make sure that the value was provided and that it is a function.
+
 
     ////Further Exploration
     //You can get the same behavior as the above solution by creating your own custom event. For this further exploration exercise, create your own CustomEvent called bolded that allows the user to add it as the type of event to listen to.
+    // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
+
     const sectionElement = document.querySelector('section');
 
     function makeBold(element) {

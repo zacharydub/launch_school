@@ -44,22 +44,16 @@
         let message = `${remaining.toString()} characters remaining`;
         let invalid = remaining < 0;
 
-        textarea.classList.toggle('invalid', invalid);
-        button.disabled = invalid;
+        textarea.classList.toggle('invalid', invalid); // boolean arg in toggle method - when false, the class is not added. When true, the class gets added
 
+        button.disabled = invalid;
         counter.textContent = message;
       }
 
       textarea.addEventListener('keyup', updateCounter);
-
       updateCounter();
     });
   </script>
 </body>
 
 </html>
-
-<!-- LS solution -->
-<!--
-
- -->

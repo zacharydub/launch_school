@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cars for Sale</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+  <link rel="stylesheet" href="../../reset.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="underscore.js"></script>
+  <style>
+    #cars {
+      margin-top: 30px;
+    }
+
+    .car {
+      display: inline-block;
+      width: 200px;
+      margin: 0 0 20px 20px;
+      border-radius: 4px;
+    }
+
+    main h1 {
+      margin: 20px 0 0 20px;
+      font-size: 26px;
+    }
+
+    .car a {
+      display: inline-block;
+      padding: 5px 10px;
+      background: #e29921;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+
+    .car h2,
+    .car p,
+    .car a {
+      margin-top: 5px;
+    }
+
+    .car img {
+      width: 100%;
+    }
+
+    header {
+      color: #fff;
+      height: 100px;
+      background: #e29921;
+      padding: 20px;
+      box-sizing: border-box;
+      outline: none;
+      border-radius: 4px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    select {
+      width: 80px;
+      height: 25px;
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      margin-left: 5px;
+      margin-right: 8px;
+      outline: none;
+      border-radius: 4px;
+    }
+
+    option {
+      background: #e29921;
+    }
+
+    .filter_btn {
+      margin-left: 20px;
+      background: transparent;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      padding: 5px 10px;
+      color: #fff;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Buy Used Cars</h1>
+    <div id="filters"></div>
+  </header>
+  <main>
+    <div id="cars"></div>
+  </main>
+
+  <script id="filters_template" type="text/x-handlebars-template">
+      <label for="make_select">Make</label>
+      <select name="make" id="make_select">
+        <option value="">All</option>
+        {{#each makes}}
+          <option value="{{.}}">{{.}}</option>
+        {{/each}}
+      </select>
+
+      <label for="model_select">Model</label>
+      <select name="model" id="model_select">
+        <option value="">All</option>
+        {{#each models}}
+          <option value="{{.}}">{{.}}</option>
+        {{/each}}
+      </select>
+
+      <label for="price_select">Price</label>
+      <select name="price" id="price_select">
+        <option value="">Any</option>
+        {{#each prices}}
+          <option value="{{.}}">{{.}}</option>
+        {{/each}}
+      </select>
+
+      <label for="year_select">Year</label>
+      <select name="year" id="year_select">
+        <option value="">Any</option>
+        {{#each years}}
+          <option value="{{.}}">{{.}}</option>
+        {{/each}}
+      </select>
+
+      <button class="filter_btn">Filter</button>
+  </script>
+
+  <script id="cars_template" type="text/x-handlebars-templates">
+    {{#each cars}}
+      {{> car_template}}
+    {{/each}}
+  </script>
+
+  <script id="car_template" type="text/x-handlebars-templates">
+    <div class="car">
+      <figure>
+        <img src="{{image}}">
+      </figure>
+      <h2>{{make}} {{model}}</h2>
+      <p class="year">Year: {{year}}</p>
+      <p class="price">Price: ${{price}}</p>
+      <a href="#">Buy</a>
+    </div>
+  </script>
+
+  <script>
+    Handlebars.registerPartial('car_template', $('#car_template').html());
+
+    var cars = [
+      { make: 'Honda', image: 'images/honda-accord-2005.jpg', model: 'Accord', year: 2005, price: 7000 },
+      { make: 'Honda', image: 'images/honda-accord-2008.jpg', model: 'Accord', year: 2008, price: 11000 },
+      { make: 'Toyota', image: 'images/toyota-camry-2009.jpg', model: 'Camry', year: 2009, price: 12500 },
+      { make: 'Toyota', image: 'images/toyota-corrolla-2016.jpg', model: 'Corrolla', year: 2016, price: 15000 },
+      { make: 'Suzuki', image: 'images/suzuki-swift-2014.jpg', model: 'Swift', year: 2014, price: 9000 },
+      { make: 'Audi', image: 'images/audi-a4-2013.jpg', model: 'A4', year: 2013, price: 25000 },
+      { make: 'Audi', image: 'images/audi-a4-2013.jpg', model: 'A4', year: 2013, price: 26000 },
+    ];
+
+
+    var App = {
+      carsTemplate: Handlebars.compile($('#cars_template').html()),
+      filtersTemplate: Handlebars.compile($('#filters_template').html()),
+      allCars: cars,
+      $cars: $('#cars'),
+      $filters: $('#filters'),
+      filteredCars: cars,
+
+      renderCars: function () {
+        this.$cars.html(this.carsTemplate({ cars: this.filteredCars }));
+      },
+
+      renderFilterMenu: function () {
+        this.$filters.html(this.filtersTemplate(this.generateFilters()));
+      },
+
+      handleFilterClick: function () {
+        var make = $('#make_select').val();
+        var model = $('#model_select').val();
+        var price = Number($('#price_select').val());
+        var year = Number($('#year_select').val());
+
+        var filters = {};
+
+        if (make) filters.make = make;
+        if (model) filters.model = model;
+        if (price) filters.price = price;
+        if (year) filters.year = year;
+
+        this.filterCars(filters);
+      },
+
+      filterCars: function (filters) {
+        this.filteredCars = _(this.allCars).where(filters); //the filters object serves as the true/false condition for the where() method, where each name/value pair in the filers object needs to match the original list
+        this.renderCars();
+      },
+
+      generateFilters: function () {
+        var makes = _.uniq(_(this.allCars).pluck('make'));
+        //pluck - get all values from list/array of objects where property name is 'make'
+        //uniq - return new array of only unique elements
+        console.log(makes)
+        var models = _.uniq(_(this.allCars).pluck('model'));
+        var prices = _.uniq(_(this.allCars).pluck('price'));
+        var years = _.uniq(_(this.allCars).pluck('year'));
+
+        return { makes: makes, models: models, prices: prices, years: years };
+      },
+
+      init: function () {
+        this.renderCars();
+        this.renderFilterMenu();
+        $('.filter_btn').on('click', this.handleFilterClick.bind(this));
+      }
+    };
+    App.init();
+  </script>
+</body>
+
+</html>
+
+<!--
+  A:
+  - render cars
+  - render filter
+  - register EL for filter button
+ -->

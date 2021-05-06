@@ -96,6 +96,10 @@ Use this HTML and sample run to test out your code:-->
     //["ARTICLE", "MAIN", "SECTION", "P", "SPAN", "STRONG", "A"]
     sliceTree(11, 19);
 //["SECTION", "P", "SPAN", "STRONG", "A"]
+
+//There are a couple of things worth noting in this problem. First, it is difficult to build the slice of the DOM tree starting from the start since there is the possibility that an element branches off to many child elements. When this happens, you have to check each branch for the existence of the element with the specified end. Working from end is easier, since an element will always have only one Node.parentNode.
+
+//Another tricky thing here is the scenario wherein a slice is not possible given the combination of start and end. The catch here is to detect when you've already reached the body element and you haven't gotten an element that matches the id attribute of the start. When that happens, it means that the combination isn't possible and sliceTree returns undefined
   </script>
 </body>
 

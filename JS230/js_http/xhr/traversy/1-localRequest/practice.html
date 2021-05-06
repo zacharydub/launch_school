@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajax1 - Text File</title>
+</head>
+
+<body>
+  <button id="button">Get Text File</button>
+  <br><br>
+
+  <div id="text"></div>
+
+  <script>
+    document.getElementById('button').addEventListener('click', loadtext)
+
+    function loadtext() {
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', 'practice.txt')
+
+      console.log('readystate: ', xhr.readyState) // at this point we get '1' - established
+
+
+      //OPTIONAL - used for loaders
+      xhr.onprogress = function () {
+        console.log('readystate: ', xhr.readyState) // this will log '3' - processing request
+      }
+
+      xhr.onload = function () {
+        console.log('readystate: ', xhr.readyState) // this will clg '4' - since ONLOAD wont run unless the request is finished and the response is ready
+        if (this.status === 200) {
+          //console.log(this.responseText)
+          document.getElementById('text').textContent = this.responseText
+        } else if (this.status = 404) {
+          document.getElementById('text').textContent = 'noT found'
+        }
+      }
+
+      xhr.onerror = function () {
+        console.log('req error')
+      }
+
+      ////the ONLOAD method only gets invoked if readyState = 4 so dont need to check the readyState when using ONLOAD, but do need to check for it when using ONREADYSTATECHANGE
+
+
+      //xhr.onreadystatechange = function () {
+      //  console.log('readystate: ', xhr.readyState) // this will now clg 1-4. But onload doesn't go thru these checks
+      //  if (this.readyState === 4 && this.status === 200) {
+      //    console.log(this.responseText)
+      //  }
+      //}
+
+      xhr.send()
+    }
+
+    //readyState values:
+    //0: request not initialized
+    //1: server connection established
+    //2: request received
+    //3: processing request
+    //4: request finished & response is ready
+  </script>
+</body>
+
+</html>

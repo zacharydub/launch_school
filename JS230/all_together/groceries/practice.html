@@ -1,0 +1,118 @@
+<!-- When we load the page, we'll be presented with a form that asks us for an item's name and quantity as two text fields. Once the form is completed and submitted, a new item will be added to our grocery list. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grocery List</title>
+  <style>
+    body {
+      background-color: teal;
+    }
+
+    main {
+      background-color: white;
+      color: darkgreen;
+      width: 500px;
+      /*margin-top: 100px;
+      margin-left: 100px;*/
+      margin: 20%;
+    }
+
+    dt,
+    dd {
+
+      margin: 10px 0 10px 0;
+    }
+
+    input {
+      /*outline: 1px solid black;*/
+    }
+
+    fieldset {
+      border: 0;
+    }
+
+    button {
+      width: 250px;
+      height: 50px;
+      background-color: maroon;
+      border-radius: 5px;
+      border: 2px black;
+      color: white;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Add an item</h1>
+    <form>
+      <fieldset>
+        <dl>
+          <dt><label for="name">Name</label></dt>
+          <dd><input type="text" id='name' name='name'></dd>
+          <dt><label for="quantity">Quantity</label></dt>
+          <dd><input type="text" id='quantity' name='quantity'></dd>
+        </dl>
+        <button type="submit">Add</button>
+      </fieldset>
+    </form>
+    <section id="list">
+      <p>Groceries</p>
+      <ul></ul>
+    </section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', (e) => {
+      //let listItems = [['beef', 10], ['chicken', 10], ['stew', 10]]
+      let listItems = []
+
+      listItems.forEach(item => {
+        let order = document.createElement('li');
+        order.textContent = `${item[0]}: ${item[1]}`;
+        document.querySelector('#list ul').appendChild(order)
+      })
+
+      let text = document.createTextNode('try again')
+
+      document.querySelector('button').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        let name = document.querySelector('#name').value;
+        let quantity = document.querySelector('#quantity').value;
+        //console.log(quantity)
+        if (quantity === '') {
+          quantity = '1';
+        }
+
+        if (!name) {
+          console.log('Empty value')
+          document.querySelector('form').appendChild(text)
+          return
+        }
+
+        if (listItems.indexOf(name) === -1) {
+          listItems.push([name, quantity])
+          let newItem = document.createTextNode(`${quantity} ${name}`)
+          let newListItem = document.createElement('li');
+          newListItem.appendChild(newItem)
+          document.querySelector('#list ul').appendChild(newListItem)
+        } else {
+          console.log('already on list')
+        }
+
+        document.querySelector('form').reset()
+      })
+    })
+  </script>
+</body>
+
+</html>

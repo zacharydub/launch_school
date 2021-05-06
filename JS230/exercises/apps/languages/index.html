@@ -1,0 +1,125 @@
+<!-- A page that gives a description of one paragraph of a few programming languages of your choice and give the user the option to show/hide a portion of the paragraph.
+
+Requirements
+Create a collection of programming languages of your choice.
+Display a heading and a paragraph for each programming language.
+Initially, display the first 120 characters for each paragraph.
+There is a Show More button for each programming language.
+Functionality
+When the user clicks the Show More button:
+
+Display the entire paragraph about the corresponding language.
+Change the button text to Show Less.
+When the user clicks the Show Less button:
+
+Change the button text to Show More.
+Hide all but the first 120 characters of the paragraph text.
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Languages</title>
+  <link rel="stylesheet" href="../reset.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: sandybrown;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 50px;
+      margin: 25px;
+      ;
+    }
+
+    main {
+      background-color: white;
+      margin-left: 5px;
+      border-radius: 5px;
+      height: auto;
+      padding: 5px;
+    }
+
+    button {
+      background-color: sandybrown;
+      border-radius: 5px;
+      color: white;
+    }
+
+    p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+
+    .active {
+      text-overflow: initial;
+      overflow: auto;
+      white-space: normal;
+      max-width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Programming Languages</h1>
+  <main>
+    <section>
+      <h2>Ruby</h2>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quo expedita velit molestiae ratione illo
+        culpa repellendus obcaecati cum doloribus, incidunt repellat architecto, laborum quidem quisquam debitis,
+        similique placeat nobis.</p>
+      <button>Show More</button>
+    </section>
+    <section>
+      <h2>JS</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem voluptates ratione culpa quasi! Assumenda
+        aperiam adipisci iste esse vitae dolorem necessitatibus aliquid! Nam totam a tenetur eos, mollitia non alias.
+      </p>
+      <button>Show More</button>
+    </section>
+    <section>
+      <h2>Lisp</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem voluptates ratione culpa quasi! Assumenda
+        aperiam adipisci iste esse vitae dolorem necessitatibus aliquid! Nam totam a tenetur eos, mollitia non alias.
+      </p>
+      <button>Show More</button>
+    </section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let buttons = document.querySelectorAll('button');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          let p = e.target.previousElementSibling;
+          let button = e.target;
+
+          console.log('p', p)
+          if (p.classList.contains('active')) {
+            p.classList.remove('active');
+
+            button.textContent = 'Show More';
+          } else {
+            p.classList.add('active');
+            //p.style.width = 'auto'
+            button.textContent = 'Show Less';
+          }
+          //Object.assign(p.style, { overflow: "none", textOverflow: "none", maxWidth: "auto" })
+          //p.style.cssText = "overflow: none; textOverflow: none;maxWidth: auto"
+        })
+      })
+    })
+  </script>
+</body>
+
+</html>

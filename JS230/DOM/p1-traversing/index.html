@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <title>On the River</title>
+</head>
+
+<body>
+  <h1>On the River</h1>
+  <p>A poem by Paul Laurence Dunbar</p>
+
+  <p>
+    The sun is low,<br>
+    The waters flow,<br>
+    My boat is dancing to and fro.<br>
+    The eve is still,<br>
+    Yet from the hill<br>
+    The killdeer echoes loud and shrill.
+  </p>
+  <p>
+    The paddles plash,<br>
+    The wavelets dash,<br>
+    We see the summer lightning flash;<br>
+    While now and then,<br>
+    In marsh and fen<br>
+    Too muddy for the feet of men,
+  </p>
+  <p>
+    Where neither bird<br>
+    Nor beast has stirred,<br>
+    The spotted bullfrog's croak is heard.<br>
+    The wind is high,<br>
+    The grasses sigh,<br>
+    The sluggish stream goes sobbing by.
+  </p>
+  <p>
+    And far away<br>
+    The dying day<br>
+    Has cast its last effulgent ray;<br>
+    While on the land<br>
+    The shadows stand<br>
+    Proclaiming that the eve's at hand.
+  </p>
+  <script>
+    function walk(node, callback) {
+      callback(node);
+
+      for (let index = 0; index < node.childNodes.length; index += 1) {
+        walk(node.childNodes[index], callback);
+      }
+    }
+    let firsts = []
+    walk(document, node => {
+      if (node.nodeName === 'P') {
+        //let text = node.firstChild.data.trim();
+        let text = node.firstChild.nodeValue.trim()
+        //console.log(text)
+        let firstWord = text.split(' ')[0];
+        firsts.push(firstWord)
+      }
+    })
+    console.log(firsts)
+  </script>
+</body>
+
+</html>
+
+<!--function walk(node, callback) {
+callback(node);
+
+for (let index = 0; index < node.childNodes.length; index +=1) { walk(node.childNodes[index], callback); } } -->
+
+<!--
+  Starting with the document node, use the lastChild and childNodes properties to change the text color to red on the On
+  the River heading and set its font size 48 pixels.
+
+  let heading=document.childNodes[1].lastChild.childNodes[1]
+  heading.style.color='red' heading.style.fontSize='48px' -->
+
+
+<!-- Count the paragraphs on the page, and then log the result.
+
+  let count = 0
+walk(document, node => {
+  if(node.nodeName === 'P'){
+    count++
+  }
+})
+console.log(count)
+  -->
+
+
+<!-- Retrieve the first word from each paragraph on the page and log the entire list.
+
+  let firsts = []
+  walk(document, node => {
+  if(node.nodeName === 'P'){
+     let text = node.firstChild.data.trim();
+    let firstWord = text.split(' ')[0];
+    firsts.push(firstWord)
+  }
+})
+console.log(firsts)
+
+  -->
+
+
+<!-- Add the class stanza to each paragraph except the first.
+
+  let first = true;
+
+   walk(document, node => {
+  if(node.nodeName === 'P'){
+    if(first){
+      first = false
+    } else{
+      node.classList.add('stanza')
+    }
+  }
+})
+  -->
+
+
+
+<!-- different HTML now... -->
+
+<!-- Count the images on the page, then count the PNG images. Log both results.
+
+  let images = [];
+
+ walk(document, node => {
+  if(node.nodeName === 'IMG'){
+    images.push(node)
+  }
+})
+console.log(images.length)
+
+let pngImages = images.filter(elm => elm.getAttribute('src').match(/png$/))
+console.log(pngImages.length)
+
+  -->
+
+
+<!-- Change the link color to red for every link on the page.
+
+    walk(document, node => {
+  if(node.nodeName === 'A'){
+    node.style.color = 'red';
+  }
+})
+  -->

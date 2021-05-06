@@ -74,7 +74,9 @@
     </div>
     <script>
 
-      document.querySelector('.d3').addEventListener('click', highlightThis, false);
+      //document.querySelector('.d3').addEventListener('click', highlightThis, false);
+      //two phases for every event: first it goes through the capturing phase calling each handler that is set to be handled during the capture phase, then the currentTarget fires, and finally the bubbling phase occurs, with each handler that is set to be handled during the bubble phase. Note that changing which phase an even is handle by does not effect the rest of the events. The process goes from the top-down during the capture phase, and bottom-up during the bubble phase. Thus, events fire in this order: d1 (capture), d2 (capture), d4 (capture), d3 (bubble).
+
       let divs = document.querySelectorAll('.pick');
 
       for (let index = 0; index < divs.length; index += 1) {
