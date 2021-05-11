@@ -1,0 +1,24 @@
+//events and elements:
+- retrieve list (or show list initial)
+
+- add contact button
+  - submit
+  - cancel
+
+
+
+- edit - remove that contact from list if user submits, then add the modified user to contacts list
+  - submit
+  - cancel
+
+- delete
+
+- search field
+  - on each input, use the input value as the new search query, which we should check against each contact to see if the fullname has a matching substring
+
+- tags
+  - populate tags lists from contacts lists (use the underscore.js pluck/where methods. Maybe with those methods I didnt need to add the contact to the tags list each time!)
+  - display relevant list of filtered contacts when tag is clicked
+
+-- do i need separate ELs for create submit vs edit submit? yes - one will use PUT, the other POST
+-- do i need separate ELs for create cancel vs edit cancel? no - both hide form and display list

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../reset.css">
+</head>
+
+<body>
+  <main>
+    <div id="window">
+      <div id="operation_window"></div>
+      <div id="entry_window">0</div>
+    </div>
+    <div id="buttons">
+      <button class="inputs" id="ce">CE</button>
+      <button class="inputs" id="c">C</button>
+      <button class="inputs" id="neg">NEG</button>
+      <button class="inputs operator" id="slash">/</button>
+      <button class="inputs digit" id="seven">7</button>
+      <button class="inputs digit" id="eight">8</button>
+      <button class="inputs digit" id="nine">9</button>
+      <button class="inputs operator" id="multiply">x</button>
+      <button class="inputs digit" id="four">4</button>
+      <button class="inputs digit" id="five">5</button>
+      <button class="inputs digit" id="six">6</button>
+      <button class="inputs operator" id="subtract">-</button>
+      <button class="inputs digit" id="one">1</button>
+      <button class="inputs digit" id="two">2</button>
+      <button class="inputs digit" id="three">3</button>
+      <button class="inputs operator" id="add">+</button>
+      <button class="inputs digit" id="zero">0</button>
+      <button class="inputs" id="dot">.</button>
+      <button class="inputs operator" id="percent">%</button>
+      <button class="inputs" id="equals">=</button>
+    </div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let App = {
+        currentEntry: document.querySelector('#entry_window'),
+        opWindow: document.querySelector('#operation_window'),
+        handleCE() {
+          this.currentEntry.textContent = '0';
+        },
+        handleC() {
+          this.currentEntry.textContent = '0';
+          this.opWindow.textContent = '';
+        },
+        handleNeg() {
+          if (!(this.currentEntry.textContent[0] === '-')) {
+            this.currentEntry.textContent = '-' + this.currentEntry.textContent;
+          }
+        },
+        handleDigit(e) {
+          if (this.currentEntry.textContent.trim() === '0') {
+            this.currentEntry.textContent = e.target.textContent;
+          } else {
+            this.currentEntry.textContent += e.target.textContent;
+          }
+        },
+        handleOperator(e) {
+          let selectedOp = e.target.textContent;
+          if (this.opWindow.textContent !== '') {
+            this.opWindow.textContent += " " + this.currentEntry.textContent + " " + selectedOp
+          } else {
+            this.opWindow.textContent = this.currentEntry.textContent + " " + selectedOp;
+          }
+          this.currentEntry.textContent = '0';
+        },
+        handleOp(result, elm, currentOp) {
+          if (currentOp === '/') {
+            return (Number(result) / Number(elm))
+          } else if (currentOp === 'x') {
+            return Number(result) * Number(elm)
+          }
+          else if (currentOp === '-') {
+            return Number(result) - Number(elm)
+          }
+          else if (currentOp === '+') {
+            return Number(result) + Number(elm)
+          }
+          else if (currentOp === '%') {
+            return Number(result) % Number(elm)
+          }
+        },
+        handleEquals(e) {
+          if (this.currentEntry.textContent.match(/\d/)) {
+            this.opWindow.textContent += " " + this.currentEntry.textContent
+          }
+
+          let opArr = this.opWindow.textContent.split(' ');
+          let operators = ['-', '+', '/', 'x', '%'];
+          let result = 0;
+
+          let currentOp = null;
+          opArr.forEach((elm, index) => {
+            if (elm.match(/\d/)) {
+              if (currentOp) {
+                result = this.handleOp(result, elm, currentOp);
+              } else {
+                result += Number(elm);
+              }
+            } else if (operators.includes(elm)) {
+              currentOp = elm;
+            }
+          })
+          this.opWindow.textContent = '';
+
+          this.currentEntry.textContent = String(result)
+        },
+        handleDot() {
+          this.currentEntry.textContent += '.';
+        },
+        init() {
+          document.querySelectorAll('.digit').forEach(item => item.addEventListener('click', this.handleDigit.bind(this)));
+          document.querySelectorAll('.operator').forEach(item => item.addEventListener('click', this.handleOperator.bind(this)));
+          document.querySelector('#equals').addEventListener('click', this.handleEquals.bind(this));
+          document.querySelector('#neg').addEventListener('click', this.handleNeg.bind(this));
+          document.querySelector('#ce').addEventListener('click', this.handleCE.bind(this));
+          document.querySelector('#c').addEventListener('click', this.handleC.bind(this));
+          document.querySelector('#dot').addEventListener('click', this.handleDot.bind(this))
+        }
+      }
+      App.init();
+    })
+
+  </script>
+</body>
+
+</html>

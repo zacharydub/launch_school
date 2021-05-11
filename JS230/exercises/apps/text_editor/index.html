@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Editor</title>
+  <script src="https://kit.fontawesome.com/7f5d82fb3c.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: royalblue;
+      box-sizing: border-box;
+    }
+
+    header {
+      color: white;
+      font-weight: bold;
+      margin: 20px auto 25px auto;
+      text-align: center;
+    }
+
+    #app {
+      background-color: whitesmoke;
+      margin: auto 100px;
+    }
+
+    #toolbar {
+      background-color: lightgray;
+      padding-left: 5px;
+      height: 35px;
+      width: 100%;
+    }
+
+    /*a {
+      height: 100%;
+    }*/
+
+    .toolbar_icon {
+      color: black;
+      padding-left: 10px;
+      height: 35px;
+      width: 35px;
+    }
+
+    .fas {
+      height: 35px;
+      width: 35px;
+      /* need to adjust media query to prevent icons from wrapping. instead want arrow/hamburger. */
+    }
+
+    .fas:hover {
+      background-color: white;
+    }
+
+    #editor {
+      height: 500px;
+      width: 100%;
+      background-color: white;
+    }
+
+    /*#popup {
+      height: 100px;
+      width: 200px;
+      position: relative;
+      left: 40%;
+      outline: 1px solid black;
+      display: none;
+    padding: 15px;
+    }
+    */
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Rich Text Editor</h1>
+  </header>
+  <div id='app'>
+    <div id="toolbar">
+      <a href="#" class='toolbar_icon' id='bold'><i class="fas fa-bold fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="italics"><i class="fas fa-italic fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="underline"><i class="fas fa-underline fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="strike"><i class="fas fa-strikethrough fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="link"><i class="fas fa-link fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="list"><i class="fas fa-list fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="numbered_list"><i class="fas fa-list-ol fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="align_right"><i class="fas fa-align-right fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="align_left"><i class="fas fa-align-left fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="align_block"><i class="fas fa-align-justify fa-2x"></i></a>
+      <a href="#" class='toolbar_icon' id="align_center"><i class="fas fa-align-center fa-2x"></i></a>
+    </div>
+    <div id="editor" contenteditable="true">
+      <div id="popup">
+        Enter URL to link to:
+        <input id='popupInput' type="text">
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let App = {
+        editor: document.querySelector('#editor'),
+        boldIcon: document.querySelector('#bold'),
+        italicsIcon: document.querySelector('#italics'),
+        underlineIcon: document.querySelector('#underline'),
+        strikeIcon: document.querySelector('#strike'),
+        linkIcon: document.querySelector('#link'),
+        listIcon: document.querySelector('#list'),
+        numbered_list_icon: document.querySelector('#numbered_list'),
+        align_right_icon: document.querySelector('#align_right'),
+        align_left_icon: document.querySelector('#align_left'),
+        align_block_icon: document.querySelector('#align_block'),
+        align_center_icon: document.querySelector('#align_center'),
+        background(node) {
+          node = node.firstChild;
+          node.style.backgroundColor === "white" ? node.style.backgroundColor = "lightgray" : node.style.backgroundColor = "white";
+        },
+        handlebold() {
+          document.execCommand('bold', true, null);
+          this.background(this.boldIcon)
+        },
+        handleitalics() {
+          document.execCommand('italic', true, null);
+          this.background(this.italicsIcon)
+        },
+        handleunderline() {
+          document.execCommand('underline', true, null);
+          this.background(this.underlineIcon)
+        },
+        handlestrike() {
+          document.execCommand('strikeThrough', true, null);
+          this.background(this.strikeIcon)
+        },
+        handlelink() {
+          let selection = document.getSelection().toString();
+          if (!selection) return;
+
+          let url = prompt('Enter a URL:', 'http://');
+          if (!url) return;
+
+          document.execCommand('createLink', false, url);
+
+          //need unlink command as well?
+        },
+        handlelist() {
+          document.execCommand('insertUnorderedList', true, null);
+
+        },
+        handlenumbered_list() {
+          document.execCommand('insertOrderedList', true, null);
+          this.background(this.numbered_list_icon)
+        },
+        handlealign_right() {
+          document.execCommand('justifyRight', true, null);
+          this.background(this.align_right_icon)
+        },
+        handlealign_left() {
+          document.execCommand('justifyLeft', true, null);
+          this.background(this.align_left_icon)
+        },
+        handlealign_block() {
+          document.execCommand('justifyFull', true, null);
+          this.background(this.align_block_icon)
+        },
+        handlealign_center() {
+          document.execCommand('justifyCenter', true, null);
+          this.background(this.align_center_icon)
+        },
+        init() {
+          this.boldIcon.addEventListener('click', this.handlebold.bind(this));
+          this.italicsIcon.addEventListener('click', this.handleitalics.bind(this));
+          this.underlineIcon.addEventListener('click', this.handleunderline.bind(this));
+          this.strikeIcon.addEventListener('click', this.handlestrike.bind(this));
+          this.linkIcon.addEventListener('click', this.handlelink.bind(this));
+          this.listIcon.addEventListener('click', this.handlelist.bind(this));
+          this.numbered_list_icon.addEventListener('click', this.handlenumbered_list.bind(this));
+          this.align_right_icon.addEventListener('click', this.handlealign_right.bind(this));
+          this.align_left_icon.addEventListener('click', this.handlealign_left.bind(this));
+          this.align_block_icon.addEventListener('click', this.handlealign_block.bind(this));
+          this.align_center_icon.addEventListener('click', this.handlealign_center.bind(this));
+
+        }
+      };
+
+      App.init();
+    })
+  </script>
+</body>
+
+</html>

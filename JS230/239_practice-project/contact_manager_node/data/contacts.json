@@ -1,0 +1,44 @@
+[
+  {
+    "id": 2,
+    "full_name": "Victor Reyes",
+    "email": "vpr@example.com",
+    "phone_number": "0987654321011",
+    "tags": ""
+  },
+  {
+    "full_name": "pete hanson",
+    "phone_number": "",
+    "email": "",
+    "tags": "engineering",
+    "id": 3
+  },
+  {
+    "full_name": "aza",
+    "phone_number": "",
+    "email": "",
+    "tags": "sales",
+    "id": 4
+  },
+  {
+    "full_name": "za",
+    "phone_number": "12",
+    "email": "",
+    "tags": "sales",
+    "id": 5
+  },
+  {
+    "full_name": "z",
+    "phone_number": "",
+    "email": "",
+    "tags": "",
+    "id": 6
+  },
+  {
+    "full_name": "zac",
+    "phone_number": "",
+    "email": "",
+    "tags": "marketing",
+    "id": 7
+  }
+]

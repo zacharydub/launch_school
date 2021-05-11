@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="calc.css">
+  <style>
+    body {
+      background: #22596e;
+    }
+
+    #calculator {
+      width: 350px;
+      height: 430px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 4px;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+
+    #screen {
+      height: 120px;
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+      padding: 10px;
+      margin: 0 0 10px 0;
+      text-align: right;
+      position: relative;
+    }
+
+    #screen .current_num {
+      font-size: 36px;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      margin: 0px;
+    }
+
+    #buttons a {
+      width: 82px;
+      height: 53px;
+      background: #ccc;
+      box-sizing: border-box;
+      padding: 15px 0 0 0;
+      text-align: center;
+      display: inline-block;
+      text-decoration: none;
+      color: #000;
+      margin-top: 5px;
+      font-size: 18px;
+      border-radius: 4px;
+    }
+
+    #bottons a:hover {
+      background: #bbb;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="calculator">
+    <div id="screen">
+      <p class="calculation"></p>
+      <p class="current_num">0</p>
+    </div>
+
+    <div id="buttons">
+
+      <a href="#" id="ce" class="control">CE</a>
+      <a href="#" id="c" class="control">C</a>
+      <a href="#" id="neg" class="control">NEG</a>
+      <a href="#" class="op">/</a> <!-- other divide sign as further exp -->
+      <a href="#" class="digit">7</a>
+      <a href="#" class="digit">8</a>
+      <a href="#" class="digit">9</a>
+      <a href="#" class="op">x</a>
+      <a href="#" class="digit">4</a>
+      <a href="#" class="digit">5</a>
+      <a href="#" class="digit">6</a>
+      <a href="#" class="op">-</a>
+      <a href="#" class="digit">1</a>
+      <a href="#" class="digit">2</a>
+      <a href="#" class="digit">3</a>
+      <a href="#" class="op">+</a>
+      <a href="#" class="digit">0</a>
+      <a href="#" class="dot">.</a>
+      <a href="#" class="op">%</a>
+      <a href="#" class="result_button">=</a>
+    </div>
+  </div>
+
+  <script>
+    function App() {
+      this.currentNumScreen = document.querySelector('#screen .current_num');
+      this.operationsScreen = document.querySelector('#screen .calculation');
+      this.result = 0;
+      this.currentOp = '+';
+      this.resultStatus = false;
+
+      this.bindEvents();
+    }
+
+    App.prototype = {
+      handleDigitClick: function (event) {
+        event.preventDefault();
+        this.printDigit(event.target.textContent.trim());
+      },
+      handleOpClick: function (event) {
+        event.preventDefault();
+
+        this.printOperator(event.target.textContent.trim());
+      },
+      clearAll: function (event) {
+        this.clear(event);
+        this.clearOpScreen();
+        this.reset();
+      },
+      clear: function (event) {
+        event.preventDefault();
+        this.clearCurrNumScreen();
+        this.currentNumScreen.textContent = '0';
+      },
+      handleResClick: function (event) {
+        event.preventDefault();
+
+        this.calculateResult();
+        this.clearOpScreen();
+        this.reset();
+      },
+      handleDotClick: function (event) {
+        event.preventDefault();
+
+        if (this.currentNumScreen.textContent.indexOf('.') === -1) {
+          this.printToNumScreen('.');
+        }
+      },
+      reset: function () {
+        this.result = 0;
+        this.currentOp = '+';
+      },
+      printOperator: function (operator) {
+        var prevOperationText = this.operationsScreen.textContent;
+        var numAndOpToAdd = this.currentNumScreen.textContent + ' ' + operator + ' ';
+        this.calculateResult();
+        this.currentOp = operator;
+        this.operationsScreen.textContent = prevOperationText + numAndOpToAdd;
+      },
+
+      clearCurrNumScreen: function () {
+        this.currentNumScreen.textContent = '';
+      },
+      clearOpScreen: function () {
+        this.operationsScreen.textContent = '';
+      },
+      calculateResult: function () {
+        var currentNumScreen = this.currentNumScreen.textContent;
+        var number;
+        if (currentNumScreen.includes('.')) {
+          number = parseFloat(currentNumScreen);
+        } else {
+          number = parseInt(currentNumScreen);
+        }
+
+        switch (this.currentOp) {
+          case '+':
+            this.result += number;
+            break;
+          case '-':
+            this.result -= number;
+            break;
+          case '/':
+            this.result /= number;
+            break;
+          case 'x':
+            this.result *= number;
+            break;
+          case '%':
+            this.result = this.result % number;
+            break;
+        }
+
+        this.displayResult();
+      },
+      negateNum: function () {
+        if (this.currentNumScreen.textContent !== '0') {
+          this.currentNumScreen.textContent = '-' + this.currentNumScreen.textContent;
+        }
+      },
+      displayResult: function () {
+        this.currentNumScreen.textContent = this.result;
+        this.resultStatus = true;
+      },
+      printDigit: function (digit) {
+        if (this.currentNumScreen.textContent === '0') this.clearCurrNumScreen();
+        if (this.resultStatus) {
+          this.clearCurrNumScreen();
+          this.resultStatus = false;
+        }
+
+        this.printToNumScreen(digit);
+      },
+      printToNumScreen: function (item) {
+        var currText = this.currentNumScreen.textContent.trim();
+        this.currentNumScreen.textContent = currText + item;
+      },
+      bindEvents: function () {
+        document.querySelectorAll('.digit').forEach(function (digitButton) {
+          digitButton.addEventListener('click', this.handleDigitClick.bind(this));
+        }.bind(this));
+
+        document.querySelectorAll('.op').forEach(function (opButton) {
+          opButton.addEventListener('click', this.handleOpClick.bind(this));
+        }.bind(this));
+
+        document.querySelector('.result_button').addEventListener('click', this.handleResClick.bind(this));
+        document.querySelector('#neg').addEventListener('click', this.negateNum.bind(this));
+        document.querySelector('#c').addEventListener('click', this.clearAll.bind(this));
+        document.querySelector('#ce').addEventListener('click', this.clear.bind(this));
+        document.querySelector('.dot').addEventListener('click', this.handleDotClick.bind(this));
+      },
+    };
+
+    new App;
+  </script>
+</body>
+
+</html>

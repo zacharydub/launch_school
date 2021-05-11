@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Manager</title>
+  <script src="/javascripts/jquery.js"></script>
+  <!--<script src="/javascripts/handlebars.js"></script>-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+  <style>
+    body {
+      background-color: white;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #add_search {
+      text-align: center;
+    }
+
+    header {
+      height: 125px;
+      width: 100%;
+      background-color: #cdbfe3;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+
+    #add_search {
+      background-color: #ededed;
+      padding: 30px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .add_btn {
+      height: 75px;
+      padding: 25px;
+      font-size: 24px;
+      border-radius: 5px;
+    }
+
+    #search {
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid lightgray;
+      font-size: 20px;
+    }
+
+    #list {
+      text-align: center;
+    }
+
+    #form {
+      display: none;
+    }
+
+    #list_populated {
+      display: none;
+      height: auto;
+      width: 250px
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Contact Manager</h1>
+    <h3>Using blah blah blah</h3>
+  </header>
+
+  <div id='underlay_wrapper'>
+    <div id="add_search">
+      <button class="add_btn">Add Contact</button>
+      <input type="text" name="search" id="search" placeholder="Search">
+    </div>
+    <div id="list_initial">
+      <h2>No contacts</h2>
+      <button class="add_btn">Add Contact</button>
+    </div>
+    <div id="list_populated"></div>
+  </div>
+
+  <div id="form">
+    <h1>Create Contact</h1>
+    <form action="" method="post">
+      <!-- get path from server -->
+      <fieldset>
+        <dl>
+          <dt><label for="fullname">Full name:</label></dt>
+          <dd><input type="text" name="fullname" id="fullname"></dd>
+          <dt><label for="email">Email address:</label></dt>
+          <dd><input type="email" name="email" id="email"></dd>
+          <dt> <label for="phone">Telephone number:</label></dt>
+          <dd><input type="number" name="phone" id="phone"></dd>
+        </dl>
+        <input type="submit" value="Submit" id="submit">
+        <button id='cancel'>Cancel</button>
+      </fieldset>
+    </form>
+  </div>
+
+  <script id="list_template" type="text/x-handlebars-template">
+    <div id="list_wrapper">
+      {{#each obj}}
+        <h2> <strong> {{full_name}}</strong></h2>
+        <p> <strong>Phone Number:</strong> </p>
+        <p>{{phone_number}}</p>
+        <p> <strong>Email:</strong> </p>
+        <p>{{email}}</p>
+        <button id="edit">Edit</button>
+        <button id="delete">Delete</button>
+      {{/each}}
+    </div>
+  </script>
+
+  <!--<script id="form" type="text/x-handlebars-template">-->
+  <!--<h1>Create Contact</h1>
+  <form action="" method="post">
+    <fieldset>
+      <dl>
+        <dt><label for="fullname">Full name:</label></dt>
+        <dd><input type="text" name="fullname" id="fullname"></dd>
+        <dt><label for="email">Email address:</label></dt>
+        <dd><input type="email" name="email" id="email"></dd>
+        <dt> <label for="phone">Telephone number:</label></dt>
+        <dd><input type="number" name="phone" id="phone"></dd>
+      </dl>
+      <input type="submit" value="Submit" id="submit">
+      <button id='cancel'>Cancel</button>
+    </fieldset>
+  </form>-->
+  <!--</script>-->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let App = {
+        add_btn: document.querySelectorAll('.add_btn'),
+        search: document.querySelector('#search'),
+        //edit: document.querySelector('#edit'),
+        delete: document.querySelector('#delete'),
+        submit: document.querySelector('#submit'),
+        cancel: document.querySelector('#cancel'),
+        form: document.querySelector('#form'),
+        list_template: Handlebars.compile(document.querySelector('#list_template').innerHTML),
+        handleAdd() {
+          //display form
+          this.form.style.display = 'block';
+          document.querySelector('#underlay_wrapper').style.display = "none";
+        },
+        handleCancel(e) {
+          e.preventDefault()
+          this.form.style.display = 'none';
+          document.querySelector('#underlay_wrapper').style.display = "block";
+        },
+        handleSubmit() {
+          //serialize data and send to
+          let xhr = new XMLHttpRequest();
+          const formData = new FormData(form);
+          const json = JSON.stringify(formDataToJson(formData));
+
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(json);
+          //get URl from server
+          xhr.open('post', '/api/contacts');
+          xhr.send(data);
+
+          xhr.addEventListener('load', (e) => {
+            let contacts_res = xhr.response;
+            console.log(contacts_res)
+          })
+
+          //if list has any contacts, then the list template should show. Otherwise, #list_initial shouls show
+          if (this.contacts.length > 0) {
+            this.renderList(this.contacts);
+          }
+        },
+        renderList(array) {
+          //let xhr = new XMLHttpRequest();
+          //xhr.open('get', '/api/contacts');
+          //xhr.send();
+          //xhr.addEventListener('load', e => {
+          //  console.log('get request.response ' + xhr.response)
+          //})
+
+
+          document.querySelector('#list_initial').style.display = 'none';
+          let fullList = document.querySelector('#list_populated');
+          fullList.style.display = 'block';
+          fullList.style.outline = "1px solid black"
+          fullList.innerHTML = this.list_template({ obj: this.contacts })
+
+          //          let div = document.createElement('div');
+          //          div.innerHTML = this.list_template({ obj: this.contacts });
+          //
+          //          fullList.appendChild(div);
+
+          //let text = document.createTextNode(listElement);
+          //console.log(text)
+
+          //fullList.insertBefore(listElement, fullList.firstElementChild)
+        },
+        formDataToJson(formData) {
+          const json = {};
+          for (const pair of formData.entries()) {
+            json[pair[0]] = pair[1];
+          }
+
+          return json;
+        },
+        handleSearch() {
+          this.searchQuery = this.search.value;
+          this.filter(this.searchQuery);
+        },
+        filter() {
+          //get all substrings of each list elm and show the elements with a substring that matches the current search query
+        },
+
+        handleEdit() {
+          //update/edit contact from list
+        },
+        handleDelete() {
+          //delete contact from list
+        },
+
+
+
+        init() {
+          this.add_btn.forEach(btn => btn.addEventListener('click', this.handleAdd.bind(this)));
+          this.search.addEventListener('input', this.handleSearch.bind(this));
+
+          //do I put ELs for dynamically created elements in init method?
+          //this.edit.addEventListener('click', this.handleEdit.bind(this));
+          this.delete.addEventListener('click', this.handleDelete.bind(this));
+          this.submit.addEventListener('click', this.handleSubmit.bind(this));
+          this.cancel.addEventListener('click', this.handleCancel.bind(this));
+
+
+
+          this.searchQuery = null;
+          this.contacts = [];
+
+          let xhr = new XMLHttpRequest();
+          xhr.open('get', '/api/contacts');
+          xhr.send();
+          xhr.addEventListener('load', e => {
+            console.log('get request.response ' + xhr.response)
+            this.contacts = xhr.response;
+            if (this.contacts.length > 0) this.renderList(this.contacts);
+          })
+
+        }
+      }
+      App.init();
+    })
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: blue;
+}
+
+main {
+  background-color: white;
+  height: auto;
+  width: 400px;
+  border-radius: 7px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5px;
+  /*margin: 20px;*/
+}
+
+#buttons {
+  border-top: 2px solid lightgray;
+  padding: 15px;
+  /*margin: 20px;*/
+  display: grid;
+  /*grid-auto-rows: min-content;*/
+  column-gap: 5px;
+  row-gap: 5px;
+  grid-template-areas:
+    "ce c neg slash"
+    "seven  eight  nine  multiply"
+    "four five six subtract"
+    "one two three add"
+    "zero dot percent equals";
+  grid-template-columns: 1fr 1fr 1fr 1.1fr;
+}
+.inputs{
+  height: 50px;
+  background-color: gray;
+  outline: none;
+}
+#c {
+  grid-area: ce;
+}
+
+#c {
+  grid-area: c;
+}
+
+#neg {
+  grid-area: neg;
+}
+
+#slash {
+  grid-area: slash;
+}
+
+#seven {
+  grid-area: seven;
+}
+
+#eight {
+  grid-area: eight;
+}
+
+#nine {
+  grid-area: nine;
+}
+
+#multiply {
+  grid-area: multiply;
+}
+
+#four {
+  grid-area: four;
+}
+
+#five {
+  grid-area: five;
+}
+
+#six {
+  grid-area: six;
+}
+
+#subtract {
+  grid-area: subtract;
+}
+
+#one {
+  grid-area: one;
+}
+
+#two {
+  grid-area: two;
+}
+
+#three {
+  grid-area: three;
+}
+
+#add {
+  grid-area: add;
+}
+#zero {
+  grid-area: zero;
+}
+#dot {
+  grid-area: dot;
+}
+#percent {
+  grid-area: percent;
+}
+#equals {
+  grid-area: equals;
+}
+
+#operation_window{
+  text-align: right;
+  font: 25px;
+  padding-right:20px;
+}
+#entry_window {
+  text-align: right;
+  font-size: 40px;
+  padding-right:20px;
+}
+#window{
+height: 50px;
+}

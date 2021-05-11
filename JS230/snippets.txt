@@ -1,0 +1,146 @@
+*****************
+DOM TREE
+*****************
+
+____________WALK the TREE
+
+function walk(node, callback) {
+  callback(node);
+
+if (node.childNodes.length > 0) {
+
+  for (let index = 0; index < node.childNodes.length; index += 1) {
+   walk(node.childNodes[index], callback);
+  }
+}
+walk(document, node => {} )
+
+____________CLIMB THE TREE DOWN
+
+function getAllChildrenOf(parents) {
+      return parents.map(({ children }) => Array.prototype.slice
+        .call(children))
+        .reduce((collection, children) => collection.concat(children), []);
+    }
+
+while (generation < targetGeneration) {
+        generation += 1;
+        elements = getAllChildrenOf(parents);
+        parents = elements;
+      }
+
+____________CLIMB THE TREE UP
+
+do {
+        parentElement = currentElement.parentNode;
+        let children = getTagNames(parentElement.children);
+        domTree.push(children);
+        currentElement = parentElement;
+      } while (parentElement.tagName !== 'BODY');
+
+function getTagNames(htmlCollection) {
+      const elementsArray = Array.from(htmlCollection);
+      //or
+      //const elementsArray = [].slice.call(htmlCollection)
+
+      return elementsArray.map((elm) => elm.tagName);
+      //or
+      //return elementsArray.map(({ tagName }) => tagName);
+    }
+
+***********************
+EVENTS
+***********************
+
+_________CUSTOM EVENT
+
+ function makeBold(element) {
+      element.style.fontWeight = 'bold';
+      const event = new CustomEvent('bolded');
+
+      element.dispatchEvent(event);
+    }
+
+ sectionElement.addEventListener('bolded', (event) => {
+      alert(event.target.tagName);
+      event.target.classList.add('highlight');
+    });
+
+makeBold(sectionElement);
+
+
+__________SELECTION FILTERS
+see events_async/exercises/selectionFilters.html
+
+**********************
+ASYNC
+**********************
+
+_________setTimeout
+
+function makeLogger(number) {
+  return function () {
+    console.log(number);
+  }
+}
+function delayLog() {
+  for (let index = 1; index <= 10; index += 1) {
+    let logger = makeLogger(index);
+    setTimeout(logger, index * 1000);
+  }
+}
+
+__________setInterval
+
+let clear;
+function startCounting() {
+  let count = 0;
+  clear = setInterval(() => {
+    count++
+    console.log(count)
+  }, 1000)
+
+  if (count === 5) {
+    stopCounting()
+  }
+}
+function stopCounting() {
+  clearInterval(clear)
+}
+startCounting()
+
+*****************************
+FORMS and AJAX
+*****************************
+
+____________RECEIVE JSON - PARSE
+let request = new XMLHttpRequest();
+request.open('GET', 'https://api.github.com/repos/rails/rails');
+request.responseType = 'json';
+
+request.addEventListener('load', event => {
+  // request.response will be the result of parsing the JSON response body or null if the body couldn't be parsed or another erroroccurred.
+
+  let data = request.response;
+});
+request.send();
+
+___________CONVERT FormData to JSON
+
+function formDataToJson(formData) {
+      const json = {};
+      for (const pair of formData.entries()) {
+        json[pair[0]] = pair[1];
+      }
+
+      return json;
+    }
+const formData = new FormData(form);
+const json = JSON.stringify(formDataToJson(formData));
+
+xhr.open('POST', form.action);
+
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.send(json);
+
+___________SERIALIZE DATA USING EncodeURIComponent
