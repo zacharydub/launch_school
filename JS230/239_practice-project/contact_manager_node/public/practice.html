@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animate</title>
+  <style>
+    body {
+      padding: 20px;
+    }
+
+    .thing {
+      margin: 20px;
+      padding: 20px;
+      background: lightyellow;
+      border: 1px solid green;
+    }
+
+    .thing2 {
+      opacity: 0;
+    }
+
+    .m-fadeOut {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s linear 300ms, opacity 300ms;
+    }
+
+    .m-fadeIn {
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0s linear 0s, opacity 300ms;
+    }
+  </style>
+</head>
+
+<button id="tog">toggle them fancy classes</button>
+
+<div id="thing" class="thing">I toggle m-fadeOut</div>
+<div id="thing2" class="thing thing2">I toggle m-fadeIn</div>
+
+<p>Lorem ipsum </p>
+
+<script>
+  var tog = document.getElementById("tog");
+  var thing = document.getElementById("thing");
+  var thing2 = document.getElementById("thing2");
+
+  tog.addEventListener("click", function () {
+
+    thing.classList.toggle("m-fadeOut");
+    thing2.classList.toggle("m-fadeIn");
+
+  });
+</script>
+</body>
+
+</html>

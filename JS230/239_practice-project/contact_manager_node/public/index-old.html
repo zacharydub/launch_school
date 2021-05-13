@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Manager</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+  <script src="underscore.js"></script>
+  <style>
+    body {
+      background-color: white;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #add_search {
+      text-align: center;
+    }
+
+    header {
+      height: 125px;
+      width: 100%;
+      background-color: #cdbfe3;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+
+    #add_search {
+      background-color: #ededed;
+      padding: 30px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .add_btn {
+      height: 75px;
+      padding: 15px;
+      font-size: 24px;
+      border-radius: 5px;
+      background-color: gray;
+      border: 1px solid blue
+    }
+
+    #search {
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid lightgray;
+      font-size: 20px;
+    }
+
+    #list {
+      text-align: center;
+    }
+
+    #form_div {
+      display: none;
+    }
+
+    #list_populated {
+      display: none;
+      height: auto;
+      width: 250px;
+    }
+
+    .item_wrapper {
+      border-bottom: 1px solid lightgray;
+      padding-bottom: 20px;
+      line-height: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Contact Manager</h1>
+    <h3>Using blah blah blah</h3>
+  </header>
+
+  <div id='underlay_wrapper'>
+    <div id="add_search">
+      <button class="add_btn">Add Contact</button>
+      <input type="text" name="search" id="search" placeholder="Search">
+    </div>
+    <div id="list_initial">
+      <h2>No contacts</h2>
+      <button class="add_btn">Add Contact</button>
+    </div>
+    <div id="list_populated">
+    </div>
+  </div>
+
+  <div id="form_div">
+    <div id="create_div">
+      <h1>Create Contact</h1>
+      <form action="/api/contacts" method="post">
+        <fieldset>
+          <dl>
+            <dt><label for="full_name">Full name:</label></dt>
+            <dd><input type="text" name="full_name" id="full_name"></dd>
+            <dt><label for="email">Email address:</label></dt>
+            <dd><input type="email" name="email" id="email"></dd>
+            <dt> <label for="phone_number">Telephone number:</label></dt>
+            <dd><input type="number" name="phone_number" id="phone_number"></dd>
+            <dt> <label for="tags">Tags:</label></dt>
+            <dd><select multiple name="tags" id="tags">
+                <option value="sales">Sales</option>
+                <option value="engineering">Engineering</option>
+                <option value="marketing">Marketing</option>
+              </select></dd>
+          </dl>
+          <input type="submit" value="Submit" class="submit">
+          <button class='cancel'>Cancel</button>
+        </fieldset>
+      </form>
+    </div>
+    <div id="edit_div"></div>
+  </div>
+
+
+  <script id='edit_form_template' type="text/x-handlebars-template">
+    <h1>Edit Contact</h1>
+    <form action="#" id="{{contact.id}}">
+      <fieldset>
+        <dl>
+          <dt><label for="full_name">Full name:</label></dt>
+          <dd><input type="text" name="full_name" id="full_name" value="{{contact.full_name}}"></dd>
+          <dt><label for="email">Email address:</label></dt>
+          <dd><input type="email" name="email" id="email" value="{{contact.email}}"></dd>
+          <dt> <label for="phone_number">Telephone number:</label></dt>
+          <dd><input type="number" name="phone_number" id="phone_number" value="{{contact.phone_number}}"></dd>
+          <dt> <label for="tags">Tags:</label></dt>
+          <!-- How to reselect the tags already chosen? -->
+          <dd><select multiple name="tags" id="tags">
+              <option value="sales">Sales</option>
+              <option value="engineering">Engineering</option>
+              <option value="marketing">Marketing</option>
+            </select></dd>
+        </dl>
+        <input type="submit" value="Submit" class="submit">
+        <button class='cancel'>Cancel</button>
+      </fieldset>
+    </form>
+  </div>
+  </script>
+
+  <script id="list_template" type="text/x-handlebars-template">
+    <div id="list_wrapper">
+      {{#each array}}
+      <div class="item_wrapper" id={{id}}>
+        <h2> <strong> {{full_name}}</strong></h2>
+        <br>
+        <p> <strong>Phone Number:</strong> </p>
+        <p>{{phone_number}}</p>
+        <p> <strong>Email:</strong> </p>
+        <p>{{email}}</p>
+        <p class='tags_area'> <strong>Tags:</strong>
+          {{#tags}}
+          <button class='tag'>{{.}}</button>
+          {{/tags}}
+        </p>
+        <br>
+        <button class="edit">Edit</button>
+        <button class="delete">Delete</button>
+      </div>
+      {{/each}}
+    </div>
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let App = {
+        add_btn: document.querySelectorAll('.add_btn'),
+        search: document.querySelector('#search'),
+        submit_new: document.querySelector('#create_div submit'),
+        cancel: document.querySelectorAll('#form_div .cancel'),
+        form_new: document.querySelector('#create_div form'),
+        form_div: document.querySelector('#form_div'),
+        //edit: document.querySelectorAll('#list_populated .edit'),
+        list_template: Handlebars.compile(document.querySelector('#list_template').innerHTML),
+        edit_template: Handlebars.compile(document.querySelector('#edit_form_template').innerHTML),
+        fullList: document.querySelector('#list_populated'),
+        handleAdd() {
+          this.form_div.style.display = 'block';
+          document.querySelector('#create_div').style.display = 'block';
+          document.querySelector('#edit_div').style.display = 'none';
+          //console.log(document.querySelector('#create_div form').elements)
+
+          //.forEach(elm => elm.value = '')
+
+          document.querySelector('#underlay_wrapper').style.display = "none";
+        },
+        handleCancel(e) {
+          e.preventDefault()
+          this.form_div.style.display = 'none';
+          document.querySelector('#underlay_wrapper').style.display = "block";
+        },
+        handleSubmitNew(e) {
+          e.preventDefault();
+          let xhr = new XMLHttpRequest();
+          let formData = new FormData(this.form_new);
+          let newcontact = this.formDataToJson(formData);
+          let json = JSON.stringify(newcontact);
+
+          xhr.open('POST', '/api/contacts');
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.responseType = 'json';
+
+          this.form_new.reset();
+          //console.log(Array.prototype.slice.call(this.form_new.elements))
+          //
+          xhr.addEventListener('load', () => {
+            //console.log(formData.getAll('tags'))
+            //formData.getAll('tags').toString().split(',').forEach(elm => {
+            formData.getAll('tags').forEach(elm => {
+              if (elm) {
+                if (elm === 'sales') {
+                  this.sales_tags.push(xhr.response.id);
+                } else if (elm === 'marketing') {
+                  this.marketing_tags.push(xhr.response.id);
+                } else if (elm === 'engineering') {
+                  this.engineering_tags.push(xhr.response.id);
+                }
+              }
+            })
+            this.form_div.style.display = 'none';
+            if (this.contacts.length > 0) {
+              this.retrieveList();
+              let success = document.createTextNode('Submitted successfully');
+              let p = document.createElement('p');
+              p.appendChild(success);
+              document.querySelector('#add_search').appendChild(p);
+            }
+            document.querySelector('#underlay_wrapper').style.display = "block";
+
+          })
+          xhr.send(json);
+          //xhr.addEventListener('loadend', () => {
+          //this.form_div.style.display = 'none';
+          //if (this.contacts.length > 0) {
+          //  this.retrieveList();
+          //  let success = document.createTextNode('Submitted successfully');
+          //  let p = document.createElement('p');
+          //  p.appendChild(success);
+          //  document.querySelector('#add_search').appendChild(p);
+          //}
+          //document.querySelector('#underlay_wrapper').style.display = "block";
+          //})
+
+        },
+        formDataToJson(formData) {
+          const json = {};
+          //let tagsList = [];
+          let tagsList = '';
+          for (const pair of formData.entries()) {
+            if (pair[0] === 'tags' && pair[1]) {
+              //if (!tagsList.includes(pair[1])) {
+              //  tagsList.push(pair[1])
+              if (tagsList.indexOf(pair[1]) === -1) {
+                if (tagsList.length > 0) { tagsList += `,${pair[1]}` }
+                else { tagsList += `${pair[1]}` }
+              }
+              continue;
+            }
+            json[pair[0]] = pair[1];
+          }
+          //json.tags = tagsList.split(',');
+          json.tags = tagsList;
+          return json;
+        },
+        handleSearch() {
+          this.searchQuery = this.search.value;
+          this.searchList = [];
+          if (this.searchQuery) {
+            this.contacts.forEach(obj => {
+              let subs = this.getSubs(obj['full_name']);
+              if (subs.indexOf(this.searchQuery.toUpperCase()) !== -1) {
+                this.searchList.push(obj);
+              }
+            })
+
+          }
+          if (this.searchList.length > 0) {
+            let initial = document.querySelector('#list_initial');
+            initial.style.display = 'none';
+            this.fullList.style.display = 'block';
+            this.fullList.innerHTML = '';
+            this.fullList.innerHTML = this.list_template({ array: this.searchList });
+          } else {
+            this.retrieveList();
+          }
+
+          //for each contact,get all substrings. If searchQuery matches any of the substrings, then it should be added to our searchList. Use this search list in list_template
+        },
+
+        getSubs(str) {
+          let arr = str.split('');
+          let subs = [];
+          for (let i = 0; i < arr.length; i++) {
+            for (let j = i + 1; j <= arr.length; j++) {
+              subs.push(arr.slice(i, j).join(''))
+            }
+          }
+          return subs.filter(elm => elm.length > 0);
+        },
+
+        handleEdit(contactId) {
+          let editedContact = this.contacts.find(elm => elm.id === Number(contactId));
+
+          this.form_div.style.display = 'block';
+          document.querySelector('#create_div').style.display = 'none';
+          document.querySelector('#edit_div').style.display = 'block';
+          document.querySelector('#underlay_wrapper').style.display = "none";
+          document.querySelector('#edit_div').innerHTML = '';
+          document.querySelector('#edit_div').innerHTML = this.edit_template({ contact: editedContact })
+
+        },
+        handleDelete(contactId) {
+          //console.log('dlete butn')
+          console.log(contactId)
+
+          //popup prompting user if certain
+          if (confirm('Are you sure you want to delete?')) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('delete', `/api/contacts/${contactId}`);
+            xhr.send();
+            xhr.responseType = 'json';
+            //check for successful operation and if so post text node saying deletion successful
+
+            this.retrieveList();
+          }
+
+        },
+
+        handleTagClick(e) {
+          //get tag name of clicked element
+          //show list of only those contacts with given tag name (included in tags prop array?)
+        },
+
+        retrieveList() {
+          let xhr = new XMLHttpRequest();
+          xhr.open('get', '/api/contacts');
+          xhr.send();
+          xhr.responseType = 'json';
+          xhr.addEventListener('load', e => {
+            this.contacts = xhr.response;
+            //issue with the tags prop - need to convert the string to array to render properly using template
+            //for every contact in contacts list, I want to
+            this.contacts.forEach(obj => {
+              if (obj.tags) obj.tags = obj['tags'].split(',');
+            })
+            //console.log(this.contacts)
+            //this.contacts = this.contacts.map(obj => {
+            //  if (obj.tags) return obj.tags = obj.tags.split(',')
+            //})
+            //console.log(this.contacts)
+            let initial = document.querySelector('#list_initial');
+            if (this.contacts.length > 0) {
+              initial.style.display = 'none';
+              this.fullList.style.display = 'block';
+              this.fullList.innerHTML = '';
+              this.fullList.innerHTML = this.list_template({ array: this.contacts });
+              //populate tags lists
+              //this.contacts.forEach(obj => {
+              //  if (obj['tags'] > 0 && obj['tags'].length > 0) {
+              //    let tags = obj['tags'].split(',');
+              //    tags.forEach(tag => {
+              //      if (tag === 'sales') {
+              //        this.sales_tags.push(obj);
+              //      } else if (tag === 'marketing') {
+              //        this.marketing_tags.push(obj);
+              //      } else if (tag === 'engineering') {
+              //        this.engineering_tags.push(obj);
+              //      }
+              //    })
+              //    obj['tags'] = obj['tags'].split(',');
+              //  }
+              //})
+              ;
+            } else {
+              initial.style.display = 'block';
+            }
+          })
+        },
+        handleListClick(e) {
+          if (e.target.tagName === 'BUTTON') {
+            if (e.target.classList.contains('edit')) {
+              this.handleEdit(e.target.parentNode.id);
+            } else if (e.target.classList.contains('delete')) {
+              this.handleDelete(e.target.parentNode.id);
+            } else if (e.target.classList.contains('tag')) {
+              this.renderTagList(e)
+            }
+          }
+        },
+        getTags(tagName) {
+          let tagsList = [];
+          this.contacts.forEach(obj => {
+            if (obj['tags'] instanceof Object) {
+              if (obj['tags'].includes(tagName)) {
+                tagsList.push(obj);
+              }
+            }
+          })
+          return tagsList;
+        },
+        renderTagList(e) {
+          let selectedTag = e.target.textContent;
+          //need to handle seed data + submitted data?
+          // instead of building the tag lists each time there's a submission, we can populate the tags arrays with all the elements in the this.contacts array where one of their tags = 'sales'. Either using vanilla JS or underscoreJS.
+          if (selectedTag === 'sales') {
+            this.sales_tags = this.getTags(selectedTag);
+
+            //initial.style.display = 'none';
+            //fullList.style.display = 'block';
+            this.fullList.innerHTML = '';
+            this.fullList.innerHTML = this.list_template({ array: this.sales_tags });
+            //display all the contacts with sales tag. Akin to filtering with search. We dont want to do away with the existing contacts list, but we do need a new contacts list showing only the relevant people with accompaying tag
+
+          } else if (selectedTag === 'marketing') {
+            this.marketing_tags = this.getTags(selectedTag);
+            this.fullList.innerHTML = '';
+            this.fullList.innerHTML = this.list_template({ array: this.marketing_tags });
+          } else if (selectedTag === 'engineering') {
+            this.engineering_tags = this.getTags(selectedTag);
+            this.fullList.innerHTML = '';
+            this.fullList.innerHTML = this.list_template({ array: this.engineering_tags });
+          }
+        },
+        handleEditSubmit(e, id) {
+          e.preventDefault();
+          this.contacts = this.contacts.filter(contact => contact.id !== Number(id));
+
+          let formData = new FormData(document.querySelector('#edit_div form'));
+          let newcontact = this.formDataToJson(formData);
+          let json = JSON.stringify(newcontact);
+
+          let xhr = new XMLHttpRequest();
+          xhr.open('put', `/api/contacts/${id}`);
+          xhr.responseType = 'json';
+          xhr.setRequestHeader('Content-Type', 'application/json');
+
+          xhr.send(json);
+          xhr.addEventListener('load', () => {
+            this.form_div.style.display = 'none';
+            if (this.contacts.length > 0) {
+              this.retrieveList();
+              let success = document.createTextNode('Submitted successfully');
+              let p = document.createElement('p');
+              p.appendChild(success);
+              document.querySelector('#add_search').appendChild(p);
+            }
+            document.querySelector('#underlay_wrapper').style.display = "block";
+          })
+        },
+        init() {
+          document.addEventListener('click', () => {
+            let successNode = document.querySelectorAll('#add_search p');
+            if (successNode) successNode.forEach(node => node.textContent = '');
+          })
+          //add buttons
+          this.add_btn.forEach(btn => btn.addEventListener('click', this.handleAdd.bind(this)));
+          //submit new contact
+          this.form_new.addEventListener('submit', this.handleSubmitNew.bind(this));
+          //cancel (new and edited) & submit edited
+          document.querySelector('#form_div').addEventListener('click', e => {
+            if (e.target.classList.contains('cancel')) {
+              this.handleCancel(e)
+            } else if (e.target.classList.contains('submit') && e.target.closest('#edit_div')) {
+              this.handleEditSubmit(e, e.target.parentNode.parentNode.id)
+            }
+          })
+          //edit & delete buttons & tags
+          document.querySelector('#list_populated').addEventListener('click', this.handleListClick.bind(this));
+
+          //filter
+          this.search.addEventListener('input', this.handleSearch.bind(this));
+
+          this.searchQuery = null;
+          this.searchList = [];
+          this.contacts = [];
+          this.tagContacts = [];
+
+          this.sales_tags = [];
+          this.marketing_tags = [];
+          this.engineering_tags = [];
+          this.retrieveList();
+        }
+      }
+      App.init();
+    })
+  </script>
+</body>
+
+</html>
+<!-- //do I put ELs for dynamically created elements in init method, i.e. the edit and delete buttons? And why can't i select the node representing the button of each contact created by the list_template? Answer to both is elements arent yet created before rendering using Handelbars template.
+ -->

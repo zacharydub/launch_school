@@ -22,3 +22,25 @@
 
 -- do i need separate ELs for create submit vs edit submit? yes - one will use PUT, the other POST
 -- do i need separate ELs for create cancel vs edit cancel? no - both hide form and display list
+
+
+REFACTOR
+- variable for document.querySelector('#underlay_wrapper').style.display
+- show create form
+- success message (223-226)
+- show list, hide initial (266-269 | 324-328 | 366-375). (do we even need to hide initial after the 1st time?)
+
+
+-need a 'show all contacts' button to avoid dead-end after clicking tag. Can put it next to a title called 'Selected Contacts' whenever someone clicks a tag button. Better than generic 'selected contacts' can put 'marketing contacts', etc. for each one. Need to understnand when to use Handlebars partial...perhaps this is a scenario?
+
+-form validation to prevent empty spaces and non-alphas
+
+--re the tags data structure - either array or string. API docs staes it's a comma-separated string, so whenever i send a request or get one back from API i will be dealing with a string. But to loop through the tags using Handlebars I need an array, right? Any way to loop thru a string using Handlebars? Or a better way to display the tag buttons?
+
+--when user clicks to edit contact, I populated the fields with the previously entered inputs. How do I select the dropdown items that were previously selected? Some way to isolate the tag names from the contact and match them up with the option values. If a match, then pre-select that option.
+
+--CSS animation for the underlay wrapper
+
+--seleting DOM elements at top of App object or in init() method
+
+--re pre-select select options for the previously selected tags - im also not capturing the edited tags when a user makes an edit on the tags
