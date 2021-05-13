@@ -32,7 +32,7 @@
       background-color: #ededed;
       padding: 30px;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-evenly;
     }
 
     .add_btn {
@@ -151,7 +151,8 @@
                 <option value="marketing">Marketing</option>
               </select></dd>
           </dl>
-          <input type="submit" value="Submit" class="submit">
+          <!--<input type="submit" value="Submit" class="submit">-->
+          <button type="submit" value="submit" class="submit">Submit</button>
           <button class='cancel'>Cancel</button>
         </fieldset>
       </form>
@@ -177,11 +178,10 @@
               <option value="sales" id="salesSelect" {{func contact.tags "sales"}}>Sales</option>
               <option value="engineering" id="engineeringSelect" {{func contact.tags "engineering"}} >Engineering</option>
               <option value="marketing" id="marketingSelect" {{func contact.tags "marketing"}}>Marketing</option>
-
-
             </select></dd>
         </dl>
-        <input type="submit" value="Submit" class="submit">
+        <button type="submit" value="submit" class="submit">Submit</button>
+        <!--<input type="submit" value="Submit" class="submit">-->
         <button class='cancel'>Cancel</button>
       </fieldset>
     </form>
@@ -223,303 +223,319 @@
       //return !list ? null : list.includes(name) ? 'selected' : null
     })
 
-    document.addEventListener('DOMContentLoaded', () => {
-      let App = {
 
-        handleAdd() {
-          this.showElm(this.form_div)
-          //console.log(this.form_div)
-          //this.form_div.style.display = 'block';
-          //this.form_div.classList.add('show')
-          this.showElm(document.querySelector('.create_div'))
+    let App = {
+
+      handleAdd() {
+        //this.form_div.style.display = 'block';
+        //document.querySelector('.create_div').style.display = 'block';
+        //document.querySelector('.edit_div').style.display = 'none';
+        this.showElm(this.form_div);
+        this.showElm(this.create_div)
+        this.hideElm(this.edit_div)
+        //this.showElm(document.querySelector('.create_div'));
+        //this.hideElm(document.querySelector('.edit_div'));
+
+        document.querySelector('#underlay_wrapper').style.display = "none";
+      },
+      handleCancel(e) {
+        e.preventDefault();
+        this.hideElm(this.form_div);
+        //this.form_div.style.display = 'none';
+        //this.form_div.classList.add('hide')
+        this.create_div.style.display = 'block';
+        document.querySelector('#underlay_wrapper').style.display = "block";
+      },
+
+      hideElm(node) {
+        node.classList.add('hide');
+        node.classList.remove('show');
+      },
+      showElm(node) {
+        node.classList.add('show');
+        node.classList.remove('hide');
+      },
+
+      handleEditButton(contactId) {
+        let editedContact = this.contacts.find(elm => elm.id === Number(contactId));
+        //let editedContact = this.contacts.filter(elm => elm.id === Number(contactId))[0];
+        this.showElm(this.form_div);
+        //this.form_div.style.display = 'block';
+        //this.form_div.classList.add('show');
+        //this.hideElm(document.querySelector('.create_div'))
+        this.create_div.style.display = 'none';
+        //document.querySelector('.create_div').classList.add('hide')
+
+        this.showElm(this.edit_div);
+        //document.querySelector('#edit_div').style.display = 'block';
+        //document.querySelector('.edit_div').classList.add('show')
+
+        document.querySelector('#underlay_wrapper').style.display = "none";
+        this.edit_div.innerHTML = '';
+        this.edit_div.innerHTML = this.edit_template({ contact: editedContact });
+      },
+
+      handleSubmitNew(e) {
+        e.preventDefault();
+        let formData = new FormData(this.form_new);
+        this.form_new.reset();
+        //let newcontact = this.formDataToJson(formData);
+        let json = JSON.stringify(this.formDataToJson(formData));
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/contacts');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.addEventListener('load', () => {
           //document.querySelector('.create_div').style.display = 'block';
-          //document.querySelector('.create_div').classList.add('show')
-
-          this.hideElm(document.querySelector('.edit_div'))
-          //document.querySelector('.edit_div').style.display = 'none';
-          //document.querySelector('.edit_div').classList.add('hide')
-
-          document.querySelector('#underlay_wrapper').style.display = "none";
-        },
-        handleCancel(e) {
-          e.preventDefault()
-          this.hideElm(this.form_div)
-          //this.form_div.style.display = 'none';
           //this.form_div.classList.add('hide')
-          document.querySelector('.create_div').style.display = 'block'
+          //this.form_div.style.display = 'none';
+          this.showElm(this.create_div);
+          this.hideElm(this.form_div);
+
+          //if (this.contacts.length > 0) {....or if POST request was successful
+          this.retrieveList();
+          this.success();
+          //}
           document.querySelector('#underlay_wrapper').style.display = "block";
-        },
+        })
+        xhr.send(json);
+      },
+      handleSubmitEdit(e, id) {
+        e.preventDefault();
 
-        hideElm(node) {
-          node.classList.add('hide')
-          node.classList.remove('show')
-        },
-        showElm(node) {
-          node.classList.add('show')
-          node.classList.remove('hide')
-        },
+        let formData = new FormData(this.edit_div.querySelector('form'));
+        let json = JSON.stringify(this.formDataToJson(formData));
 
-        handleEditButton(contactId) {
-          let editedContact = this.contacts.find(elm => elm.id === Number(contactId));
-          //let editedContact = this.contacts.filter(elm => elm.id === Number(contactId))[0];
-          this.showElm(this.form_div)
-          //this.form_div.style.display = 'block';
-          //this.form_div.classList.add('show');
-          //this.hideElm(document.querySelector('.create_div'))
-          document.querySelector('.create_div').style.display = 'none';
-          //document.querySelector('.create_div').classList.add('hide')
+        let xhr = new XMLHttpRequest();
+        xhr.open('PUT', `/api/contacts/${id}`);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(json);
+        xhr.addEventListener('load', () => {
+          //should i check for successful response? either by investigatng response or by statuscode. status code is not as thorough
+          this.create_div.style.display = 'block';
+          this.hideElm(this.form_div);
+          //this.form_div.classList.add('hide')
+          //this.form_div.style.display = 'none';
 
-          this.showElm(document.querySelector('#edit_div'))
-          //document.querySelector('#edit_div').style.display = 'block';
-          //document.querySelector('.edit_div').classList.add('show')
-
-          document.querySelector('#underlay_wrapper').style.display = "none";
-          document.querySelector('#edit_div').innerHTML = '';
-          document.querySelector('#edit_div').innerHTML = this.edit_template({ contact: editedContact })
-        },
-
-        handleSubmitNew(e) {
-          e.preventDefault();
-          let formData = new FormData(this.form_new);
-          this.form_new.reset();
-          //let newcontact = this.formDataToJson(formData);
-          let json = JSON.stringify(this.formDataToJson(formData));
-
-          let xhr = new XMLHttpRequest();
-          xhr.open('POST', '/api/contacts');
-          xhr.setRequestHeader('Content-Type', 'application/json');
-          xhr.addEventListener('load', () => {
-            //document.querySelector('.create_div').style.display = 'block';
-            this.showElm(document.querySelector('.create_div'))
-            this.hideElm(this.form_div)
-
-            //this.form_div.classList.add('hide')
-            //this.form_div.style.display = 'none';
-
-            //if (this.contacts.length > 0) {....or if POST request was successful
+          //check in case submission wasnt successful. When would it not be successful? Can contacts list ever be 0 after a submit edit? No...
+          if (this.contacts.length > 0) {
             this.retrieveList();
             this.success();
-            //}
-            document.querySelector('#underlay_wrapper').style.display = "block";
-          })
-          xhr.send(json);
-        },
-        handleSubmitEdit(e, id) {
-          e.preventDefault();
-
-          let formData = new FormData(document.querySelector('#edit_div form'));
-          let json = JSON.stringify(this.formDataToJson(formData));
-
-          let xhr = new XMLHttpRequest();
-          xhr.open('PUT', `/api/contacts/${id}`);
-          xhr.setRequestHeader('Content-Type', 'application/json');
-          xhr.send(json);
-          xhr.addEventListener('load', () => {
-            //should i check for successful response? either by investigatng response or by statuscode. status code is not as thorough
-            document.querySelector('.create_div').style.display = 'block';
-            this.hideElm(this.form_div);
-            //this.form_div.classList.add('hide')
-            //this.form_div.style.display = 'none';
-
-            //check in case submission wasnt successful. When would it not be successful? Can contacts list ever be 0 after a submit edit? No...
-            if (this.contacts.length > 0) {
-              this.retrieveList();
-              this.success();
-            }
-            document.querySelector('#underlay_wrapper').style.display = "block";
-          })
-        },
-        handleDelete(contactId) {
-          if (confirm('Are you sure you want to delete?')) {
-            let xhr = new XMLHttpRequest();
-            xhr.open('DELETE', `/api/contacts/${contactId}`);
-            xhr.send();
-            //check for successful operation and if so post text node saying deletion successful
-            xhr.addEventListener('loadend', () => {
-              this.retrieveList();
-            })
           }
-        },
-        retrieveList() {
-          this.search.value = '';
+          document.querySelector('#underlay_wrapper').style.display = "block";
+        })
+      },
+      handleDelete(contactId) {
+        if (confirm('Are you sure you want to delete?')) {
           let xhr = new XMLHttpRequest();
-          xhr.open('get', '/api/contacts');
+          xhr.open('DELETE', `/api/contacts/${contactId}`);
           xhr.send();
-          xhr.responseType = 'json';
-          xhr.addEventListener('load', e => {
-            this.contacts = xhr.response;
-            //need to convert the tags prop string to array so Handlebars template can loop through. In case there are no tags there should be no buttons - was seeing a small empty tags button appear, I think it's because of an empty string value so setting it to 'null'
-            this.contacts.forEach(obj => {
-              if (typeof obj.tags === 'string') {
-                obj.tags = obj.tags.split(',');
-              }
-              if (!obj.tags[0]) obj.tags = null;
-            })
-            if (this.contacts.length > 0) {
-              this.renderList(this.contacts);
-            } else {
-              this.initial.style.display = 'block';
-              this.fullList.innerHTML = '';
-
-              document.querySelector('#all_tags').style.display = 'none';
-            }
-          })
-        },
-        handleListClick(e) {
-          if (e.target.tagName === 'BUTTON') {
-            if (e.target.classList.contains('edit')) {
-              this.handleEditButton(e.target.parentNode.id);
-            } else if (e.target.classList.contains('delete')) {
-              this.handleDelete(e.target.parentNode.id);
-            } else if (e.target.classList.contains('tag')) {
-              this.renderTagList(e);
-            }
-          }
-        },
-        handleSearch(e) {
-          e.preventDefault()
-          console.log(this.search.value)
-          console.log(this.search.value.trim())
-          //this.initial.style.display = 'none';
-          //if (this.search.value.trim()) {
-          //this.searchQuery = this.search.value;
-          this.searchList = [];
-          if (this.search.value) {
-            this.contacts.forEach(obj => {
-              let subs = this.getSubs(obj['full_name'].toLowerCase());
-              if (subs.indexOf(this.search.value.toLowerCase()) !== -1) {
-                this.searchList.push(obj);
-              }
-            })
-          } else {
+          //check for successful operation and if so post text node saying deletion successful
+          xhr.addEventListener('loadend', () => {
             this.retrieveList();
-          }
-          if (this.searchList.length > 0) {
-            this.renderList(this.searchList);
+          })
+        }
+      },
+      retrieveList() {
+        this.search.value = '';
+        let xhr = new XMLHttpRequest();
+        xhr.open('get', '/api/contacts');
+        xhr.send();
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', e => {
+          this.contacts = xhr.response;
+          //need to convert the tags prop string to array so Handlebars template can loop through. In case there are no tags there should be no buttons - was seeing a small empty tags button appear, I think it's because of an empty string value so setting it to 'null'
+          this.contacts.forEach(obj => {
+            if (typeof obj.tags === 'string') {
+              obj.tags = obj.tags.split(',');
+            }
+            if (!obj.tags[0]) obj.tags = null;
+          })
+          if (this.contacts.length > 0) {
+            this.renderList(this.contacts);
           } else {
             this.initial.style.display = 'block';
-            document.querySelector('#all_tags').style.display = 'block';
-            this.fullList.style.display = 'none';
-          }
-          //} else {
-          //  this.retrieveList();
-          //}
+            this.fullList.innerHTML = '';
 
-        },
-        renderList(array) {
-          this.initial.style.display = 'none';
-          this.fullList.style.display = 'block';
-          this.fullList.innerHTML = '';
-          this.fullList.innerHTML = this.list_template({ array: array });
-          document.querySelector('#all_tags').style.display = 'block';
-        },
-        renderTagList(e) {
-          let selectedTag = e.target.textContent;
-          if (selectedTag === 'sales') {
-            this.sales_tags = this.getTags(selectedTag);
-            this.renderList(this.sales_tags);
-          } else if (selectedTag === 'marketing') {
-            this.marketing_tags = this.getTags(selectedTag);
-            this.renderList(this.marketing_tags);
-          } else if (selectedTag === 'engineering') {
-            this.engineering_tags = this.getTags(selectedTag);
-            this.renderList(this.engineering_tags);
+            this.all_tags.style.display = 'none';
           }
-        },
-
-        success() {
-          let success = document.createTextNode('Submitted successfully');
-          let p = document.createElement('p');
-          p.appendChild(success);
-          document.querySelector('#add_search').appendChild(p);
-        },
-        getTags(tagName) {
-          let tagsList = [];
+        })
+      },
+      handleListClick(e) {
+        if (e.target.tagName === 'BUTTON') {
+          if (e.target.classList.contains('edit')) {
+            this.handleEditButton(e.target.parentNode.id);
+          } else if (e.target.classList.contains('delete')) {
+            this.handleDelete(e.target.parentNode.id);
+          } else if (e.target.classList.contains('tag')) {
+            this.renderTagList(e);
+          }
+        }
+      },
+      handleSearch(e) {
+        //this.initial.style.display = 'none';
+        //if (this.search.value.trim()) {
+        //this.searchQuery = this.search.value;
+        this.searchList = [];
+        if (this.search.value) {
           this.contacts.forEach(obj => {
-            if (obj['tags'] instanceof Object) {
-              if (obj['tags'].includes(tagName)) {
-                tagsList.push(obj);
-              }
+            let subs = this.getSubs(obj['full_name'].toLowerCase());
+            if (subs.indexOf(this.search.value.toLowerCase()) !== -1) {
+              this.searchList.push(obj);
             }
           })
-          return tagsList;
-        },
-        getSubs(str) {
-          let arr = str.split('');
-          let subs = [];
-          for (let i = 0; i < arr.length; i++) {
-            for (let j = i + 1; j <= arr.length; j++) {
-              subs.push(arr.slice(i, j).join(''));
-            }
-          }
-
-          return subs.filter(sub => sub.trim());
-        },
-        formDataToJson(formData) {
-          const json = {};
-          //let tagsList = [];
-          let tagsList = '';
-          for (const pair of formData.entries()) {
-            if (pair[0] === 'tags' && pair[1]) {
-              //if (!tagsList.includes(pair[1])) {
-              //  tagsList.push(pair[1])
-              if (tagsList.indexOf(pair[1]) === -1) {
-                tagsList.length > 0 ? tagsList += `,${pair[1]}` : tagsList += `${pair[1]}`;
-              }
-              continue;
-            }
-            json[pair[0]] = pair[1];
-          }
-          //json.tags = tagsList.split(',');
-          json.tags = tagsList;
-          return json;
-        },
-        init() {
-          document.addEventListener('click', () => {
-            let successNode = document.querySelectorAll('#add_search p');
-            if (successNode) successNode.forEach(node => node.textContent = '');
-          })
-          //add buttons
-          this.add_btn = document.querySelectorAll('.add_btn');
-          this.add_btn.forEach(btn => btn.addEventListener('click', this.handleAdd.bind(this)));
-          //submit new contact
-          this.form_new = document.querySelector('#create_div form');
-          this.form_new.addEventListener('submit', this.handleSubmitNew.bind(this));
-          //submit edited + cancel
-          this.form_div = document.querySelector('#form_div');
-          this.form_div.addEventListener('click', e => {
-            if (e.target.classList.contains('cancel')) { this.handleCancel(e) }
-            else if (e.target.classList.contains('submit') && e.target.closest('#edit_div')) {
-              this.handleSubmitEdit(e, e.target.parentNode.parentNode.id)
-            }
-          })
-          //tags + edit/delete buttons
-          this.fullList = document.querySelector('#list_populated');
-          this.fullList.addEventListener('click', this.handleListClick.bind(this));
-
-          //search box
-          this.search = document.querySelector('#search');
-          this.search.addEventListener('input', this.handleSearch.bind(this));
-
-          //all contacts button
-          document.querySelector('#all_tags').addEventListener('click', this.retrieveList.bind(this))
-
-          //other variables declarations
-          this.initial = document.querySelector('#list_initial');
-          this.list_template = Handlebars.compile(document.querySelector('#list_template').innerHTML);
-          this.edit_template = Handlebars.compile(document.querySelector('#edit_form_template').innerHTML);
-          //how to enforce form field requirements in the edit form? why is it not working there? Alternative is to prevent a user from pressing the space key if the field is blank. And to prevent user from clicking backspace key when the value is just 1.
-          //this.edit_form_template.addEventListener('input')
-          this.searchQuery = null;
-          this.searchList = [];
-          this.contacts = [];
-          this.sales_tags = [];
-          this.marketing_tags = [];
-          this.engineering_tags = [];
-
+        } else {
           this.retrieveList();
         }
+        if (this.searchList.length > 0) {
+          this.renderList(this.searchList);
+        } else {
+          this.initial.style.display = 'block';
+          this.all_tags.style.display = 'block';
+          this.fullList.style.display = 'none';
+        }
+
+      },
+      renderList(array) {
+        this.initial.style.display = 'none';
+        this.fullList.style.display = 'block';
+        this.fullList.innerHTML = '';
+        this.fullList.innerHTML = this.list_template({ array: array });
+        this.all_tags.style.display = 'block';
+      },
+      renderTagList(e) {
+        let selectedTag = e.target.textContent;
+
+        if (selectedTag === 'sales') {
+          this.tags = this.getTags(selectedTag);
+          this.renderList(this.tags);
+        } else if (selectedTag === 'marketing') {
+          this.tags = this.getTags(selectedTag);
+          this.renderList(this.tags);
+        } else if (selectedTag === 'engineering') {
+          this.tags = this.getTags(selectedTag);
+          this.renderList(this.tags);
+        }
+      },
+
+      success() {
+        let success = document.createTextNode('Submitted successfully');
+        let p = document.createElement('p');
+        p.appendChild(success);
+        document.querySelector('#add_search').appendChild(p);
+      },
+      getTags(tagName) {
+        let tagsList = [];
+        this.contacts.forEach(obj => {
+          if (obj['tags'] instanceof Object) {
+            if (obj['tags'].includes(tagName)) {
+              tagsList.push(obj);
+            }
+          }
+        })
+        return tagsList;
+      },
+      getSubs(str) {
+        let arr = str.split('');
+        let subs = [];
+        for (let i = 0; i < arr.length; i++) {
+          for (let j = i + 1; j <= arr.length; j++) {
+            subs.push(arr.slice(i, j).join(''));
+          }
+        }
+        //use filter to prevent empty space as valid search query
+        return subs.filter(sub => sub.trim());
+      },
+      formDataToJson(formData) {
+        const json = {};
+        //let tagsList = [];
+        let tagsList = '';
+        for (const pair of formData.entries()) {
+          if (pair[0] === 'tags' && pair[1]) {
+            //if (!tagsList.includes(pair[1])) {
+            //  tagsList.push(pair[1])
+            if (tagsList.indexOf(pair[1]) === -1) {
+              tagsList.length > 0 ? tagsList += `,${pair[1]}` : tagsList += `${pair[1]}`;
+            }
+            continue;
+          }
+          json[pair[0]] = pair[1];
+        }
+        //json.tags = tagsList.split(',');
+        json.tags = tagsList;
+        return json;
+      },
+      bindEvents() {
+        document.addEventListener('click', () => {
+          while (document.querySelector('#add_search p')) {
+            let node = document.querySelector('#add_search p');
+            document.querySelector('#add_search').removeChild(node)
+          }
+        })
+
+        //add buttons
+        this.add_btn.forEach(btn => btn.addEventListener('click', this.handleAdd.bind(this)));
+        //submit new contact
+        this.form_new.addEventListener('submit', this.handleSubmitNew.bind(this));
+        //submit edited + cancel
+        this.form_div.addEventListener('click', e => {
+          if (e.target.classList.contains('cancel')) { this.handleCancel(e) }
+          else if (e.target.classList.contains('submit') && e.target.closest('#edit_div')) {
+            this.handleSubmitEdit(e, e.target.parentNode.parentNode.id)
+          }
+        })
+        //tags + edit/delete buttons
+        this.fullList.addEventListener('click', this.handleListClick.bind(this));
+
+        //search box
+        this.search.addEventListener('input', this.handleSearch.bind(this));
+        document.addEventListener('keydown', e => {
+          let spaceBar = 32;
+          if (e.keyCode === spaceBar) {
+            if (!this.search.value.trim()) {
+              e.preventDefault();
+            }
+          }
+        })
+
+        //the edit form is not enforcing the field requirements. For now I will prevent the user from clearing out the required full_name field
+        document.addEventListener('keydown', (e) => {
+          if (e.target.tagName === 'INPUT' && e.target.value.length === 1 && e.target.id === 'full_name' && e.keyCode === 8) {
+            e.preventDefault();
+          }
+        })
+        //all contacts button
+        this.all_tags.addEventListener('click', this.retrieveList.bind(this))
+      },
+      init() {
+        let successNode = document.querySelectorAll('#add_search p');
+        this.add_btn = document.querySelectorAll('.add_btn');
+        this.form_new = document.querySelector('.create_div form')
+        this.create_div = document.querySelector('.create_div')
+        this.edit_div = document.querySelector('.edit_div')
+        this.fullList = document.querySelector('#list_populated');
+        this.form_div = document.querySelector('#form_div');
+        this.search = document.querySelector('#search');
+        this.initial = document.querySelector('#list_initial');
+        this.all_tags = document.querySelector('#all_tags')
+        this.list_template = Handlebars.compile(document.querySelector('#list_template').innerHTML);
+        this.edit_template = Handlebars.compile(document.querySelector('#edit_form_template').innerHTML);
+
+        this.searchQuery = null;
+        this.searchList = [];
+        this.contacts = [];
+        this.tags = [];
+        //this.sales_tags = [];
+        //this.marketing_tags = [];
+        //this.engineering_tags = [];
+
+        this.bindEvents();
+        this.retrieveList();
+
+        document.querySelector('#edit_div').addEventListener('click', () => console.log('editdiv'))
       }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
       App.init();
     })
   </script>

@@ -1,23 +1,16 @@
 [
   {
+    "full_name": "x",
+    "phone_number": "",
+    "email": "a",
+    "tags": "sales",
+    "id": 1
+  },
+  {
     "full_name": "za",
     "phone_number": "",
     "email": "",
-    "tags": "engineering",
+    "tags": "marketing",
     "id": 2
-  },
-  {
-    "full_name": "z",
-    "phone_number": "",
-    "email": "",
-    "tags": "",
-    "id": 3
-  },
-  {
-    "full_name": "v",
-    "phone_number": "",
-    "email": "",
-    "tags": "",
-    "id": 4
   }
 ]
