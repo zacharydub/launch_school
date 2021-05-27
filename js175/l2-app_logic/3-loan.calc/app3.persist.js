@@ -78,6 +78,8 @@ function createLoanOffer(params) {
   let amount = Number(params.get('amount'));
   let duration = Number(params.get('duration'));
   let payment = calculateLoan(amount, duration, APR);
+
+  //using URLs manipulated by hyperlinks to give user interactive controls and simulate state
   let content = `<tr>
                   <th>Amount:</th>
                     <td>

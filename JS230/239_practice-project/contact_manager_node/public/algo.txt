@@ -44,3 +44,30 @@ REFACTOR
 --seleting DOM elements at top of App object or in init() method
 
 --re pre-select select options for the previously selected tags - im also not capturing the edited tags when a user makes an edit on the tags
+
+
+SEARCH AUTOCOMPLETE
+- need HTML elements: overlay, list
+searc
+wrapper
+  search
+  list
+  overlay
+
+valueChanged method
+  on each search field INPUT event:
+    if input.value > 0
+      call helper func fetch matches, which takes a searchquery and cb with param matches:
+        - xhr req, where res = matches list. And we call the CB with res as arg
+        -  Make list visible by making visible = true(in DRAW func, if visible === false, make over overlay.textContent = '' then return to end draw func)
+        - set matches to matches param/arg
+        - selectedindex = null
+        - bestmatchindex = 0
+        - draw list
+    else reset list
+
+reset method
+draw method
+handlekeydown
+
+handleSearch vs valueChanged. Valuechanged uses XHR, handleSearch uses the existing contacts list

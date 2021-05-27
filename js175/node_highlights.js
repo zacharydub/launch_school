@@ -3,14 +3,16 @@ const HTTP = require('http');
 const SERVER = HTTP.createServer((req, res) => {
 });
 
-SERVER.listen(3000, () => {
-  console.log('Server listening on port 3000');
-})
+SERVER.listen(3000, // server is listening for incoming TCP connections
+  () => {
+    console.log('Server listening on port 3000');
+  })
 //navigate to http://localhost:3000 and you will see your console log 'Server listening on port 3000'
 
 ////url module
-const URL = require('url').URL;
+const URL = require('url').URL;//we append the URL property reference to the require call is so that we can use the URL module's URL class as a constructor. When constructing a new URL object we can pass the constructor function a path as an input to be combined with a base URL. The URL constructor essentially breaks the input URL into different components, and sets these components as properties of the URL object.
 const myURL = new URL('/my/path?color=red', 'http://some-website');
+console.log(myURL) //bunch of props available, like:
 console.log(myURL.searchParams); // URLSearchParams { 'color' => 'red' }
 console.log(myURL.searchParams.get('color')); // red
 console.log(myURL.pathname); // /my/path

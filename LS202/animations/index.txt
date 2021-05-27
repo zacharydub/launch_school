@@ -1,0 +1,134 @@
+https://javascript.info/css-animations
+
+4 properties to describe CSS transitions:
+- transition-property: prop to animate
+- transition-duration: how long the animation should take
+- transition-timing-function: describes how the animation process is distributed along its timeline. Will it start slowly and then go fast, or vice versa.
+- transition-delay: delay before the animation
+
+[or shortened 'transition <property><duration> <timing-function> <delay>']
+#growing {
+  transition: font-size 3s, color 2s;
+}
+
+<style>
+
+#digit {
+  width: .5em;
+  overflow: hidden;
+  font: 32px monospace;
+  cursor: pointer;
+}
+
+#stripe {
+  display: inline-block
+}
+
+#stripe.animate {
+  transform: translate(-90%);
+  transition-property: transform;
+  transition-duration: 9s;
+  transition-timing-function: linear;
+}
+</style>
+
+<body>
+  Click below to animate:
+  <div id="digit"><div id="stripe">0123456789</div></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+___________________________________________
+EVENT transitioned
+
+-triggers when the CSS animation finishes, allowing us to perform an action after te animation is done. And we can join animations
+
+boat.onclick = function() {
+  //...
+  let times = 1;
+
+  function go() {
+    if (times % 2) {
+      // sail to the right
+      boat.classList.remove('back');
+      boat.style.marginLeft = 100 * times + 200 + 'px';
+    } else {
+      // sail to the left
+      boat.classList.add('back');
+      boat.style.marginLeft = 100 * times - 200 + 'px';
+    }
+  }
+  go();
+  boat.addEventListener('transitionend', function() {
+    times++;
+    go();
+  });
+
+'transitioned' event object has these props:
+  - event.propertyName: the property that has finished animating. Can be good if we animate multiple properties simultaneously.
+  - event.elapsedTime - the time (in seconds) that the animation took, without transition-delay
+
+JOIN MULTIPLE ANIMATION USING @keyframes
+- this specifies the “name” of the animation and rules – what, when and where to animate. Then using the animation property, we can attach the animation to the element and specify additional parameters for it
+
+<div class="progress"></div>
+
+<style>
+  @keyframes go-left-right {        /* give it a name: "go-left-right" */
+    from { left: 0px; }             /* animate from left: 0px */
+    to { left: calc(100% - 50px); } /* animate to left: 100%-50px */
+  }
+
+  .progress {
+    animation: go-left-right 3s infinite alternate;
+    /* apply the animation "go-left-right" to the element
+       duration 3 seconds
+       number of times: infinite
+       alternate direction every time
+    */
+
+    position: relative;
+    border: 2px solid green;
+    width: 50px;
+    height: 20px;
+    background: lime;
+  }
+</style>
+
+Probably won’t need @keyframes often, unless everything is in constant motion on your sites
+
+CSS Animation vs. JS animations:
+- CSS is good for simple solution and is fast/lightweight
+- JS is more flexible in implementing any logic, and not limited to just prop changes - can also create elements as part of an animation
+
+The majority of animations can be implemented using CSS as described in this chapter. And the transitionend event allows JavaScript to be run after the animation, so it integrates fine with the code.
+___________________________________________
+JS animations
+
+JavaScript animations should be implemented via requestAnimationFrame. That built-in method allows to setup a callback function to run when the browser will be preparing a repaint
+
+helper animate function to setup most animations:
+
+function animate({timing, draw, duration}) {
+  let start = performance.now();
+
+  requestAnimationFrame(function animate(time) {
+    // timeFraction goes from 0 to 1
+    let timeFraction = (time - start) / duration;
+    if (timeFraction > 1) timeFraction = 1;
+
+    // calculate the current animation state
+    let progress = timing(timeFraction);
+
+    draw(progress); // draw it
+
+    if (timeFraction < 1) {
+      requestAnimationFrame(animate);
+    }
+  });
+}
+
+
+JavaScript animations are not applied on a daily basis. They are used to do something interesting and non-standard

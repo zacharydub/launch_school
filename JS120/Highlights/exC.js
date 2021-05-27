@@ -123,7 +123,8 @@ console.log(theater.movie);     // "Top Gun"
 
 //CONTEXT LOSS
 
-//METHOD COPIED 
+//METHOD COPIED
+//solutions:
 //--> either pass context obj as arg or use 'bind'
 let john = {
     firstName: 'John',
@@ -133,7 +134,7 @@ let john = {
     },
 };
 john.greetings(); // context is john - logs 'hello john doe'
-let foo = john.greetings; // Strips context. 
+let foo = john.greetings; // Strips context.
 foo();   // context is now the global object, so logs undesired
 
 let myobj = {
@@ -149,6 +150,7 @@ let sup2 = myobj.method.bind(myobj)
 console.log('bound context works now: ', sup2())
 
 //INNER NESTED FUNCTIONS:
+//solutions:
 // -> outer scope (due to lexical scoping - rule that a variable defined in an outer scope is available to an inner scope),
 // -> call iner func with explcit
 // -> bind
@@ -182,7 +184,8 @@ let greeter = {
 
 greeter.greet(); // logs 'undefined undefined'
 
-//FUNCTION PASSED AS ARGUMENT 
+//FUNCTION PASSED AS ARGUMENT
+//solutions:
 // -> outer scope variable
 // ->bind,
 // ->arrow func
@@ -245,7 +248,7 @@ greeter.greet(); // logs 'undefined undefined'
 //   animal: "cat"
 // }
 
-// obj1.logAnimal.call(obj2,"meow"); 
+// obj1.logAnimal.call(obj2,"meow");
 
 
 //collaborator objects

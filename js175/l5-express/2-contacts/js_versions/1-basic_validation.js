@@ -148,7 +148,7 @@ app.post("/contacts/new",
     }
 
     for (let i = 0; i < contactData.length; i++) {
-      if (contactData[i].firstName === req.body.firstName && contactData[i].firstName === req.body.firstName) {
+      if (contactData[i].firstName === req.body.firstName && contactData[i].lastName === req.body.lastName) {
         res.locals.errorMessages.push('name must be unique')
       }
     }
@@ -184,6 +184,8 @@ app.post("/contacts/new",
     });
 
     res.redirect("/contacts");
+    //we use redirect instead of render here. First off, we would've had to repeat the code from the app.get("/contacts", ...) route callback: we need to pass the sorted contact data into the view. A more subtle problem occurs in the browser. If you take a look at the URL bar, the URL probably refers to /contacts/new, not /contacts as it should. This problem seems minor, but it can confuse users. Truthfully, most errors can be handled by res.render, but sometimes we have to redirect the user to a completely different page. We can use res.render to display those pages, but the user's browser won't show the correct URL.
+    //While handling POST requests, web developers conventionally use res.render to redisplay the form. They call res.redirect when they need to display some other page. Typically, you should re-render the page to handle validation errors and use redirection after a successful operation.
   }
 )
 //// original code pre-MW:

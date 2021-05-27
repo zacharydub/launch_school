@@ -1,19 +1,13 @@
-//separating out the CSS onto a separate file - to retrieve that static file we use 'fs' module (and 'path' module)
+//instead of getting query params from manually changing the URL and having just a single loan offer page, we can use a form for user to submit initial values for loan amount and duration and then display a separate loan offer page based on those form inputs
+//so we add a second template source and changed href values in template source to use path '/loan-offer', which would be the loan offer page after user submits the form
+//we are defining resources in the paths '/' and '/loan-offer' - those resources aren't actual files on the server, so the paths that request them are an abstraction rather than having any relationship to a file path.
+//this works well for dynamic content, but if we do want to return static content i.e. contents of an actual file - see loancalc2.static.js file
 
 const HTTP = require('http');
 const URL = require('url').URL;
-const PATH = require('path');
-const FS = require('fs');
 const PORT = 3000;
-const HANDLEBARS = require('handlebars');
+const HANDLEBARS = require('handlebars');//templating engine
 const APR = 5;
-const MIME_TYPES = {
-  '.css': 'text/css',
-  '.js': 'application/javascript',
-  '.jpg': 'image/jpeg',
-  '.png': 'image/png',
-  '.ico': 'image/x-icon'
-};
 
 const LOAN_OFFER_SOURCE = `
 <!DOCTYPE html>
@@ -21,11 +15,43 @@ const LOAN_OFFER_SOURCE = `
   <head>
     <meta charset="utf-8">
     <title>Loan Calculator</title>
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <style type="text/css">
+      body {
+        background: rgba(250, 250, 250);
+        font-family: sans-serif;
+        color: rgb(50, 50, 50);
+      }
+
+      article {
+        width: 100%;
+        max-width: 40rem;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        text-align: center;
+      }
+
+      table {
+        font-size: 1.5rem;
+      }
+      th {
+        text-align: right;
+      }
+      td {
+        text-align: center;
+      }
+      th,
+      td {
+        padding: 0.5rem;
+      }
+    </style>
   </head>
   <body>
     <article>
-      <h1>Loan Calculator - Static</h1>
+      <h1>Loan Calculator - Multiple Paths</h1>
       <table>
         <tbody>
           <tr>
@@ -68,11 +94,53 @@ const LOAN_FORM_SOURCE = `<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>Loan Calculator</title>
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <style type="text/css">
+      body {
+        background: rgba(250, 250, 250);
+        font-family: sans-serif;
+        color: rgb(50, 50, 50);
+      }
+
+      article {
+        width: 100%;
+        max-width: 40rem;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        text-align: center;
+      }
+
+      form,
+      input {
+        font-size: 1.5rem;
+      }
+      form p {
+        text-align: center;
+      }
+      label,
+      input {
+        display: block;
+        width: 100%;
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      input[type="submit"] {
+        width: auto;
+        margin: 1rem auto;
+        cursor: pointer;
+        color: #fff;
+        background-color: #01d28e;
+        border: none;
+        border-radius: 0.3rem;
+      }
+    </style>
   </head>
   <body>
     <article>
-      <h1>Loan Calculator - Static</h1>
+      <h1>Loan Calculator - Multiple Paths</h1>
       <form action="/loan-offer" method="get">
         <p>All loans are offered at an APR of {{apr}}%.</p>
         <label for="amount">How much do you want to borrow (in dollars)?</label>
@@ -101,6 +169,7 @@ function getParams(path) {
 
 function getPathname(path) {
   const myURL = new URL(path, `http://localhost:${PORT}`);
+  // console.log('myURL.pathname: ', myURL.pathname)
   return myURL.pathname;
 };
 
@@ -133,37 +202,28 @@ function createLoanOffer(params) {
 const SERVER = HTTP.createServer((req, res) => {
   let method = req.method;
   let path = req.url;
+  // console.log('Req.path: ', path)
   let pathname = getPathname(path);
-  let fileExtension = PATH.extname(pathname); //or can use the 'path' variable
 
-  FS.readFile(`./public/${pathname}`, (err, data) => {
-    if (data) {
-      res.statusCode = 200;
-      res.setHeader('Content-Type', `${MIME_TYPES[fileExtension]}`);
-      res.write(`${data}\n`);
-      res.end();
-    } else {
-      if (pathname === '/') {
-        let content = render(LOAN_FORM_TEMPLATE, { apr: APR });
+  if (pathname === '/') {
+    let content = render(LOAN_FORM_TEMPLATE, { apr: APR });
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        res.write(`${content}\n`);
-        res.end();
-      } else if (pathname === '/loan-offer') {
-        let data = createLoanOffer(getParams(path));
-        let content = render(LOAN_OFFER_TEMPLATE, data);
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/html');
+    res.write(`${content}\n`);
+    res.end();
+  } else if (pathname === '/loan-offer') {
+    let data = createLoanOffer(getParams(path));
+    let content = render(LOAN_OFFER_TEMPLATE, data);
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        res.write(`${content}\n`);
-        res.end();
-      } else {
-        res.statusCode = 404;
-        res.end();
-      }
-    }
-  });
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/html');
+    res.write(`${content}\n`);
+    res.end();
+  } else {
+    res.statusCode = 404;
+    res.end();
+  }
 });
 
 SERVER.listen(PORT, () => {

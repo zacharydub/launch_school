@@ -6,13 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Manager</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
-  <!--<script src="underscore.js"></script>-->
-  <link rel="stylesheet" href="./stylesheets/normalize.css">
+  <script src="underscore.js"></script>
   <style>
     body {
       background-color: white;
       width: 100%;
       height: 100%;
+    }
+
+    #add_search {
+      text-align: center;
+      margin: auto;
     }
 
     header {
@@ -22,6 +26,13 @@
       color: white;
       text-align: center;
       padding: 5px;
+    }
+
+    #add_search {
+      background-color: #ededed;
+      padding: 30px;
+      display: flex;
+      justify-content: space-evenly;
     }
 
     .add_btn {
@@ -34,12 +45,14 @@
     }
 
     #search {
-      /*padding: 15px;*/
+      padding: 15px;
       border-radius: 5px;
       border: 1px solid lightgray;
-      width: 400px;
-      margin: 100px auto 0;
-      /*font-size: 20px;*/
+      font-size: 20px;
+    }
+
+    #list {
+      text-align: center;
     }
 
     .form_div {
@@ -79,23 +92,8 @@
       line-height: 8px;
     }
 
-    .nav_buttons {
-      display: flex;
-    }
-
     #all_tags {
       display: none;
-      /*position: absolute;
-      top: 125px;
-      left: 75px;*/
-      margin: 15px 0 10px 50px;
-    }
-
-    #delete_all {
-      display: none;
-      /*position: absolute;
-      top: 125px;
-      left: 250px;*/
       margin: 15px 0 10px 50px;
     }
 
@@ -110,69 +108,6 @@
     button:hover {
       background-color: burlywood;
     }
-
-    #underlay_wrapper {
-      position: relative;
-    }
-
-    .top-level {
-      display: inline-block;
-    }
-
-    .autocomplete_wrapper {
-      position: relative;
-    }
-
-    .autocomplete-wrapper input {
-      position: relative;
-      z-index: 10;
-      background: transparent;
-    }
-
-    .autocomplete-ui {
-      list-style: none;
-      padding: 0px;
-      color: black;
-      margin-top: 0;
-      width: 200px;
-      box-shadow: 0 1px 2px grey;
-    }
-
-    .autocomplete-ui-choice {
-      padding: 5px;
-      border-bottom: solid 1px #ddd;
-    }
-
-    .autocomplete-ui-choice:hover {
-      background: #eee;
-      cursor: pointer;
-    }
-
-    .autocomplete-ui-choice.selected {
-      background: lightblue;
-    }
-
-    .autocomplete-ui-choice:last-of-type {
-      border-bottom: 0;
-    }
-
-    .autocomplete-ui-choice p {
-      margin: 0;
-    }
-
-    .autocomplete-overlay {
-      position: absolute;
-      top: 11em;
-      left: .8em;
-      z-index: 1;
-      color: #999;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .autocomplete-overlay:empty {
-      display: none;
-    }
   </style>
 </head>
 
@@ -180,21 +115,17 @@
   <header>
     <h1>Contact Manager</h1>
   </header>
+
   <div id='underlay_wrapper'>
-    <button class="add_btn top-level">Add Contact</button>
-    <div class="autocomplete-wrapper top-level">
+    <div id="add_search">
+      <button class="add_btn">Add Contact</button>
       <input type="text" name="search" id="search" placeholder="Search">
-      <ul class='autocomplete-ui'></ul>
-      <div class="autocomplete-overlay"></div>
     </div>
     <div id="list_initial">
       <h2>No contacts</h2>
       <button class="add_btn">Add Contact</button>
     </div>
-    <div class="nav_buttons">
-      <button id='all_tags'>All Contacts</button>
-      <button id='delete_all'>Delete All</button>
-    </div>
+    <button id='all_tags'>All Contacts</button>
     <div id="list_populated">
     </div>
   </div>
@@ -206,7 +137,7 @@
         <fieldset>
           <dl>
             <dt><label for="full_name">Full name:</label></dt>
-            <dd><input type="text" name="full_name" id="full_name" required pattern="[A-Za-z -/']+"></dd>
+            <dd><input type="text" name="full_name" id="full_name" required pattern="[A-Za-z]*"></dd>
             <dt><label for="email">Email address:</label></dt>
             <dd><input type="email" name="email" id="email"></dd>
             <dt> <label for="phone_number">Telephone number:</label></dt>
@@ -232,17 +163,18 @@
 
   <script id='edit_form_template' type="text/x-handlebars-template">
     <h1>Edit Contact</h1>
-    <form action="/api/contacts" method="post" id="{{contact.id}}">
+    <form action="#" id="{{contact.id}}">
       <fieldset>
         <dl>
           <dt><label for="full_name">Full name:</label></dt>
-          <dd><input type="text" name="full_name" id="full_name" required pattern="[A-Za-z -/']+" value="{{contact.full_name}}" ></dd>
+          <dd><input type="text" name="full_name"  id="full_name" value="{{contact.full_name}}" required pattern="[A-Za-z]*"></dd>
           <dt><label for="email">Email address:</label></dt>
           <dd><input type="email" name="email" id="email" value="{{contact.email}}"></dd>
           <dt> <label for="phone_number">Telephone number:</label></dt>
           <dd><input type="text" name="phone_number" id="phone_number" value="{{contact.phone_number}}" pattern="\d{3}-\d{3}-\d{4}" placeholder="###-###-####" ></dd>
           <dt> <label for="tags">Tags:</label></dt>
           <dd><select multiple name="tags" id="tags">
+            {
               <option value="sales" id="salesSelect" {{func contact.tags "sales"}}>Sales</option>
               <option value="engineering" id="engineeringSelect" {{func contact.tags "engineering"}} >Engineering</option>
               <option value="marketing" id="marketingSelect" {{func contact.tags "marketing"}}>Marketing</option>
@@ -370,7 +302,7 @@
       },
       handleSubmitEdit(e, id) {
         e.preventDefault();
-        //don't need to reset EDIT form like we needed to for CREATE form?
+
         let formData = new FormData(this.edit_div.querySelector('form'));
         let json = JSON.stringify(this.formDataToJson(formData));
 
@@ -404,17 +336,6 @@
           })
         }
       },
-      handleDeleteAll() {
-        console.log(this.contacts)
-        if (confirm('Are you sure you want to delete all contacts?')) {
-          this.contacts.forEach(contact => {
-            let xhr = new XMLHttpRequest();
-            xhr.open('DELETE', `/api/contacts/${contact.id}`);
-            xhr.send();
-          })
-          this.retrieveList();
-        }
-      },
       retrieveList() {
         this.search.value = '';
         let xhr = new XMLHttpRequest();
@@ -425,21 +346,18 @@
           this.contacts = xhr.response;
           //need to convert the tags prop string to array so Handlebars template can loop through. In case there are no tags there should be no buttons - was seeing a small empty tags button appear, I think it's because of an empty string value so setting it to 'null'
           this.contacts.forEach(obj => {
-            //if (typeof obj.tags === 'string') {
-            if (obj.tags) {
+            if (typeof obj.tags === 'string') {
               obj.tags = obj.tags.split(',');
             }
-            //if (!obj.tags[0]){
-            //  obj.tags = null;
-            //}
+            if (!obj.tags[0]) obj.tags = null;
           })
           if (this.contacts.length > 0) {
             this.renderList(this.contacts);
           } else {
             this.initial.style.display = 'block';
             this.fullList.innerHTML = '';
+
             this.all_tags.style.display = 'none';
-            this.delete_all.style.display = 'none';
           }
         })
       },
@@ -455,7 +373,6 @@
         }
       },
       handleSearch(e) {
-        e.preventDefault()
         //this.initial.style.display = 'none';
         //if (this.search.value.trim()) {
         //this.searchQuery = this.search.value;
@@ -463,10 +380,7 @@
         if (this.search.value) {
           this.contacts.forEach(obj => {
             let subs = this.getSubs(obj['full_name'].toLowerCase());
-            let phones = this.getSubs(obj['phone_number']);
-            let emails = this.getSubs(obj['email']);
-
-            if (subs.indexOf(this.search.value.toLowerCase()) !== -1 || phones.indexOf(this.search.value) !== -1 || emails.indexOf(this.search.value) !== -1) {
+            if (subs.indexOf(this.search.value.toLowerCase()) !== -1) {
               this.searchList.push(obj);
             }
           })
@@ -477,15 +391,8 @@
           this.renderList(this.searchList);
         } else {
           this.initial.style.display = 'block';
+          this.all_tags.style.display = 'block';
           this.fullList.style.display = 'none';
-          if (this.contacts.length > 0) {
-            this.all_tags.style.display = 'block';
-            this.delete_all.style.display = 'block';
-          } else {
-            this.all_tags.style.display = 'none';
-            this.delete_all.style.display = 'none';
-          }
-
         }
 
       },
@@ -495,7 +402,6 @@
         this.fullList.innerHTML = '';
         this.fullList.innerHTML = this.list_template({ array: array });
         this.all_tags.style.display = 'block';
-        this.delete_all.style.display = 'block'
       },
       renderTagList(e) {
         let selectedTag = e.target.textContent;
@@ -514,10 +420,9 @@
 
       success() {
         let success = document.createTextNode('Submitted successfully');
-        let node = document.createElement('h4');
-        node.appendChild(success);
-        document.querySelector('#underlay_wrapper').insertBefore(node, document.querySelector('#underlay_wrapper').firstChild)
-
+        let p = document.createElement('p');
+        p.appendChild(success);
+        document.querySelector('#add_search').appendChild(p);
       },
       getTags(tagName) {
         let tagsList = [];
@@ -541,10 +446,6 @@
         //use filter to prevent empty space as valid search query
         return subs.filter(sub => sub.trim());
       },
-      getFullNames(array) {
-        let filtered = array.filter(obj => obj.full_name.indexOf(this.search.value.toLowerCase()) !== -1)
-        return filtered.map(obj => [obj.full_name, obj.id])
-      },
       formDataToJson(formData) {
         const json = {};
         //let tagsList = [];
@@ -565,10 +466,11 @@
         return json;
       },
       bindEvents() {
-        //clear out success message. There should be a more elegant solution to this
         document.addEventListener('click', () => {
-          let node = document.querySelectorAll('#underlay_wrapper h4')
-          node.forEach(elm => elm.remove())
+          while (document.querySelector('#add_search p')) {
+            let node = document.querySelector('#add_search p');
+            document.querySelector('#add_search').removeChild(node)
+          }
         })
 
         //add buttons
@@ -585,204 +487,47 @@
         //tags + edit/delete buttons
         this.fullList.addEventListener('click', this.handleListClick.bind(this));
 
-        //search box - preventing user to enter a space
-        //document.addEventListener('keydown', e => {
-        //  const SPACEBAR = 32;
-        //  if (e.keyCode === SPACEBAR && this.search.value.trim().length === 0) {
-        //    e.preventDefault();
-        //  }
-        //})
+        //search box
+        this.search.addEventListener('input', this.handleSearch.bind(this));
+        document.addEventListener('keydown', e => {
+          let spaceBar = 32;
+          if (e.keyCode === spaceBar) {
+            if (!this.search.value.trim()) {
+              e.preventDefault();
+            }
+          }
+        })
+
         //the edit form is not enforcing the field requirements. For now I will prevent the user from clearing out the required full_name field
-        //document.addEventListener('keydown', (e) => {
-        //  const BACKSPACE = 8;
-        //  if (e.target.tagName === 'INPUT' && e.target.value.length === 1 && e.target.id === 'full_name' && e.keyCode === BACKSPACE && e.target.value.match(/[a-zA-Z]/)) {
-        //    e.preventDefault();
-        //  }
-        //})
-        //INSTEAD OF ALL THAT I NEED TO FIGURE OUT WHY FORM ISNT CAPTURING REQUIRED FIELDS
-
-
+        document.addEventListener('keydown', (e) => {
+          if (e.target.tagName === 'INPUT' && e.target.value.length === 1 && e.target.id === 'full_name' && e.keyCode === 8) {
+            e.preventDefault();
+          }
+        })
         //all contacts button
         this.all_tags.addEventListener('click', this.retrieveList.bind(this))
-        //delete all button
-        this.delete_all.addEventListener('click', this.handleDeleteAll.bind(this))
-        //autocomplete events
-        this.search.addEventListener('input', this.valueChanged.bind(this));
-        this.search.addEventListener('keydown', this.handleKeydown.bind(this));
-        this.listUI.addEventListener('mouseout', this.reset.bind(this))
-        this.listUI.addEventListener('mousedown', this.handleMousedown.bind(this));
-      },
-      draw() {
-        while (this.listUI.lastChild) {
-          this.listUI.removeChild(this.listUI.lastChild);
-        }
-
-        if (!this.visible) {
-          this.overlay.textContent = '';
-          return;
-        }
-
-        if (this.bestMatchIndex !== null && this.matches.length !== 0) {
-          //console.log(this.overlay)
-          //this.overlay.textContent = this.contacts.find(elm => elm.full_name.indexOf(this.matches[this.bestMatchIndex][0]) !== -1).full_name.substr(this.search.value.length);
-          //console.log(this.overlay.textContent)
-          //this.overlay.style.width = this.search.clientWidth + 'px';
-          let selected = this.matches[this.bestMatchIndex];
-          console.log('selected ', selected);
-
-          this.overlay.textContent = selected[0].substr(this.search.value.length)
-          console.log(this.overlay.textContent)
-
-
-        }
-        else {
-          this.overlay.textContent = '';
-        }
-
-        //  this.generateOverlayContent(this.search.value, selected);
-        //} else {
-        //  this.overlay.textContent = '';
-        //}
-
-        console.log(this.matches)
-        this.matches.forEach((match, index) => {
-          let li = document.createElement('li');
-          li.classList.add('autocomplete-ui-choice');
-          if (index === this.selectedIndex) {
-            li.classList.add('selected');
-            this.search.value = match[0];
-          }
-          li.textContent = match[0].toLowerCase();
-          this.listUI.appendChild(li);
-          ;
-        })
-      },
-      generateOverlayContent(value, match) {
-
-        console.log('match ', match)
-        let contact = this.contacts.find(elm => elm.full_name.indexOf(match[0]) !== -1);
-        console.log('contact obj ', contact)
-        if (contact) {
-          let end = contact.full_name.substr(value.length);
-          console.log(end)
-          return value + end;
-        }
-      },
-      fetchMatches(callback) {
-        let request = new XMLHttpRequest();
-        request.addEventListener('load', () => {
-          callback(request.response);
-        });
-        request.open('GET', '/api/contacts');
-        request.responseType = 'json';
-        request.send();
-      },
-      handleKeydown(event) {
-        switch (event.key) {
-          case 'Tab':
-            if (this.bestMatchIndex !== null && this.matches.length !== 0) {
-              this.search.value = this.matches[this.bestMatchIndex][0];
-              event.preventDefault();
-            }
-            this.reset();
-            break;
-          case 'ArrowRight':
-            if (this.bestMatchIndex !== null && this.matches.length !== 0) {
-              this.search.value =
-                this.search.value = this.matches[this.bestMatchIndex][0];
-              event.preventDefault();
-            }
-            this.reset();
-            break;
-          case 'Enter':
-            this.reset();
-            this.renderList(this.contacts.filter(obj => obj.full_name === this.search.value));
-            break;
-          case 'ArrowUp':
-            event.preventDefault();
-            if (this.selectedIndex === null || this.selectedIndex === 0) {
-              this.selectedIndex = this.matches.length - 1;
-            } else {
-              this.selectedIndex -= 1;
-            }
-            this.bestMatchIndex = null;
-            this.draw();
-            break;
-          case 'ArrowDown':
-            event.preventDefault();
-            if (this.selectedIndex === null || this.selectedIndex === this.matches.length - 1) {
-              this.selectedIndex = 0;
-            } else {
-              this.selectedIndex += 1;
-            }
-            this.bestMatchIndex = null;
-            this.draw();
-            break;
-          case 'Escape':
-            this.search.value = this.previousValue;
-            this.reset();
-            break;
-        }
-      },
-      handleMousedown(event) {
-        let element = event.target;
-        this.search.value = element.textContent;
-        this.reset();
-        let contact = this.contacts.filter(obj => obj.full_name === this.search.value);
-        this.fullList.innerHTML = '';
-        this.fullList.innerHTML = this.list_template({ array: contact });
-      },
-      reset() {
-        this.visible = false;
-        this.matches = [];
-        this.selectedIndex = null;
-        this.previousValue = null;
-        this.bestMatchIndex = null;
-        this.draw();
-      },
-      valueChanged(e) {
-        //e.preventDefault();
-        this.handleSearch(e);
-
-        let value = this.search.value
-        this.previousValue = value;
-        if (value.length > 0) {
-          this.fetchMatches(contacts => {
-            this.visible = true;
-            this.matches = this.getFullNames(contacts);
-            this.selectedIndex = null;
-            this.bestMatchIndex = 0;
-            this.draw();
-          });
-        } else {
-          this.reset();
-        }
       },
       init() {
+        let successNode = document.querySelectorAll('#add_search p');
         this.add_btn = document.querySelectorAll('.add_btn');
-        this.form_new = document.querySelector('.create_div form');
-        this.create_div = document.querySelector('.create_div');
-        this.edit_div = document.querySelector('.edit_div');
+        this.form_new = document.querySelector('.create_div form')
+        this.create_div = document.querySelector('.create_div')
+        this.edit_div = document.querySelector('.edit_div')
         this.fullList = document.querySelector('#list_populated');
         this.form_div = document.querySelector('#form_div');
         this.search = document.querySelector('#search');
         this.initial = document.querySelector('#list_initial');
-        this.all_tags = document.querySelector('#all_tags');
+        this.all_tags = document.querySelector('#all_tags')
         this.list_template = Handlebars.compile(document.querySelector('#list_template').innerHTML);
         this.edit_template = Handlebars.compile(document.querySelector('#edit_form_template').innerHTML);
-        this.overlay = document.querySelector('.autocomplete-overlay');
-        this.listUI = document.querySelector('ul');
-        this.delete_all = document.querySelector('#delete_all')
 
         this.searchQuery = null;
         this.searchList = [];
         this.contacts = [];
         this.tags = [];
-        this.visible = false;
-        this.matches = [];
-        this.selectedIndex = null;
-        this.previousValue = null;
-        this.bestMatchIndex = null;
+        //this.sales_tags = [];
+        //this.marketing_tags = [];
+        //this.engineering_tags = [];
 
         this.bindEvents();
         this.retrieveList();

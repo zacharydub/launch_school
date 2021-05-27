@@ -9,6 +9,7 @@ class Autocomplete {
     this.input = input;
     this.url = url;
 
+
     this.listUI = null;
     this.overlay = null;
     this.visible = false;
@@ -33,6 +34,7 @@ class Autocomplete {
     let wrapper = document.createElement('div');
     wrapper.classList.add('autocomplete-wrapper');
     this.input.parentNode.appendChild(wrapper);
+    console.log(this.input.parentNode)
     wrapper.appendChild(this.input);
   }
 

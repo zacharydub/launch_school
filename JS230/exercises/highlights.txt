@@ -1,0 +1,129 @@
+-----------------------------------------
+DISPATCH TABLE
+ - lets us perform the correct calculation based on the operator selected in the form's dropdown element. Dispatch tables a convenient way to perform operations based on some string value.Alternativvely can use a switch or if statement.
+
+  const Calculate = {
+        "+": (firstNumber, secondNumber) => firstNumber + secondNumber,
+        "-": (firstNumber, secondNumber) => firstNumber - secondNumber,
+        "*": (firstNumber, secondNumber) => firstNumber * secondNumber,
+        "/": (firstNumber, secondNumber) => firstNumber / secondNumber,
+      };
+------------------------------------------
+getUserInput HELPER func
+
+const getValueOf = (selector) => form.querySelector(selector).value;
+
+let firstNumber = +getValueOf("#first-number");
+let secondNumber = +getValueOf("#second-number");
+let operator = getValueOf("#operator")
+------------------------------------------
+DISPATCH + getValue HELPER
+
+let calculate = Calculate[operator];
+let answer = calculate(firstNumber, secondNumber);
+
+------------------------------------------
+let quantity = getValueOf("#quantity") || "1"; -----> in case value not provided by user
+------------------------------------------
+MODALS
+A modal acts like a separate sub-window of content that can be closed in order to return to the main content, all without leaving the page. These always use CSS positioning to place the modal and an optional overlay element over the top of the content. The overlay acts as a blocking element to prevent interacting with the page underneath the modal. It is good practice to have at least a close link and a close action bound to clicking on the overlay that will remove the modal and the overlay.
+
+Implementation:
+1. One option would be to mark-up a modal (including the relevant content) for each team member, and then show the appropriate modal when that team member's list item is clicked.
+2. Another option would be to mark-up a single modal element that is shown when any team member list item is clicked, and then dynamically set the content for the modal depending on which team member was clicked) (using HTML Data Attributes)
+-------------------------------------------
+CENTER POSITIONING
+When an element is absolute or fixed position, we can't use the typical margin:auto or align-text:center. We'll have to instead position it from the left edge 50% of the way across the screen, then set a left margin equal to half the modal's width, in a negative value.
+___________________________________________
+ANIMATION
+https://developer.mozilla.org/en-US/docs/Web/CSS/transition
+
+If using CSS animations, the common method of starting an animation is to toggle a class on an element to be animated and using a transition for the property being animated.
+___________________________________________
+JQUERY - PHOTO GALLERY
+index + eq, stop, closest/find, :visible pseudo-selector + fadeIn/fadeOut +
+___________________________________________
+AJAX (fetch) + HANDLEBARS (partials + data attributes) - PHOTO GALLERY_AJAX + ANIMATION
+creating a photo gallery based on data that we receive from our API server that will allow us to like and favorite a photo. The comments for each photo will be rendered below the slideshow and the form will allow us to send new comments back via AJAX. When the slideshow advances, the details of the photo and the comments are re-rendered to match the visible image.
+___________________________________________
+ANIMATION
+ One approach for the fading effect using vanilla JS would be to alter the opacity of the various slides, and set a transition duration for that property change. Note that some CSS properties cannot be animated, including display. In order to fade the slides using opacity, you'll need to update the stylesheet so that #slides figure + figure selector uses opacity rather than display to be initially hidden from view. You can then define some new CSS classes to alter the opacity of the elements, and add and remove these classes to the appropriate elements
+ - using jQuery: prev + next
+
+ #slides figure + figure {
+  opacity: 0;
+}
+
+#slides .hide {
+  opacity: 0;
+  transition: opacity 800ms;
+}
+
+#slides .show {
+  opacity: 1;
+  transition: opacity 800ms;
+}
+
+nextSlide: function(e) {
+    e.preventDefault();
+    let next = this.currentSlide.nextElementSibling;
+    if (!next) {
+      next = this.firstSlide;
+    }
+    this.fadeOut(this.currentSlide);
+    this.fadeIn(next);
+    this.renderPhotoContent(next.getAttribute("data-id"));
+    this.currentSlide = next;
+  },
+  fadeOut: function(slide) {
+    slide.classList.add('hide');
+    slide.classList.remove('show');
+  },
+  fadeIn: function(slide) {
+    slide.classList.remove('hide');
+    slide.classList.add('show');
+  },
+
+  ___________________________________________
+  FETCH
+  if (buttonType) {
+    let href = button.getAttribute("href");
+    let dataId = button.getAttribute("data-id");
+    let text = button.textContent;
+
+    fetch(href, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      body: 'photo_id=' + dataId
+    })
+    .then(response => response.json())
+    .then(json => {
+      button.textContent = text.replace(/\d+/, json.total);
+    });
+  }
+
+
+***************
+ FormData API in conjunction with the URLSearchParam (OR jQuery's serialize method on the form object to serialize the form )
+
+server is expecting the data as a set of parameters in the structure of a query string (although we're sending it in the body, since this is a post request)
+***************
+  let data = new FormData(form);
+  let currentSlideId = slideshow.currentSlide.getAttribute('data-id');
+  data.set('photo_id', currentSlideId);
+
+  fetch(href, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    body: new URLSearchParams([...data])
+  })
+  .then(response => response.json())
+  .then(json => {
+    let commentsList = document.querySelector('#comments ul');
+    commentsList.insertAdjacentHTML('beforeend', templates.photo_comment(json));
+    form.reset();
+  });

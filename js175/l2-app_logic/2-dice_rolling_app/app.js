@@ -41,6 +41,7 @@ const SERVER = HTTP.createServer((req, res) => {
   }
 });
 
-SERVER.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}...`);
-});
+SERVER.listen(//the server is listening for incoming TCP connections. Our HTTP server is now listening for incoming TCP connections on port 3000. If we open a browser window and enter the url http://localhost:3000/, the browser opens a connection to the server and makes a GET request for the path /
+  PORT, () => {
+    console.log(`Server listening on port ${PORT}...`);
+  });

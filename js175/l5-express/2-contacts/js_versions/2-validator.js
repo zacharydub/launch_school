@@ -3,7 +3,7 @@
 
 const express = require("express");
 const morgan = require("morgan");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator"); // lets us use the body and validationResult methods from the validator module
 
 const app = express();
 
@@ -68,11 +68,11 @@ app.get("/contacts/new", (req, res) => {
 });
 ////func used for refactoring validation code:
 const validateName = (name, whichName) => {
-  return body(name)
-    .trim()
+  return body(name)// Each chain (the part that begins with body) performs validation and sanitization on the indicated input field in req.body
+    .trim() // one type of sanitization method -- the remianing methods either validate the date or define the error message to use when the most recent validation fails
     .isLength({ min: 1 })
-    .withMessage(`${whichName} name is required.`)
-    .bail()
+    .withMessage(`${whichName} name is required.`)// If you don't call withMessage for a particular validator, express-validator creates one for you.
+    .bail() //tells express-validator to "bail out" of the current validation if any previous validation in the chain failed. We use it here since, without it, we'd get two error messages for each empty field.
     .isLength({ max: 25 })
     .withMessage(`${whichName} name is too long. Maximum length is 25 characters.`)
     .isAlpha()
@@ -83,6 +83,7 @@ app.post("/contacts/new",
     ////refactored:
     validateName("firstName", "First"),
     validateName("lastName", "Last"),
+    // NOTE: We have removed the validation test for duplicate names. Validating multiple fields with express-validator is possible, with some work.
 
     ////refactored above:
     // body("firstName")

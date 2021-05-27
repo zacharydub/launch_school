@@ -1,4 +1,9 @@
-//using new modules: 'express-flash' to handle flash messages for error redirects and other situational messages (i.e. success, debugging, warning)
+//using new modules: 'express-flash' to handle flash messages for error redirects and other situational messages (i.e. success, debugging, warning). express-flash uses express-session to persist multiple messages over multiple request/response cycles.
+
+//The error handling in our application is simple but effective. When we need to show an error message to the user, we merely pass an array of error messages to the view and display that array. However, that only works when using res.render to render the view; it doesn't work as well when you use res.redirect. The error messages won't be available after the redirect unless you store them in the session data. That makes them persistent so you can use them after the redirect.However, aren't we supposed to use res.render for errors? Why worry about res.redirect? Truthfully, most errors can be handled by res.render, but sometimes we have to redirect the user to a completely different page. We can use res.render to display those pages, but the user's browser won't show the correct URL. Furthermore, we may want to display other situational messages, such as a success message (e.g., "New contact created!") after performing some action. We might also want to display debugging messages, warnings, or informational messages that have nothing to do with success or failure.
+//A great way to deal with these problems is to use flash messages. Flash messages get rendered once, then go away the next time the browser makes a new request. The page can display multiple flash messages of different types, each with a different appearance.
+
+
 const express = require("express");
 const morgan = require("morgan");
 const { body, validationResult } = require("express-validator");
@@ -56,7 +61,7 @@ app.set("views", "./views");
 app.set("view engine", "pug");
 
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));//tell Express to expect form data in URL-encoded format so that it can be parsed and stored in req/body...then we can access the data as props (according to HTML 'name' attribute) on req.body
 app.use(morgan("common"));
 app.use(session({
   cookie: {

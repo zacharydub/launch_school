@@ -2,7 +2,7 @@
 
 const HTTP = require('http');
 const URL = require('url').URL;
-const QUERYSTRING = require('querystring');
+const QUERYSTRING = require('querystring'); //provide our application with access to the querystring.parse() method, which we'll use in the parseFormData() function
 const PATH = require('path');
 const FS = require('fs');
 const PORT = 3000;
@@ -95,8 +95,8 @@ function render(template, data) {
   return html;
 }
 
-function parseFormData(request, callback) {
-  //what do we need these next 3 lines for - is this first event listener required to then make use of the next one? Because we don't use variable body again as far as I see
+function parseFormData(request, callback) { // this func is based on the fact that the request body is essentially a stream of data; for Node to access the request body it needs to work with this data stream. The function contains two event listeners, one for when the data stream starts, and another for when it ends. You don't really need to worry about these too much, just understand that they effectively allow us to access and work with the data in the request body. The request body contains the data we submitted in the form in a querystring-like format: amount=10000&duration=5. Passing this data to QUERYSTRING.parse() returns an object with amount and duration properties. This object is passed to the callback that was passed as an argument to parseFormData(). Then, within the callback passed to parseFormData(), we pass the parsed data to our createLoanOffer() function, and render the returned data using our loan offer template to create the content to be sent in the HTTP response.
+
   let body = '';
   request.on('data', chunk => {
     body += chunk.toString();

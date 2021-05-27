@@ -16,19 +16,16 @@ const HTML_START = `
         font-family: sans-serif;
         color: rgb(50, 50, 50);
       }
-
       article {
         width: 100%;
         max-width: 40rem;
         margin: 0 auto;
         padding: 1rem 2rem;
       }
-
       h1 {
         font-size: 2.5rem;
         text-align: center;
       }
-
       table {
         font-size: 2rem;
       }
@@ -90,7 +87,7 @@ const SERVER = HTTP.createServer((req, res) => {
     let content = createLoanOffer(getParams(path));
 
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Content-Type', 'text/html');// If we still had the header as text/plain, the browser would output it in a <pre> tag, and display all of the HTML tags in the response body as text rather than parsing them as HTML elements.
     res.write(`${content}\n`);
     res.end();
   }
